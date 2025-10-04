@@ -31,7 +31,7 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-white text-gray-800 shadow-md fixed w-full z-50">
+    <nav className="bg-white text-gray-800  fixed w-full z-50">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
     {/* Logo */}
     <Link to="/" className="text-2xl font-bold tracking-wide text-indigo-600">
@@ -56,17 +56,13 @@ export default function NavBar() {
             <span className="absolute right-2 top-1 text-xs text-gray-400">🔍</span>
           </div>
 
-          <Link to="/events" className="hover:text-indigo-600 transition">
-            🎫 Events
-          </Link>
-
           {/* Notification */}
           <div className="relative">
             <Link to="/" className="hover:text-indigo-600">
               🔔
             </Link>
             <span className="absolute -top-1 -right-2 bg-red-500 text-xs px-1 rounded-full text-white">
-              0
+              99+
             </span>
           </div>
 
@@ -80,7 +76,7 @@ export default function NavBar() {
 
             {/* Dropdown */}
             <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 transition duration-200 border border-gray-200">
-              <Link to="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">
+              <Link to={`/profile/${user.id}`} className="block px-4 py-2 text-sm hover:bg-gray-100">
                 👤 Profile
               </Link>
               <Link to="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">

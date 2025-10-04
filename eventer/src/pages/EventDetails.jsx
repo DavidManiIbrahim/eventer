@@ -131,12 +131,24 @@ export default function EventDetail() {
           </div>
         )}
 
-        {/* Live Chat */}
-        {showChat && activeEventId === event._id && (
-          <div className="mt-6">
-            <LiveChat eventId={event._id} username={user?.username || "Guest"} />
-          </div>
-        )}
+        {/* Live Chat - Fixed Sidebar */}
+{showChat && activeEventId === event._id && (
+  <div className="fixed top-16 right-0 w-80 h-[calc(100vh-4rem)] bg-white shadow-xl border-l border-gray-200 flex flex-col">
+    <div className="flex justify-between items-center px-4 py-2 border-b">
+      <h2 className="text-lg font-semibold">💬 Live Chat</h2>
+      <button
+        onClick={() => setShowChat(false)}
+        className="text-gray-500 hover:text-red-500"
+      >
+        ✖
+      </button>
+    </div>
+    <div className="flex-1 overflow-y-auto p-4">
+      <LiveChat eventId={event._id} username={user?.username || "Guest"} />
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );

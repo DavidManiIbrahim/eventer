@@ -1,121 +1,106 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { logout, getCurrentUser } from "../utils/auth";
+import { useState, useEffect } from "react";
+import { getCurrentUser } from "../utils/auth";
 
 export default function Sidebar() {
   const [user, setUser] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
+  // ✅ Load user + preferences on mount
   useEffect(() => {
     const currentUser = getCurrentUser();
-    if (currentUser) {
-      setUser(currentUser);
-    }
+    if (currentUser) setUser(currentUser);
 
-    const handleStorageChange = () => {
-      const updatedUser = getCurrentUser();
-      setUser(updatedUser);
-    };
+    const savedDarkMode = localStorage.getItem("darkMode");
+    const savedCollapsed = localStorage.getItem("sidebarCollapsed");
 
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("userLogout", handleStorageChange);
-    window.addEventListener("userLogin", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("userLogout", handleStorageChange);
-      window.removeEventListener("userLogin", handleStorageChange);
-    };
+    if (savedDarkMode !== null) setDarkMode(savedDarkMode === "true");
+    if (savedCollapsed !== null) setCollapsed(savedCollapsed === "true");
   }, []);
 
-  const handleLogout = () => {
-    const confirmed = window.confirm("Are you sure you want to logout?");
-    if (confirmed) {
-      logout();
+  // ✅ Apply dark mode
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
-  };
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
+
+  // ✅ Save collapse preference
+  useEffect(() => {
+    localStorage.setItem("sidebarCollapsed", collapsed);
+  }, [collapsed]);
+
+  if (!user) return null;
+
+  const menuItems = [
+    { to: "/dashboard", label: "Dashboard", icon: "🎛" },
+    { to: "/events", label: "Events", icon: "🎫" },
+    { to: "/admin/dashboard", label: "Stats", icon: "📊" },
+    { to: "/my-tickets", label: "My Tickets", icon: "🎟" },
+    { to: "/live/events", label: "Live", icon: "⭕" },
+    { to: "/create", label: "Create", icon: "➕", highlight: true },
+    { to: "/settings", label: "Settings", icon: "⚙" },
+  ];
 
   return (
-    <>
-      {user && (
-        <aside className="fixed pt-16 top-0 left-0 w-64 h-screen bg-white text-gray-800 flex flex-col justify-between shadow-lg border-r border-gray-200">
-  {/* Sidebar Links */}
-  <div className="px-2 py-4 space-y-4">
-    <Link
-      to="/dashboard"
-      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition font-medium"
+    <aside
+      className={`pt-12 fixed top-0 left-0 h-screen ${
+        collapsed ? "w-20" : "w-64"
+      } border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col justify-between transition-all duration-300`}
     >
-      🎛 <span>Dashboard</span>
-    </Link>
+      {/* Collapse Button */}
+      <div className="flex justify-end p-2">
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="text-sm px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          {collapsed ? "➡" : "⬅"}
+        </button>
+      </div>
 
-    <Link
-      to="/events"
-      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition font-medium"
-    >
-      🎫 <span>Events</span>
-    </Link>
+      {/* Sidebar Links */}
+      <div className="px-2 py-4 space-y-2 flex-1">
+        {menuItems.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className={`group relative flex items-center gap-3 p-2 rounded-lg transition ${
+              item.highlight
+                ? "bg-indigo-500 text-white hover:bg-indigo-400"
+                : "hover:bg-gray-100 dark:hover:bg-gray-800"
+            }`}
+          >
+            <span className="text-lg">{item.icon}</span>
+            {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
 
-    <Link
-      to="/admin/dashboard"
-      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition font-medium"
-    >
-      📊 <span>Stats</span>
-    </Link>
+            {/* Tooltip when collapsed */}
+            {collapsed && (
+              <span className="absolute left-16 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition pointer-events-none">
+                {item.label}
+              </span>
+            )}
+          </Link>
+        ))}
+      </div>
 
-    <Link
-      to="/my-tickets"
-      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition font-medium"
-    >
-      🎟 <span>My Tickets</span>
-    </Link>
-
-    <Link
-      to="/live/events"
-      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition font-medium"
-    >
-      ⭕ <span>Live</span>
-    </Link>
-
-    {user && (
-      <Link
-        to="/create"
-        className="flex items-center gap-2 p-2 rounded-lg bg-indigo-500 text-white hover:bg-indigo-400 transition font-medium"
-      >
-        ➕ <span>Create Event</span>
-      </Link>
-    )}
-
-    <Link
-      to="/settings"
-      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition font-medium"
-    >
-      ⚙ <span>Settings</span>
-    </Link>
-  </div>
-
-  {/* Bottom Section */}
-  <div className="px-5 py-4 border-t border-gray-200">
-    <Link
-      to={`/profile/${user.id}`}
-      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition"
-    >
-      <img
-        src={`http://localhost:5000/uploads/profile_pic/${user.profilePic}`}
-        alt="Profile"
-        className="w-10 h-10 rounded-full object-cover border border-gray-300"
-      />
-      <span className="font-medium">{user.username || "Profile"}</span>
-    </Link>
-
-    <button
-      onClick={handleLogout}
-      className="w-full mt-3 flex items-center gap-2 p-2 text-red-500 rounded-lg hover:bg-red-50 transition font-medium"
-    >
-      🚪 Logout
-    </button>
-  </div>
-</aside>
-
-      )}
-    </>
+      {/* Dark/Light Mode Toggle */}
+      <div className="px-2 py-4 border-t border-gray-200 dark:border-gray-700">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+        >
+          <span className="text-lg">{darkMode ? "🌞" : "🌙"}</span>
+          {!collapsed && (
+            <span className="font-medium">
+              {darkMode ? "Light Mode" : "Dark Mode"}
+            </span>
+          )}
+        </button>
+      </div>
+    </aside>
   );
 }

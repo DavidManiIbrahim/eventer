@@ -86,7 +86,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16 pl-72 px-6">
+    <div className="min-h-screen bg-gray-50 pt-16 pl-72 px-6  z-10">
       <h2 className="text-2xl font-bold mb-6">🎛 Organizer Dashboard</h2>
 
        {/* Loading */}
