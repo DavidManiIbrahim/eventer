@@ -149,18 +149,7 @@ export default function Home() {
                         <span className="inline-block px-3 py-1 bg-red-500 text-white rounded-full text-sm font-medium">
                           🔴 LIVE NOW
                         </span>
-                        {event.liveStream.streamType === "YouTube" && (
-                          <iframe
-                            width="100%"
-                            height="200"
-                            src={event.liveStream.streamURL.replace("watch?v=", "embed/")}
-                            title="YouTube Live Stream"
-                            frameBorder="0"
-                            allow="autoplay; encrypted-media"
-                            allowFullScreen
-                            className="mt-2 rounded-lg"
-                          ></iframe>
-                        )}
+                        
                       </div>
                     )}
                   </div>

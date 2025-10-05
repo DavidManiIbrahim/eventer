@@ -109,9 +109,65 @@ const Profile = () => {
           {activeTab === "upcoming" &&
             (profile.tickets?.length ? (
               profile.tickets.map((event) => (
-                <div key={event._id} className="bg-white shadow rounded-lg p-4">
-                  <h3 className="font-semibold text-lg">{event.title}</h3>
-                  <p className="text-sm text-gray-600">{event.date}</p>
+                <div
+                  key={event._id}
+                  className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition"
+                >
+                  {/* Event Image */}
+                  {event.image && (
+                    <img
+                      src={`http://localhost:5000/uploads/event_image/${event.image}`}
+                      alt={event.title}
+                      className="h-40 w-full object-cover"
+                    />
+                  )}
+
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg text-gray-900">
+                      {event.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {event.description}
+                    </p>
+
+                    <div className="mt-2 text-sm text-gray-500">
+                      📍 {event.location}
+                    </div>
+                    <div className="mt-1 text-sm text-gray-500">
+                      📅{" "}
+                      {new Date(event.date).toLocaleDateString("en-GB", {
+                        weekday: "short",
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}{" "}
+                      {event.time && (
+                        <span>
+                          {" "}
+                          at{" "}
+                          {new Date(
+                            `1970-01-01T${event.time}`
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="mt-2 font-medium text-indigo-600">
+                      🎟 ₦{event.ticketPrice}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Tickets Left:{" "}
+                      {event.totalTickets - (event.ticketsSold || 0)}
+                    </div>
+
+                    <button className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg">
+                      View Details
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
@@ -121,16 +177,56 @@ const Profile = () => {
           {activeTab === "created" &&
             (profile.createdEvents?.length ? (
               profile.createdEvents.map((event) => (
-                <div key={event._id} className="bg-white shadow rounded-lg p-4">
-                  <h3 className="font-semibold text-lg">{event.title}</h3>
-                  <p className="text-sm text-gray-600">{event.date}</p>
+                <div
+                  key={event._id}
+                  className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition"
+                >
+                  {event.image && (
+                    <img
+                      src={`http://localhost:5000/uploads/event_image/${event.image}`}
+                      alt={event.title}
+                      className="h-40 w-full object-cover"
+                    />
+                  )}
+
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg text-gray-900">
+                      {event.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {event.description}
+                    </p>
+
+                    <div className="mt-2 text-sm text-gray-500">
+                      📍 {event.location}
+                    </div>
+                    <div className="mt-1 text-sm text-gray-500">
+                      📅 {new Date(event.date).toLocaleDateString()} at{" "}
+                      {event.time}
+                    </div>
+
+                    <div className="mt-2 font-medium text-indigo-600">
+                      🎟 ₦{event.ticketPrice}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Tickets Left:{" "}
+                      {event.totalTickets - (event.ticketsSold || 0)}
+                    </div>
+
+                    <button className="mt-4 w-full bg-yellow-500 hover:bg-yellow-600 text-black py-2 rounded-lg">
+                      Manage Event
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
               <p className="text-gray-500">No created events</p>
             ))}
         </div>
+
         {/* Future: Add Past Events Section Here */}
+        {activeTab === "past" && <p className="text-gray-500">No past events</p>}
+        
       </div>
     </div>
   );

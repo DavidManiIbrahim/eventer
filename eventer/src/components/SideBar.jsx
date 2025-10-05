@@ -4,7 +4,9 @@ import { getCurrentUser } from "../utils/auth";
 
 export default function Sidebar() {
   const [user, setUser] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true"
+  );
   const [collapsed, setCollapsed] = useState(false);
 
   // ✅ Load user + preferences on mount
@@ -12,10 +14,7 @@ export default function Sidebar() {
     const currentUser = getCurrentUser();
     if (currentUser) setUser(currentUser);
 
-    const savedDarkMode = localStorage.getItem("darkMode");
     const savedCollapsed = localStorage.getItem("sidebarCollapsed");
-
-    if (savedDarkMode !== null) setDarkMode(savedDarkMode === "true");
     if (savedCollapsed !== null) setCollapsed(savedCollapsed === "true");
   }, []);
 
@@ -23,10 +22,11 @@ export default function Sidebar() {
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem("darkMode", "true");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("darkMode", "false");
     }
-    localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
 
   // ✅ Save collapse preference

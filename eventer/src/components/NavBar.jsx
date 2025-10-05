@@ -46,15 +46,6 @@ export default function NavBar() {
             Welcome, <strong className="text-gray-900">{user.username}</strong>
           </span>
 
-          {/* Search */}
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="px-3 py-1 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <span className="absolute right-2 top-1 text-xs text-gray-400">🔍</span>
-          </div>
 
           {/* Notification */}
           <div className="relative">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import API from "../api/axios";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -96,7 +97,9 @@ export default function Dashboard() {
       {/* Admin Stats */}
       {isAdmin && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Link to = "/admin/users" >
           <StatCard title="👥 Total Users" value={stats.totalUsers} />
+          </Link>
           <StatCard title="🟢 Active Users" value={stats.activeUsers} />
           <StatCard title="🎤 Organizers" value={stats.organizers} />
         </div>

@@ -22,7 +22,7 @@ const UserManagement = () => {
       { role },
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    setUsers(users.map(u => (u._id === id ? res.data : u)));
+    setUsers(users.map(u => (u._id === id ? { ...u, ...res.data } : u)));
   };
 
   const deleteUser = async (id) => {
@@ -34,7 +34,7 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="pl-60 pt-20 pr-6">
+    <div className="pt-20 px-6 pl-72 min-h-screen bg-gray-50">
       <h2 className="text-2xl font-bold mb-4">User Management</h2>
       <table className="w-full border">
         <thead>
