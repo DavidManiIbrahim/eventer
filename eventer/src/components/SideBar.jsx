@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useTheme } from "../contexts/ThemeContexts";
 import { getCurrentUser } from "../utils/auth";
 
 export default function Sidebar() {
   const [user, setUser] = useState(null);
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("darkMode") === "true"
-  );
   const [collapsed, setCollapsed] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
-  // ✅ Load user + preferences on mount
   useEffect(() => {
     const currentUser = getCurrentUser();
     if (currentUser) setUser(currentUser);
@@ -18,18 +16,6 @@ export default function Sidebar() {
     if (savedCollapsed !== null) setCollapsed(savedCollapsed === "true");
   }, []);
 
-  // ✅ Apply dark mode
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("darkMode", "true");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("darkMode", "false");
-    }
-  }, [darkMode]);
-
-  // ✅ Save collapse preference
   useEffect(() => {
     localStorage.setItem("sidebarCollapsed", collapsed);
   }, [collapsed]);
@@ -46,17 +32,34 @@ export default function Sidebar() {
     { to: "/settings", label: "Settings", icon: "⚙" },
   ];
 
+  // ✅ Theme-based style variables for dark/light mode
+  const bgColor = theme === "dark" ? "#0f172a" : "#ffffff"; // sidebar background
+  const textColor = theme === "dark" ? "#f9fafb" : "#1f2937"; // text color
+  const hoverBg = theme === "dark" ? "#1e293b" : "#f3f4f6"; // hover effect
+  const borderColor = theme === "dark" ? "#334155" : "#e5e7eb"; // sidebar border
+
   return (
     <aside
-      className={`pt-12 fixed top-0 left-0 h-screen ${
-        collapsed ? "w-20" : "w-64"
-      } border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col justify-between transition-all duration-300`}
+      className={`pt-12 fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300 shadow-lg ${
+        theme === "dark" ? "dark-sidebar" : "light-sidebar"
+      }`}
+      style={{
+        width: collapsed ? "5rem" : "16rem",
+        backgroundColor: bgColor,
+        color: textColor,
+        borderRight: `1px solid ${borderColor}`,
+      }}
     >
       {/* Collapse Button */}
       <div className="flex justify-end p-2">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-sm px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="transition-colors rounded-md px-2 py-1 text-sm"
+          style={{
+            backgroundColor: hoverBg,
+            color: textColor,
+            border: `1px solid ${borderColor}`,
+          }}
         >
           {collapsed ? "➡" : "⬅"}
         </button>
@@ -68,18 +71,29 @@ export default function Sidebar() {
           <Link
             key={item.to}
             to={item.to}
-            className={`group relative flex items-center gap-3 p-2 rounded-lg transition ${
-              item.highlight
-                ? "bg-indigo-500 text-white hover:bg-indigo-400"
-                : "hover:bg-gray-100 dark:hover:bg-gray-800"
+            className={`group relative flex items-center gap-3 p-2 rounded-lg transition-all ${
+              item.highlight ? "font-semibold" : ""
             }`}
+            style={{
+              backgroundColor: item.highlight ? "#6366f1" : "transparent",
+              color: item.highlight ? "#fff" : textColor,
+            }}
           >
             <span className="text-lg">{item.icon}</span>
-            {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+            {!collapsed && (
+              <span className="text-sm font-medium">{item.label}</span>
+            )}
 
             {/* Tooltip when collapsed */}
             {collapsed && (
-              <span className="absolute left-16 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition pointer-events-none">
+              <span
+                className="absolute left-16 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition"
+                style={{
+                  backgroundColor: theme === "dark" ? "#1e293b" : "#111827",
+                  color: "#fff",
+                  pointerEvents: "none",
+                }}
+              >
                 {item.label}
               </span>
             )}
@@ -87,16 +101,27 @@ export default function Sidebar() {
         ))}
       </div>
 
-      {/* Dark/Light Mode Toggle */}
-      <div className="px-2 py-4 border-t border-gray-200 dark:border-gray-700">
+      {/* Theme Toggle (remains here only) */}
+      <div
+        className="px-2 py-4 border-t transition"
+        style={{ borderColor: borderColor }}
+      >
         <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+          onClick={toggleTheme}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-all"
+          style={{
+            backgroundColor: hoverBg,
+            color: textColor,
+            border: `1px solid ${borderColor}`,
+            cursor: "pointer",
+          }}
         >
-          <span className="text-lg">{darkMode ? "🌞" : "🌙"}</span>
+          <span className="text-lg">
+            {theme === "dark" ? "☀️" : "🌙"}
+          </span>
           {!collapsed && (
             <span className="font-medium">
-              {darkMode ? "Light Mode" : "Dark Mode"}
+              {theme === "dark" ? "Light Mode" : "Dark Mode"}
             </span>
           )}
         </button>
