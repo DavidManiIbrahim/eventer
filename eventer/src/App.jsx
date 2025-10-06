@@ -7,7 +7,6 @@ import CreateEvent from "./pages/CreateEvent";
 import MyTickets from "./pages/MyTickets";
 import Dashboard from "./pages/Dashboard";
 import EditEvent from "./pages/Editevent";
-import MyEvents from "./pages/MyEvents";
 import NavBar from "./components/NavBar";
 import Success from "./pages/success";
 import StatsDashboard from "./pages/StatsDashboard";
@@ -45,7 +44,6 @@ function Layout() {
         <Route path="/Eventdetail/:eventId" element={<EventDetail />} />
         <Route path="/edit/:eventId" element={<EditEvent />} />
         <Route path="/success" element={<Success />} />
-        <Route path="/admin/my-events" element={<MyEvents />} />
         <Route path="/live/events" element={<LiveEvent />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/profile/:id" element={<Profile />} />

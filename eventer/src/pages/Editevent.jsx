@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../api/axios";
+import "./CSS/EditEvent.css"; // ✅ Import dark mode CSS
 
 export default function EditEvent() {
   const { eventId } = useParams();
@@ -40,33 +41,29 @@ export default function EditEvent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+    <div className="edit-event-page min-h-screen flex items-center justify-center p-6">
+      <div className="edit-event-card w-full max-w-2xl rounded-2xl shadow-lg p-8">
+        <h2 className="edit-event-title text-2xl font-bold mb-6 flex items-center gap-2">
           ✏️ Edit Event
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Title
-            </label>
+            <label className="form-label">Title</label>
             <input
               name="title"
               value={form.title}
               onChange={handleChange}
               placeholder="Event title"
               required
-              className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
+            <label className="form-label">Description</label>
             <textarea
               name="description"
               value={form.description}
@@ -74,52 +71,46 @@ export default function EditEvent() {
               placeholder="Event description"
               required
               rows="4"
-              className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
             />
           </div>
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Location
-            </label>
+            <label className="form-label">Location</label>
             <input
               name="location"
               value={form.location}
               onChange={handleChange}
               placeholder="Event location"
               required
-              className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
             />
           </div>
 
           {/* Date & Time */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Date
-              </label>
+              <label className="form-label">Date</label>
               <input
                 name="date"
                 type="date"
                 value={form.date}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Time
-              </label>
+              <label className="form-label">Time</label>
               <input
                 name="time"
                 type="time"
                 value={form.time}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
               />
             </div>
           </div>
@@ -127,9 +118,7 @@ export default function EditEvent() {
           {/* Ticket Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Ticket Price ($)
-              </label>
+              <label className="form-label">Ticket Price ($)</label>
               <input
                 name="ticketPrice"
                 type="number"
@@ -137,14 +126,12 @@ export default function EditEvent() {
                 onChange={handleChange}
                 placeholder="Enter ticket price"
                 required
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Total Tickets
-              </label>
+              <label className="form-label">Total Tickets</label>
               <input
                 name="totalTickets"
                 type="number"
@@ -152,7 +139,7 @@ export default function EditEvent() {
                 onChange={handleChange}
                 placeholder="Number of tickets"
                 required
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
               />
             </div>
           </div>
@@ -160,14 +147,12 @@ export default function EditEvent() {
           {/* Streaming Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Stream Type
-              </label>
+              <label className="form-label">Stream Type</label>
               <select
                 name="streamType"
                 value={form.streamType}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
               >
                 <option value="YouTube">YouTube</option>
                 <option value="Facebook">Facebook</option>
@@ -175,25 +160,20 @@ export default function EditEvent() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Stream URL
-              </label>
+              <label className="form-label">Stream URL</label>
               <input
                 name="streamURL"
                 value={form.streamURL}
                 onChange={handleChange}
                 placeholder="Paste stream link"
-                className="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
               />
             </div>
           </div>
 
           {/* Submit Button */}
           <div className="pt-4">
-            <button
-              type="submit"
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition"
-            >
+            <button type="submit" className="submit-btn w-full py-3 font-semibold rounded-lg shadow-md transition">
               ✅ Update Event
             </button>
           </div>

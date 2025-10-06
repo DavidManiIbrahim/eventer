@@ -17,8 +17,9 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
+import "./CSS/Stats.css"; // Import the CSS for dark mode
 
-export default function Dashboard() {
+export default function Stats() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -58,9 +59,9 @@ export default function Dashboard() {
 
   function StatCard({ title, value }) {
     return (
-      <div className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
-        <h3 className="text-sm text-gray-500">{title}</h3>
-        <p className="text-2xl font-semibold text-indigo-600">{value}</p>
+      <div className="dashboard-card shadow-md rounded-lg p-4 flex flex-col items-center">
+        <h3 className="text-sm">{title}</h3>
+        <p className="text-2xl font-semibold text-primary">{value}</p>
       </div>
     );
   }
@@ -68,19 +69,19 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-500 mb-4"></div>
-          <p className="text-gray-600">Loading Dashboard...</p>
-        </div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-500 mb-4"></div>
+        <p>Loading Dashboard...</p>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-10 text-red-600">
-        <p className="mb-4">❌ {error}</p>
+      <div className="text-center py-10">
+        <p className="mb-4 text-error">❌ {error}</p>
         <button
           onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+          className="px-4 py-2 bg-error text-white rounded-md hover:opacity-90 transition"
         >
           Try Again
         </button>
@@ -91,21 +92,19 @@ export default function Dashboard() {
   if (!stats) return null;
 
   return (
-    <div className="p-6 space-y-8 min-h-screen bg-gray-50 pt-16 pl-72">
-      <h2 className="text-3xl font-bold text-gray-800">📊 Organizer Dashboard</h2>
+    <div className="dashboard-container p-6 space-y-8 min-h-screen pt-16 pl-72">
+      <h2 className="text-3xl font-bold">📊 Organizer Dashboard</h2>
 
-      {/* Admin Stats */}
       {isAdmin && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link to = "/admin/users" >
-          <StatCard title="👥 Total Users" value={stats.totalUsers} />
+          <Link to="/admin/users">
+            <StatCard title="👥 Total Users" value={stats.totalUsers} />
           </Link>
           <StatCard title="🟢 Active Users" value={stats.activeUsers} />
           <StatCard title="🎤 Organizers" value={stats.organizers} />
         </div>
       )}
 
-      {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard title="Total Events" value={stats.totalEvents} />
         <StatCard title="Tickets Sold" value={stats.totalTicketsSold} />
@@ -113,32 +112,29 @@ export default function Dashboard() {
         <StatCard title="Live Events" value={stats.currentlyLive} />
       </div>
 
-      {/* Top Events */}
-      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="dashboard-section rounded-lg p-6">
         <h3 className="text-lg font-semibold mb-4">🏆 Top Events</h3>
         {stats.topEvents?.length > 0 ? (
           <ul className="space-y-2">
             {stats.topEvents.map((event, i) => (
               <li
                 key={i}
-                className="flex justify-between bg-gray-50 px-3 py-2 rounded-md"
+                className="flex justify-between bg-muted px-3 py-2 rounded-md"
               >
                 <span className="font-medium">{event.title}</span>
-                <span className="text-indigo-600 font-bold">
+                <span className="text-primary font-bold">
                   {event.quantitySold} tickets
                 </span>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No events yet.</p>
+          <p>No events yet.</p>
         )}
       </div>
 
-      {/* Graphs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Bar Chart */}
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="dashboard-section rounded-lg p-6">
           <h3 className="font-semibold mb-4">Tickets Sold per Event</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={stats.perEventStats}>
@@ -152,8 +148,7 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* Pie Chart */}
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="dashboard-section rounded-lg p-6">
           <h3 className="font-semibold mb-4">Revenue Share</h3>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
@@ -180,8 +175,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Line Chart */}
-      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="dashboard-section rounded-lg p-6">
         <h3 className="font-semibold mb-4">Revenue Trend (₦)</h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={stats.perEventStats}>
@@ -196,12 +190,11 @@ export default function Dashboard() {
         </ResponsiveContainer>
       </div>
 
-      {/* Per-Event Table */}
-      <div className="bg-white shadow-md rounded-lg p-6 overflow-x-auto">
+      <div className="dashboard-section rounded-lg p-6 overflow-x-auto">
         <h3 className="font-semibold mb-4">Event Breakdown</h3>
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-100 text-left">
+            <tr className="bg-muted text-left">
               <th className="p-2">Event</th>
               <th className="p-2">Tickets Sold</th>
               <th className="p-2">Revenue (₦)</th>
@@ -220,9 +213,7 @@ export default function Dashboard() {
                       {a.buyer?.name} ({a.quantity})
                     </span>
                   ))}
-                  {event.attendees.length > 3 && (
-                    <em className="text-gray-500">+ more</em>
-                  )}
+                  {event.attendees.length > 3 && <em>+ more</em>}
                 </td>
               </tr>
             ))}
@@ -230,11 +221,10 @@ export default function Dashboard() {
         </table>
       </div>
 
-      {/* ✅ Admin Only Section */}
       {isAdmin && (
-        <div className="bg-yellow-50 border border-yellow-300 p-6 rounded-lg">
-          <h2 className="text-xl font-bold text-yellow-700">⚡ Admin Tools</h2>
-          <ul className="list-disc pl-6 mt-2 text-yellow-800 space-y-1">
+        <div className="admin-section border p-6 rounded-lg">
+          <h2 className="text-xl font-bold">⚡ Admin Tools</h2>
+          <ul className="list-disc pl-6 mt-2 space-y-1">
             <li>Manage Users</li>
             <li>Approve or Remove Events</li>
             <li>View Platform-wide Analytics</li>

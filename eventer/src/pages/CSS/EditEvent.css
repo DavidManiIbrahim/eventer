@@ -1,0 +1,82 @@
+/* 🌞 Light mode defaults */
+:root {
+  --page-bg: #f3f4f6;
+  --card-bg: #ffffff;
+  --text-color: #1f2937;
+  --label-color: #374151;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --focus-ring: #3b82f6;
+  --button-bg: #2563eb;
+  --button-hover: #1d4ed8;
+  --button-text: #ffffff;
+}
+
+/* 🌙 Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-bg: #121212;
+    --card-bg: #1f2937;
+    --text-color: #e5e7eb;
+    --label-color: #d1d5db;
+    --input-bg: #121212;
+    --input-border: #4b5563;
+    --focus-ring: #60a5fa;
+    --button-bg: #3b82f6;
+    --button-hover: #2563eb;
+    --button-text: #ffffff;
+  }
+}
+
+/* 🌐 Global */
+.edit-event-page {
+  background: var(--page-bg);
+  color: var(--text-color);
+}
+
+/* 🧱 Card */
+.edit-event-card {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+}
+
+/* 🏷️ Text + Labels */
+.edit-event-title {
+  color: var(--text-color);
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--label-color);
+  margin-bottom: 0.25rem;
+}
+
+/* ✏️ Inputs */
+.form-input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-color);
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+/* ✅ Button */
+.submit-btn {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+}
+
+.submit-btn:hover {
+  background: var(--button-hover);
+}

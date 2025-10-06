@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
-import LiveChat from "../components/LiveChats"; 
+import LiveChat from "../components/LiveChats";
 import { useNavigate, useParams } from "react-router-dom";
+import "./CSS/eventdetail.css"; // ✅ Import CSS file
 
 export default function EventDetail() {
   const { eventId } = useParams();
@@ -21,8 +22,7 @@ export default function EventDetail() {
         setEvent(res.data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         setLoading(false);
       });
   }, [eventId]);
@@ -47,108 +47,102 @@ export default function EventDetail() {
     setShowChat(true);
   };
 
-  if (loading) return <p className="text-center mt-10">Loading event...</p>;
-  if (!event) return <p className="text-center mt-10">Event not found</p>;
+  if (loading) return <p className="event-loading">Loading event...</p>;
+  if (!event) return <p className="event-loading">Event not found</p>;
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16 pl-64 px-6"> 
-      {/* ✅ ml-64 (space for sidebar), mt-16 (space for navbar) */}
+    <div className="event-detail">
+      <div className="event-container">
+        <h1 className="event-title">Event Details</h1>
 
-      <h1 className="text-2xl font-bold mb-4">Event Details</h1>
+        <div className="event-card">
+          <h2 className="event-name">{event.title}</h2>
+          <p className="event-description">{event.description}</p>
+          <p className="event-location">{event.location}</p>
+          <p className="event-date">
+            Date: {new Date(event.date).toLocaleDateString()} at {event.time}
+          </p>
+          <p className="event-price">Price: ₦{event.ticketPrice}</p>
+          <p className="event-tickets">
+            Tickets Left: {event.totalTickets - event.ticketsSold}
+          </p>
 
-      <div className="bg-white shadow-lg rounded-2xl p-6">
-        <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
-        <p className="text-gray-600 mb-2">{event.description}</p>
-        <p className="text-gray-500">{event.location}</p>
-        <p className="mt-1">
-          Date: {new Date(event.date).toLocaleDateString()} at {event.time}
-        </p>
-        <p className="mt-1 font-medium">Price: ₦{event.ticketPrice}</p>
-        <p className="mt-1 text-sm text-gray-600">
-          Tickets Left: {event.totalTickets - event.ticketsSold}
-        </p>
-
-        {event.image && (
-          <img
-            src={`${
-              import.meta.env.VITE_API_URL?.replace("/api", "") ||
-              "http://localhost:5000"
-            }/uploads/event_image/${event.image}`}
-            alt={event.title}
-            className="w-full max-h-[400px] object-cover rounded-lg mt-4"
-          />
-        )}
-
-        {/* Live Stream */}
-        {event.liveStream?.isLive && (
-          <div className="mt-6">
-            <strong className="text-red-600">🔴 LIVE NOW</strong>
-            {event.liveStream.streamType === "YouTube" && (
-              <iframe
-                className="w-full h-[315px] mt-3 rounded-lg"
-                src={event.liveStream.streamURL.replace("watch?v=", "embed/")}
-                title="YouTube Live Stream"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-              ></iframe>
-            )}
-
-            {event.liveStream.streamType === "Facebook" && (
-              <div
-                className="fb-video mt-3"
-                data-href={event.liveStream.streamURL}
-                data-width="500"
-                data-allowfullscreen="true"
-              ></div>
-            )}
-
-            <button
-              onClick={() => handleJoinChat(event._id)}
-              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-            >
-              Join Live Chat
-            </button>
-          </div>
-        )}
-
-        {/* Ticket Purchase */}
-        {isLoggedIn && (
-          <div className="mt-6 flex items-center gap-3">
-            <input
-              type="number"
-              min="1"
-              className="w-20 px-2 py-1 border rounded-lg"
-              placeholder="Qty"
-              value={buying[event._id] || "1"}
-              onChange={(e) => handleQuantityChange(e, event._id)}
+          {event.image && (
+            <img
+              src={`${
+                import.meta.env.VITE_API_URL?.replace("/api", "") ||
+                "http://localhost:5000"
+              }/uploads/event_image/${event.image}`}
+              alt={event.title}
+              className="event-image"
             />
-            <button
-              onClick={handleBuy}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
-            >
-              Buy Ticket
-            </button>
+          )}
+
+          {/* ✅ Live Stream Section */}
+          {event.liveStream?.isLive && (
+            <div className="event-live">
+              <strong className="live-label">🔴 LIVE NOW</strong>
+
+              {event.liveStream.streamType === "YouTube" && (
+                <iframe
+                  className="live-frame"
+                  src={event.liveStream.streamURL.replace("watch?v=", "embed/")}
+                  title="YouTube Live Stream"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                ></iframe>
+              )}
+
+              {event.liveStream.streamType === "Facebook" && (
+                <div
+                  className="fb-video"
+                  data-href={event.liveStream.streamURL}
+                  data-width="500"
+                  data-allowfullscreen="true"
+                ></div>
+              )}
+
+              <button
+                onClick={() => handleJoinChat(event._id)}
+                className="join-chat-btn"
+              >
+                Join Live Chat
+              </button>
+            </div>
+          )}
+
+          {/* ✅ Ticket Purchase Section */}
+          {isLoggedIn && (
+            <div className="ticket-purchase">
+              <input
+                type="number"
+                min="1"
+                className="ticket-input"
+                placeholder="Qty"
+                value={buying[event._id] || "1"}
+                onChange={(e) => handleQuantityChange(e, event._id)}
+              />
+              <button onClick={handleBuy} className="buy-btn">
+                Buy Ticket
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* ✅ Live Chat Sidebar */}
+        {showChat && activeEventId === event._id && (
+          <div className="chat-sidebar">
+            <div className="chat-header">
+              <h2>💬 Live Chat</h2>
+              <button onClick={() => setShowChat(false)} className="close-chat">
+                ✖
+              </button>
+            </div>
+            <div className="chat-body">
+              <LiveChat eventId={event._id} username={user?.username || "Guest"} />
+            </div>
           </div>
         )}
-
-        {/* Live Chat - Fixed Sidebar */}
-{showChat && activeEventId === event._id && (
-  <div className="fixed top-16 right-0 w-80 h-[calc(100vh-4rem)] bg-white shadow-xl border-l border-gray-200 flex flex-col">
-    <div className="flex justify-between items-center px-4 py-2 border-b">
-      <h2 className="text-lg font-semibold">💬 Live Chat</h2>
-      <button
-        onClick={() => setShowChat(false)}
-        className="text-gray-500 hover:text-red-500"
-      >
-        ✖
-      </button>
-    </div>
-    <div className="flex-1 overflow-y-auto p-4">
-      <LiveChat eventId={event._id} username={user?.username || "Guest"} />
-    </div>
-  </div>
-)}
-
       </div>
     </div>
   );

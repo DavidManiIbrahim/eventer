@@ -1,5 +1,6 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; 
 import API from "../api/axios";
+import "./CSS/Checkout.css"; // 👈 add this line for dark mode CSS
 
 export default function Checkout() {
   const { state } = useLocation();
@@ -27,35 +28,35 @@ export default function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="bg-white shadow-xl rounded-2xl p-8 max-w-lg w-full">
+    <div className="checkout-container min-h-screen flex items-center justify-center px-4">
+      <div className="checkout-card shadow-xl rounded-2xl p-8 max-w-lg w-full">
         {/* Header */}
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        <h1 className="text-2xl font-bold mb-6 text-center checkout-title">
           Checkout Confirmation
         </h1>
 
         {/* Event Details */}
         <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-700">{event.title}</h2>
-          <p className="text-gray-600 mt-1">{event.description}</p>
-          <p className="text-gray-500 text-sm mt-2">
+          <h2 className="text-xl font-semibold checkout-subtitle">{event.title}</h2>
+          <p className="checkout-text mt-1">{event.description}</p>
+          <p className="checkout-muted text-sm mt-2">
             📅 {new Date(event.date).toLocaleDateString()} at {event.time}
           </p>
-          <p className="text-gray-500 text-sm">📍 {event.location}</p>
+          <p className="checkout-muted text-sm">📍 {event.location}</p>
         </div>
 
         {/* Buyer Info */}
-        <div className="border-t border-gray-200 pt-4 mb-6">
-          <h3 className="text-lg font-semibold text-gray-700">Buyer Info</h3>
-          <p className="text-gray-600">👤 {user.username}</p>
-          <p className="text-gray-600">📧 {user.email}</p>
+        <div className="border-t border-gray-200 pt-4 mb-6 checkout-border">
+          <h3 className="text-lg font-semibold checkout-subtitle">Buyer Info</h3>
+          <p className="checkout-text">👤 {user.username}</p>
+          <p className="checkout-text">📧 {user.email}</p>
         </div>
 
         {/* Order Summary */}
-        <div className="border-t border-gray-200 pt-4 mb-6">
-          <h3 className="text-lg font-semibold text-gray-700">Order Summary</h3>
-          <p className="text-gray-600">🧾 Quantity: {quantity}</p>
-          <p className="text-gray-800 font-bold text-lg">
+        <div className="border-t border-gray-200 pt-4 mb-6 checkout-border">
+          <h3 className="text-lg font-semibold checkout-subtitle">Order Summary</h3>
+          <p className="checkout-text">🧾 Quantity: {quantity}</p>
+          <p className="checkout-total font-bold text-lg">
             💰 Total: ₦{event.ticketPrice * quantity}
           </p>
         </div>
@@ -64,13 +65,13 @@ export default function Checkout() {
         <div className="flex justify-between gap-3">
           <button
             onClick={handleConfirmPayment}
-            className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200"
+            className="checkout-btn-confirm w-full py-2 px-4 rounded-lg shadow-md transition duration-200"
           >
             ✅ Confirm & Pay
           </button>
           <button
             onClick={() => navigate(-1)}
-            className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200"
+            className="checkout-btn-back w-full py-2 px-4 rounded-lg shadow-md transition duration-200"
           >
             🔙 Go Back
           </button>

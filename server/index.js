@@ -11,6 +11,7 @@ const paymentRoutes = require("./routes/paymentRoutes");
 const webhookRoutes = require("./routes/webhookRoutes");
 const statRoutes = require("./routes/statRoutes");
 const userRoutes = require("./routes/userRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 
 const FRONTEND_URL = process.env.FRONTEND_URL;
@@ -41,6 +42,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/webhook", webhookRoutes);
 app.use("/api/stats", statRoutes);
 app.use("/api/profile", userRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 const http = require("http");
 const { Server } = require("socket.io");

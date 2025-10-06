@@ -1,0 +1,39 @@
+/* 🌙 Global Dark Mode Styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #e4e4e4;
+}
+
+/* Dashboard layout */
+body.dark-mode .dashboard-layout {
+  background-color: #181818;
+}
+
+/* Stat and event cards */
+body.dark-mode .stat-card,
+body.dark-mode .event-card,
+body.dark-mode .stats-wrapper {
+  background-color: #222;
+  border-color: #333;
+  color: #e4e4e4;
+}
+
+body.dark-mode .stat-card h3,
+body.dark-mode .stat-card p {
+  color: #e4e4e4;
+}
+
+body.dark-mode .event-card p,
+body.dark-mode .event-card h3 {
+  color: #ddd;
+}
+
+body.dark-mode button {
+  color: #f5f5f5;
+  border: none;
+}
+
+/* Button hover adjustment */
+body.dark-mode button:hover {
+  filter: brightness(1.2);
+}

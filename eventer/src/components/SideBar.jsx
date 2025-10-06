@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useTheme } from "../contexts/ThemeContexts";
+import { useState, useEffect, useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContexts";
 import { getCurrentUser } from "../utils/auth";
+import "./css/sidebar.css"; // ✅ Import sidebar CSS file
 
 export default function Sidebar() {
   const [user, setUser] = useState(null);
   const [collapsed, setCollapsed] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const { darkMode, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     const currentUser = getCurrentUser();
@@ -32,35 +33,15 @@ export default function Sidebar() {
     { to: "/settings", label: "Settings", icon: "⚙" },
   ];
 
-  // ✅ Theme-based style variables for dark/light mode
-  const bgColor = theme === "dark" ? "#0f172a" : "#ffffff"; // sidebar background
-  const textColor = theme === "dark" ? "#f9fafb" : "#1f2937"; // text color
-  const hoverBg = theme === "dark" ? "#1e293b" : "#f3f4f6"; // hover effect
-  const borderColor = theme === "dark" ? "#334155" : "#e5e7eb"; // sidebar border
-
   return (
     <aside
-      className={`pt-12 fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300 shadow-lg ${
-        theme === "dark" ? "dark-sidebar" : "light-sidebar"
-      }`}
-      style={{
-        width: collapsed ? "5rem" : "16rem",
-        backgroundColor: bgColor,
-        color: textColor,
-        borderRight: `1px solid ${borderColor}`,
-      }}
+      className={`sidebar fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300 pt-12 ${
+        collapsed ? "collapsed" : ""
+      } ${darkMode ? "dark-mode" : ""}`}
     >
       {/* Collapse Button */}
       <div className="flex justify-end p-2">
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="transition-colors rounded-md px-2 py-1 text-sm"
-          style={{
-            backgroundColor: hoverBg,
-            color: textColor,
-            border: `1px solid ${borderColor}`,
-          }}
-        >
+        <button onClick={() => setCollapsed(!collapsed)} className="collapse-btn">
           {collapsed ? "➡" : "⬅"}
         </button>
       </div>
@@ -71,29 +52,16 @@ export default function Sidebar() {
           <Link
             key={item.to}
             to={item.to}
-            className={`group relative flex items-center gap-3 p-2 rounded-lg transition-all ${
-              item.highlight ? "font-semibold" : ""
+            className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg ${
+              item.highlight ? "highlight" : ""
             }`}
-            style={{
-              backgroundColor: item.highlight ? "#6366f1" : "transparent",
-              color: item.highlight ? "#fff" : textColor,
-            }}
           >
             <span className="text-lg">{item.icon}</span>
-            {!collapsed && (
-              <span className="text-sm font-medium">{item.label}</span>
-            )}
+            {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
 
             {/* Tooltip when collapsed */}
             {collapsed && (
-              <span
-                className="absolute left-16 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition"
-                style={{
-                  backgroundColor: theme === "dark" ? "#1e293b" : "#111827",
-                  color: "#fff",
-                  pointerEvents: "none",
-                }}
-              >
+              <span className="tooltip absolute left-16 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
                 {item.label}
               </span>
             )}
@@ -101,27 +69,13 @@ export default function Sidebar() {
         ))}
       </div>
 
-      {/* Theme Toggle (remains here only) */}
-      <div
-        className="px-2 py-4 border-t transition"
-        style={{ borderColor: borderColor }}
-      >
-        <button
-          onClick={toggleTheme}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-all"
-          style={{
-            backgroundColor: hoverBg,
-            color: textColor,
-            border: `1px solid ${borderColor}`,
-            cursor: "pointer",
-          }}
-        >
-          <span className="text-lg">
-            {theme === "dark" ? "☀️" : "🌙"}
-          </span>
+      {/* Theme Toggle */}
+      <div className="px-2 py-4 border-t">
+        <button onClick={toggleTheme} className="theme-toggle w-full">
+          <span className="text-lg">{darkMode ? "☀️" : "🌙"}</span>
           {!collapsed && (
             <span className="font-medium">
-              {theme === "dark" ? "Light Mode" : "Dark Mode"}
+              {darkMode ? "Light Mode" : "Dark Mode"}
             </span>
           )}
         </button>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import "./CSS/Dashboard.css";
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
@@ -72,13 +73,11 @@ export default function Dashboard() {
     }
   };
 
-  const handleEdit = (id) => {
-    navigate(`/edit/${id}`);
-  };
+  const handleEdit = (id) => navigate(`/edit/${id}`);
 
   function StatCard({ title, value }) {
     return (
-      <div className="bg-white shadow rounded-xl p-4 text-center border">
+      <div className="stat-card bg-white shadow rounded-xl p-4 text-center border transition-all">
         <h3 className="text-sm text-gray-600">{title}</h3>
         <p className="text-2xl font-bold text-indigo-600">{value}</p>
       </div>
@@ -86,10 +85,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16 pl-72 px-6  z-10">
-      <h2 className="text-2xl font-bold mb-6">🎛 Organizer Dashboard</h2>
+    <div className="dashboard-layout min-h-screen bg-gray-50 pt-16 pl-72 px-6">
+      <h2 className="text-3xl font-bold mb-8">🎛 Organizer Dashboard</h2>
 
-       {/* Loading */}
+      {/* Loading */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-500 mb-4"></div>
@@ -110,9 +109,9 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Stats */}
+      {/* Stats Section */}
       {!loading && !error && stats && (
-        <div className="bg-white shadow rounded-xl p-6 mb-8 border">
+        <div className="stats-wrapper bg-white shadow rounded-xl p-6 mb-10 border transition-all">
           <h4 className="text-lg font-semibold mb-4">📊 Stats Overview</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <StatCard title="Total Events" value={stats.totalEvents} />
@@ -137,8 +136,8 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* My Events */}
-      <h4 className="text-lg font-semibold mb-3">Your Events</h4>
+      {/* My Events Section */}
+      <h4 className="text-lg font-semibold mb-4">Your Events</h4>
       {events.length === 0 ? (
         <p className="text-gray-500">You haven’t created any events yet.</p>
       ) : (
@@ -146,9 +145,8 @@ export default function Dashboard() {
           {events.map((event) => (
             <div
               key={event._id}
-              className="bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-lg transition"
+              className="event-card bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-lg transition"
             >
-              {/* Event Creator */}
               <div className="flex items-center gap-3 p-4 border-b">
                 <img
                   src={`http://localhost:5000/uploads/profile_pic/${event.createdBy?.profilePic}`}
@@ -159,7 +157,6 @@ export default function Dashboard() {
                 <h3 className="text-lg font-semibold">{event.title}</h3>
               </div>
 
-              {/* Event Image */}
               {event.image && (
                 <img
                   src={`${
@@ -172,7 +169,6 @@ export default function Dashboard() {
                 />
               )}
 
-              {/* Event Info */}
               <div className="p-4 space-y-2 text-sm text-gray-700">
                 <p>
                   {new Date(event.date).toLocaleDateString("en-US", {
@@ -186,7 +182,6 @@ export default function Dashboard() {
                 <p>Tickets left: {event.totalTickets}</p>
               </div>
 
-              {/* Actions */}
               <div className="flex justify-between items-center gap-2 p-4 border-t">
                 <button
                   onClick={() => toggleLive(event._id, event.liveStream?.isLive)}

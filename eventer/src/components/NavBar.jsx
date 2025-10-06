@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { logout, getCurrentUser } from "../utils/auth";
 import { ThemeContext } from "../contexts/ThemeContexts"; // still used for theme detection
 import "./css/NavBar.css";
+import NotificationBell from "./NotificationBell";
 
 export default function NavBar() {
   const [user, setUser] = useState(null);
@@ -51,12 +52,7 @@ export default function NavBar() {
 
               {/* Notification */}
               <div className="relative">
-                <Link to="/" className="nav-link">
-                  🔔
-                </Link>
-                <span className="absolute -top-1 -right-2 bg-red-500 text-xs px-1 rounded-full text-white">
-                  99+
-                </span>
+                <NotificationBell />
               </div>
 
               {/* User Profile Dropdown */}
@@ -78,7 +74,10 @@ export default function NavBar() {
                   <Link to="/admin/dashboard" className="dropdown-item">
                     📊 Stats
                   </Link>
-                  <button onClick={handleLogout} className="dropdown-item logout">
+                  <button
+                    onClick={handleLogout}
+                    className="dropdown-item logout"
+                  >
                     🚪 Logout
                   </button>
                 </div>

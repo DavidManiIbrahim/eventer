@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    boi:{
+    bio:{
       type: String,
       required: false,
       unique: false,

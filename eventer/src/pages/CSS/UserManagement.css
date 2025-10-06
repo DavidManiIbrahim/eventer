@@ -1,0 +1,40 @@
+/* 🌞 Light Mode (Default) */
+.user-management {
+  background-color: #f9fafb;
+  color: #111827;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.user-table th {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+.user-table td,
+.user-table th {
+  border-color: #d1d5db;
+}
+
+.delete-btn {
+  background-color: #ef4444;
+}
+
+/* 🌙 Dark Mode */
+.dark-mode .user-management {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+.dark-mode .user-table th {
+  background-color: #374151;
+  color: #f9fafb;
+}
+
+.dark-mode .user-table td,
+.dark-mode .user-table th {
+  border-color: #4b5563;
+}
+
+.dark-mode .delete-btn {
+  background-color: #dc2626;
+}
