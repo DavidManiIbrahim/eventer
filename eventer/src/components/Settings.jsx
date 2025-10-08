@@ -1,10 +1,36 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import axios from "../api/axios";
 import { ThemeContext } from "../contexts/ThemeContexts";
-import "./css/Settings.css"; // ensure CSS variables handle dark mode colors
+import "./css/Settings.css";
+import SettingsModal from "./EditProfileModal"; // matches your import
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const [user, setUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:5000/api/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Check for nested user object
+      const userData = res.data.user || res.data;
+      setUser(userData);
+
+      console.log("Fetched user:", userData);
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+    }
+  };
+
+  fetchUser();
+}, []);
+
 
   const tabs = [
     { id: "profile", label: "Profile" },
@@ -32,7 +58,8 @@ export default function Settings() {
           borderColor: "var(--border-color)",
         }}
       >
-        <h2 className="text-xl font-semibold px-6 py-4 border-b"
+        <h2
+          className="text-xl font-semibold px-6 py-4 border-b"
           style={{ borderColor: "var(--border-color)" }}
         >
           ⚙️ Settings
@@ -64,7 +91,34 @@ export default function Settings() {
         {activeTab === "profile" && (
           <div className="card">
             <h3 className="text-lg font-semibold mb-4">👤 Profile Settings</h3>
-            <p className="mb-4">Update your name, email, and profile picture.</p>
+            <div className="settings-card">
+              <div className="settings-info">
+                <p>
+                  <strong>Username:</strong> {user?.username || "Loading..."}
+                </p>
+                <p>
+                  <strong>Email:</strong> {user?.email || "Loading..."}
+                </p>
+                <p>
+                  <strong>Bio:</strong> {user?.bio || "No bio added yet"}
+                </p>
+              </div>
+              <button
+                className="edit-btn"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Edit Profile
+              </button>
+            </div>
+
+            {isModalOpen && (
+              <SettingsModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                currentUser={user}
+                onProfileUpdated={setUser}
+              />
+            )}
 
             {/* 🌙 Theme Toggle */}
             <div style={{ marginTop: "1.5rem" }}>
@@ -78,7 +132,9 @@ export default function Settings() {
                   border: "1px solid var(--border-color)",
                 }}
               >
-                {theme === "light" ? "🌙 Enable Dark Mode" : "☀️ Enable Light Mode"}
+                {theme === "light"
+                  ? "🌙 Enable Dark Mode"
+                  : "☀️ Enable Light Mode"}
               </button>
             </div>
           </div>
@@ -93,7 +149,9 @@ export default function Settings() {
 
         {activeTab === "notifications" && (
           <div className="card">
-            <h3 className="text-lg font-semibold mb-4">🔔 Notification Settings</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              🔔 Notification Settings
+            </h3>
             <p>Choose how you want to receive alerts.</p>
           </div>
         )}
@@ -114,7 +172,9 @@ export default function Settings() {
 
         {activeTab === "danger" && (
           <div className="card">
-            <h3 className="text-lg font-semibold mb-4 text-red-600">⚠️ Danger Zone</h3>
+            <h3 className="text-lg font-semibold mb-4 text-red-600">
+              ⚠️ Danger Zone
+            </h3>
             <p>Delete your account or reset everything.</p>
             <button className="delete-btn">Delete Account</button>
           </div>

@@ -104,42 +104,49 @@ export default function NavBar() {
         </button>
       </div>
 
-      {/* Mobile Nav */}
-      {isMenuOpen && (
-        <div className="mobile-nav md:hidden border-t px-4 py-3 space-y-3">
-          {user ? (
-            <>
-              <p className="text-sm">
-                Welcome, <strong>{user.username}</strong>
-              </p>
-              <Link to="/events" className="nav-link">
-                🎫 Events
-              </Link>
-              <Link to="/dashboard" className="nav-link">
-                👤 Profile
-              </Link>
-              <Link to="/dashboard" className="nav-link">
-                📋 Dashboard
-              </Link>
-              <Link to="/admin/dashboard" className="nav-link">
-                📊 Stats
-              </Link>
-              <button onClick={handleLogout} className="logout">
-                🚪 Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="nav-link">
-                🔐 Login
-              </Link>
-              <Link to="/register" className="nav-link">
-                📝 Register
-              </Link>
-            </>
-          )}
-        </div>
-      )}
+     {/* Mobile Menu Overlay */}
+{isMenuOpen && (
+  <div
+    className="mobile-nav-overlay show"
+    onClick={() => setIsMenuOpen(false)}
+  ></div>
+)}
+
+{/* Mobile Nav Modal */}
+<div className={`mobile-nav md:hidden ${isMenuOpen ? "show" : ""}`}>
+  {user ? (
+    <>
+      <p className="text-sm">
+        Welcome, <strong>{user.username}</strong>
+      </p>
+      <Link to="/events" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+        🎫 Events
+      </Link>
+      <Link to={`/profile/${user.id}`} className="nav-link" onClick={() => setIsMenuOpen(false)}>
+        👤 Profile
+      </Link>
+      <Link to="/dashboard" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+        📋 Dashboard
+      </Link>
+      <Link to="/admin/dashboard" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+        📊 Stats
+      </Link>
+      <button onClick={handleLogout} className="logout">
+        🚪 Logout
+      </button>
+    </>
+  ) : (
+    <>
+      <Link to="/login" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+        🔐 Login
+      </Link>
+      <Link to="/register" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+        📝 Register
+      </Link>
+    </>
+  )}
+</div>
+
     </nav>
   );
 }

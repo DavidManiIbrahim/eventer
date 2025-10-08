@@ -1,0 +1,135 @@
+/* Modal Backdrop */
+.settings-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal Container */
+.settings-modal {
+  background: #ffffff;
+  color: #111827;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 420px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Headings */
+.settings-modal h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Form Elements */
+.settings-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.settings-modal label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.settings-modal input,
+.settings-modal textarea {
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  transition: border 0.2s;
+}
+
+.settings-modal input:focus,
+.settings-modal textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Buttons */
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  margin-top: 1.2rem;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.save-btn {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background-color: #1e40af;
+}
+
+.cancel-btn {
+  background-color: #e5e7eb;
+}
+
+.cancel-btn:hover {
+  background-color: #d1d5db;
+}
+
+/* Alerts */
+.alert {
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.alert.success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.alert.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* 🌙 Dark Mode */
+.dark-mode .settings-modal {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+.dark-mode .settings-modal input,
+.dark-mode .settings-modal textarea {
+  background-color: #374151;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+.dark-mode .save-btn {
+  background-color: #3b82f6;
+}
+
+.dark-mode .cancel-btn {
+  background-color: #4b5563;
+  color: #f9fafb;
+}
+
+.dark-mode .cancel-btn:hover {
+  background-color: #6b7280;
+}

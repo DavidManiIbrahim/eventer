@@ -5,41 +5,41 @@
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-.event-card {
+.home-page .event-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.event-card:hover {
+ .home-page .event-card:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.search-input {
+.home-page .search-input {
   background: #fff;
   border-color: #d1d5db;
   color: #1f2937;
 }
 
-.search-input:focus {
+.home-page .search-input:focus {
   border-color: #6366f1;
 }
 
-.fallback-avatar {
+.home-page .fallback-avatar {
   background: #e5e7eb;
   color: #374151;
 }
 
-.retry-btn {
+.home-page .retry-btn {
   background: #ef4444;
   color: #fff;
 }
 
-.loader {
+.home-page .loader {
   border-color: #6366f1;
 }
 
-.live-badge {
+.home-page .live-badge {
   background: #ef4444;
   color: #fff;
 }
@@ -50,30 +50,26 @@
   color: #f8fafc;
 }
 
-.dark-mode .event-card {
-  background: #1e293b;
-  border-color: #334155;
-}
-
 .dark-mode .search-input {
   background: #1e293b;
   border-color: #334155;
   color: #f8fafc;
 }
 
-.dark-mode .fallback-avatar {
+.dark-mode .home-page .fallback-avatar {
   background: #334155;
   color: #cbd5e1;
 }
 
-.dark-mode .retry-btn {
+.dark-mode .home-page .retry-btn {
   background: #dc2626;
 }
 
-.dark-mode .loader {
+.dark-mode .home-page .loader {
   border-color: #818cf8;
 }
 
-.dark-mode .live-badge {
+.dark-mode .home-page .live-badge {
   background: #dc2626;
+  color: #fff;
 }

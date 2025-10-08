@@ -21,8 +21,22 @@
 
 /* 🌙 Dark Mode */
 .dark-mode .user-management {
-  background-color: #1f2937;
+  background-color: #1a1a1a;
   color: #f9fafb;
+}
+
+.dark-mode .user-management h2 {
+  color: #f9fafb;
+}
+
+.dark-mode .user-management select {
+  background-color: #374151;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+.dark-mode .user-table{
+    background-color: #2d2d2d;
 }
 
 .dark-mode .user-table th {

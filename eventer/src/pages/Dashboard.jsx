@@ -164,7 +164,7 @@ export default function Dashboard() {
                     "http://localhost:5000"
                   }/uploads/event_image/${event.image}`}
                   alt={`${event.title} poster`}
-                  className="w-full h-48 object-cover"
+                  className="event-image w-full h-48 object-cover"
                   onError={(e) => (e.target.style.display = "none")}
                 />
               )}

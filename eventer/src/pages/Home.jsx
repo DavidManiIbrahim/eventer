@@ -97,7 +97,7 @@ export default function Home() {
                         src={`${
                           import.meta.env.VITE_API_URL?.replace("/api", "") ||
                           "http://localhost:5000"
-                        }/uploads/${event.createdBy?.profilePic}`}
+                        }/uploads/profile_pic/${event.createdBy?.profilePic}`}
                         alt={event.createdBy?.username || "Creator"}
                         onError={(e) => {
                           e.target.style.display = "none";
@@ -119,7 +119,7 @@ export default function Home() {
                           "http://localhost:5000"
                         }/uploads/event_image/${event.image}`}
                         alt={`${event.title} poster`}
-                        className="w-full h-48 object-cover"
+                        className="event-image w-full h-48 object-cover"
                         onError={(e) => (e.target.style.display = "none")}
                       />
                     )}

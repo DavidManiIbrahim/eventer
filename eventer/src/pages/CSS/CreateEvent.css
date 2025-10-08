@@ -90,12 +90,12 @@
 
 /* ---------- 🌙 Dark Mode ---------- */
 .dark-mode.create-event-page {
-  background: #0f172a;
+  background: #1a1a1a;
   color: #f9fafb;
 }
 
 .dark-mode .form-wrapper {
-  background: #1e293b;
+  background: #2d2d2d;
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
 }
 
@@ -104,15 +104,15 @@
 }
 
 .dark-mode .input-field {
-  background: #334155;
+  background: #1a1a1a;
   border-color: #475569;
   color: #f1f5f9;
 }
 
 .dark-mode .input-field:focus {
-  border-color: #818cf8;
-  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
-  background: #1e293b;
+  border-color: #4f5168;
+  box-shadow: 0 0 0 3px rgba(79, 82, 110, 0.3);
+  background: #2d2d2d;
 }
 
 .dark-mode .upload-box {

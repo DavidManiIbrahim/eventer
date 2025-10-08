@@ -57,3 +57,124 @@
 .settings-container .delete-btn:hover {
   background-color: #b91c1c;
 }
+
+
+
+/* Light Mode */
+.settings-page {
+  background-color: #f9fafb;
+  color: #111827;
+  min-height: 100vh;
+  padding: 80px 20px 20px 280px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.settings-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.settings-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.edit-btn {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background-color: #1d4ed8;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  color: #111827;
+  padding: 25px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.save-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #9ca3af;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* 🌙 Dark Mode */
+.dark-mode .settings-page{
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+.dark-mode .settings-container h2,
+.dark-mode .settings-container h3 {
+  color: #f9fafb;
+}
+
+.dark-mode .settings-card {
+  background-color: #1f2937a9;
+}
+
+.dark-mode .edit-btn {
+  background-color: #3b82f6;
+}
+
+.dark-mode .save-btn {
+  background-color: #059669;
+}
+
+.dark-mode .cancel-btn {
+  background-color: #6b7280;
+}

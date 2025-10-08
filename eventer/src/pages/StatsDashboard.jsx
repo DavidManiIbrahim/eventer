@@ -95,6 +95,14 @@ export default function Stats() {
     <div className="dashboard-container p-6 space-y-8 min-h-screen pt-16 pl-72">
       <h2 className="text-3xl font-bold">📊 Organizer Dashboard</h2>
 
+      {/* Loading */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 mb-4 loader"></div>
+            <p>Loading events...</p>
+          </div>
+        )}
+
       {isAdmin && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link to="/admin/users">

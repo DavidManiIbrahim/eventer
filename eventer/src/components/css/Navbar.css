@@ -1,6 +1,7 @@
-/* theme.css */
-
-/* Default light mode (normal Tailwind colors apply) */
+.navbar {
+  background-color: #ffffff;
+  color: #333333;
+}
 
 /* Global dark mode styles */
 body.dark-mode {
@@ -51,4 +52,130 @@ body.dark-mode .modal {
   background-color: #1f1f1f;
   color: #f0f0f0;
   border-color: #333;
+}
+
+/* Dropdown Container */
+.navbar .dropdown {
+  position: absolute;
+  right: 0;
+  margin-top: 0.5rem;
+  width: 12rem; /* 48px * 3 = 192px */
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 50;
+}
+
+/* Show dropdown on hover of parent */
+.navbar .group:hover .dropdown,
+.navbar .dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Dropdown Items */
+.navbar .dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.navbar .dropdown-item:hover {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+/* Logout Button Style */
+.navbar .dropdown-item.logout {
+  color: #f87171; /* red-400 */
+}
+
+.navbar .dropdown-item.logout:hover {
+  background-color: #f87171;
+  color: #fff;
+}
+
+
+/* Mobile Nav Modal */
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: 0; /* can also use left:0 for left slide */
+  height: 100vh;
+  width: 100%; /* full screen modal */
+  max-width: 20rem; /* optional for sidebar width */
+  background-color: var(--card-bg);
+  border-left: 1px solid var(--border-color);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transform: translateX(100%); /* hidden by default */
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease;
+  opacity: 0;
+  z-index: 1000;
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Show modal when active */
+.mobile-nav.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Mobile nav links */
+.mobile-nav .nav-link,
+.mobile-nav .logout {
+  display: block;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.mobile-nav .nav-link:hover,
+.mobile-nav .logout:hover {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+/* Logout button */
+.mobile-nav .logout {
+  color: #f87171;
+}
+
+.mobile-nav .logout:hover {
+  background-color: #f87171;
+  color: #fff;
+}
+
+/* Optional: overlay for modal */
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 900;
+}
+
+.mobile-nav-overlay.show {
+  opacity: 1;
 }
