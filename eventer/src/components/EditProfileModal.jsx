@@ -7,7 +7,7 @@ export default function EditProfileModal({ isOpen, onClose, currentUser, onProfi
   const { theme } = useContext(ThemeContext);
 
   const [formData, setFormData] = useState({
-    name: currentUser?.name || "",
+    username: currentUser?.username || "",
     email: currentUser?.email || "",
     phone: currentUser?.phone || "",
     bio: currentUser?.bio || "",
@@ -57,8 +57,8 @@ export default function EditProfileModal({ isOpen, onClose, currentUser, onProfi
         )}
 
         <form onSubmit={handleSubmit}>
-          <label>Name</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+          <label>Userame</label>
+          <input type="text" name="username" value={formData.username} onChange={handleChange} />
 
           <label>Email</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} />

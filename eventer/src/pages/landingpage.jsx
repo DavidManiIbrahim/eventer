@@ -6,6 +6,7 @@ export default function LandingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Detect system dark mode and apply
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
@@ -15,6 +16,11 @@ export default function LandingPage() {
     }, 5000);
 
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.body.classList.toggle("dark-mode", prefersDark);
   }, []);
 
   const heroSlides = [
@@ -153,7 +159,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Slide Indicators */}
         <div className="slide-indicators">
           {heroSlides.map((_, index) => (
             <button
@@ -166,7 +171,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features */}
       <section className="features">
         <div className="container">
           <h2>Powerful Event Management Tools</h2>

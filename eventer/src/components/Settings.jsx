@@ -1,8 +1,9 @@
 import { useState, useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "../api/axios";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import "./css/Settings.css";
-import SettingsModal from "./EditProfileModal"; // matches your import
+import SettingsModal from "./EditProfileModal";
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -10,27 +11,30 @@ export default function Settings() {
   const [user, setUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // ✅ useParams to capture the user ID from the route
+  const { id } = useParams();
+
   useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-      // Check for nested user object
-      const userData = res.data.user || res.data;
-      setUser(userData);
+        // ✅ Use the backend’s /api/users/:id route
+        const res = await axios.get(`http://localhost:5000/api/users/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      console.log("Fetched user:", userData);
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
-    }
-  };
+        const userData = res.data.user || res.data;
+        setUser(userData);
 
-  fetchUser();
-}, []);
+        console.log("Fetched user:", userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
 
+    if (id) fetchUser();
+  }, [id]);
 
   const tabs = [
     { id: "profile", label: "Profile" },
@@ -69,7 +73,7 @@ export default function Settings() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full text-left px-6 py-3 text-sm font-medium transition`}
+              className="w-full text-left px-6 py-3 text-sm font-medium transition"
               style={{
                 backgroundColor:
                   activeTab === tab.id ? "var(--active-bg)" : "transparent",
@@ -103,10 +107,7 @@ export default function Settings() {
                   <strong>Bio:</strong> {user?.bio || "No bio added yet"}
                 </p>
               </div>
-              <button
-                className="edit-btn"
-                onClick={() => setIsModalOpen(true)}
-              >
+              <button className="edit-btn" onClick={() => setIsModalOpen(true)}>
                 Edit Profile
               </button>
             </div>

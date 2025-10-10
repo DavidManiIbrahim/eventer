@@ -60,10 +60,10 @@ const updateMyProfile = async (req, res) => {
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const { name, email, phone, bio, currentPassword, newPassword } = req.body;
+    const { username, email, phone, bio, currentPassword, newPassword } = req.body;
 
     // Basic info updates
-    if (name) user.name = name;
+    if (username) user.username = username;
     if (email) user.email = email;
     if (phone) user.phone = phone;
     if (bio) user.bio = bio;
@@ -195,7 +195,7 @@ module.exports = {
   updateMyProfile,
   uploadProfilePic,
   getMyTickets,
-  updateUserRole, // NEW
+  updateUserRole,
   getAllUsers,
   deleteUser,
   getMyEvents,
