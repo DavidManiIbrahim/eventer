@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../contexts/ThemeContexts";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -9,13 +10,14 @@ export default function Register() {
     password: "",
     isOrganizer: false,
   });
-
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -27,13 +29,11 @@ export default function Register() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        setError("Only image files are allowed");
-        return;
-      }
+    if (file && file.type.startsWith("image/")) {
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
+    } else {
+      setError("Only image files are allowed");
     }
   };
 
@@ -49,10 +49,6 @@ export default function Register() {
       formData.append("email", form.email.trim());
       formData.append("password", form.password);
       formData.append("isOrganizer", form.isOrganizer ? "true" : "false");
-
-      // if (imageFile) {
-      //   formData.append("profilePic", imageFile);
-      // }
 
       await API.post("/auth/register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -70,14 +66,27 @@ export default function Register() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-xl p-8">
-        <h2 className="text-2xl font-bold text-center text-indigo-600 mb-6">
+    <div
+      className={`flex min-h-screen items-center justify-center transition-all duration-300 ${
+        theme === "dark"
+          ? "bg-gray-900 text-white"
+          : "bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800"
+      }`}
+    >
+      <div
+        className={`w-full max-w-md rounded-2xl shadow-xl p-8 transition-all duration-300 ${
+          theme === "dark" ? "bg-gray-800 border border-gray-700" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-2xl font-bold text-center mb-6 ${
+            theme === "dark" ? "text-indigo-400" : "text-indigo-600"
+          }`}
+        >
           Create an Account
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Error & Success Messages */}
           {error && (
             <div className="rounded-lg bg-red-100 text-red-600 px-4 py-2 text-sm">
               {error}
@@ -89,41 +98,19 @@ export default function Register() {
             </div>
           )}
 
-          {/* Profile Picture Upload */}
-          {/* <div className="flex flex-col items-center">
-            <label htmlFor="imageUpload" className="cursor-pointer">
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-24 h-24 rounded-full object-cover border-4 border-indigo-200 hover:border-indigo-400 transition"
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-500 text-sm hover:border-indigo-400">
-                  Upload
-                </div>
-              )}
-            </label>
-            <input
-              id="imageUpload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageChange}
-            />
-          </div> */}
-
-          {/* Username */}
           <input
             name="username"
             placeholder="Username"
             value={form.username}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
+              theme === "dark"
+                ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
+                : "border-gray-300"
+            }`}
           />
 
-          {/* Email */}
           <input
             name="email"
             placeholder="Email"
@@ -131,10 +118,13 @@ export default function Register() {
             value={form.email}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
+              theme === "dark"
+                ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
+                : "border-gray-300"
+            }`}
           />
 
-          {/* Password */}
           <input
             name="password"
             placeholder="Password"
@@ -142,11 +132,18 @@ export default function Register() {
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
+              theme === "dark"
+                ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
+                : "border-gray-300"
+            }`}
           />
 
-          {/* Organizer Checkbox */}
-          <label className="flex items-center space-x-2 text-gray-600">
+          <label
+            className={`flex items-center space-x-2 ${
+              theme === "dark" ? "text-gray-300" : "text-gray-600"
+            }`}
+          >
             <input
               type="checkbox"
               name="isOrganizer"
@@ -157,7 +154,6 @@ export default function Register() {
             <span>I'm an Organizer</span>
           </label>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -167,12 +163,15 @@ export default function Register() {
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p
+          className={`text-center text-sm mt-6 ${
+            theme === "dark" ? "text-gray-400" : "text-gray-500"
+          }`}
+        >
           Already have an account?{" "}
           <span
-            className="text-indigo-600 cursor-pointer hover:underline"
-            onClick={() => navigate("/Register")}
+            className="text-indigo-500 cursor-pointer hover:underline"
+            onClick={() => navigate("/login")}
           >
             Login
           </span>

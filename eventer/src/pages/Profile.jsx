@@ -62,8 +62,9 @@ const Profile = () => {
       <div className="max-w-6xl mx-auto mt-20 px-6">
         <div className="flex flex-col md:flex-row md:justify-between items-center md:items-start gap-4">
           <div className="text-center md:text-left">
-            <h1 className="text-3xl font-bold">{profile.username}</h1>
-            <p className="mt-2 text-gray-600">{profile.email}</p>
+            <h1 className="text-3xl font-bold">{profile.name}</h1>
+            <p className="">@{profile.username}</p>
+            <p className="mt-2 text-gray-600">{profile.bio}</p>
           </div>
           <div className="flex gap-3">
             <button className="btn-primary">Dashboard</button>

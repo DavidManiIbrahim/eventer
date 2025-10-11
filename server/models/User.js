@@ -2,13 +2,19 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
     username: {
       type: String,
       required: true,
       unique: true,
       trim: true,
     },
-    bio:{
+    bio: {
       type: String,
       required: false,
       unique: false,
@@ -37,6 +43,24 @@ const UserSchema = new mongoose.Schema(
     profilePic: {
       type: String,
       default: "1754696275588.jpg",
+    },
+
+    
+    // ✅ Settings sections
+    privacy: {
+      showProfile: { type: Boolean, default: true },
+      showActivity: { type: Boolean, default: false },
+      searchable: { type: Boolean, default: true },
+    },
+    notifications: {
+      emailAlerts: { type: Boolean, default: true },
+      smsAlerts: { type: Boolean, default: false },
+      appPush: { type: Boolean, default: true },
+      newsletter: { type: Boolean, default: false },
+    },
+    billing: {
+      plan: { type: String, default: "Free" },
+      nextBillingDate: { type: String, default: "N/A" },
     },
   },
   { timestamps: true }

@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const Event = require("../models/Event");
-const Ticket = require("../models/Ticket"); // assuming you have a Ticket model
+const Ticket = require("../models/Ticket"); 
 
 
 const formatDate = (date) => {
@@ -17,7 +17,11 @@ const formatDate = (date) => {
 
 const getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    if (!req.user || !req.user.id) {
+      return res.status(400).json({ message: "User ID not found in request" });
+    }
+
+    const user = await User.findById(req.user.id).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Fetch tickets purchased by this user
@@ -60,9 +64,10 @@ const updateMyProfile = async (req, res) => {
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const { username, email, phone, bio, currentPassword, newPassword } = req.body;
+    const { name, username, email, phone, bio, currentPassword, newPassword } = req.body;
 
     // Basic info updates
+    if (name) user.name = name;
     if (username) user.username = username;
     if (email) user.email = email;
     if (phone) user.phone = phone;

@@ -14,7 +14,9 @@ export default function Sidebar() {
     if (currentUser) setUser(currentUser);
 
     const savedCollapsed = localStorage.getItem("sidebarCollapsed");
-    if (savedCollapsed !== null) setCollapsed(savedCollapsed === "true");
+    if (savedCollapsed !== null) {
+      setCollapsed(savedCollapsed === "true");
+    }
   }, []);
 
   useEffect(() => {
@@ -25,7 +27,7 @@ export default function Sidebar() {
 
   const menuItems = [
     { to: "/dashboard", label: "Dashboard", icon: "🎛" },
-    { to: "/events", label: "Events", icon: "🎫" },
+    { to: "/events", label: "Home", icon: "🎫" },
     { to: "/admin/dashboard", label: "Stats", icon: "📊" },
     { to: "/my-tickets", label: "My Tickets", icon: "🎟" },
     { to: "/live/events", label: "Live", icon: "⭕" },
@@ -41,7 +43,10 @@ export default function Sidebar() {
     >
       {/* Collapse Button */}
       <div className="flex justify-end p-2">
-        <button onClick={() => setCollapsed(!collapsed)} className="collapse-btn">
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="collapse-btn"
+        >
           {collapsed ? "➡" : "⬅"}
         </button>
       </div>
@@ -57,7 +62,9 @@ export default function Sidebar() {
             }`}
           >
             <span className="text-lg">{item.icon}</span>
-            {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+            {!collapsed && (
+              <span className="text-sm font-medium">{item.label}</span>
+            )}
 
             {/* Tooltip when collapsed */}
             {collapsed && (

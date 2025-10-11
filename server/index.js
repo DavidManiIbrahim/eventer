@@ -12,6 +12,7 @@ const webhookRoutes = require("./routes/webhookRoutes");
 const statRoutes = require("./routes/statRoutes");
 const userRoutes = require("./routes/userRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const settingsRoutes = require("./routes/settingsRoutes")
 
 
 const FRONTEND_URL = process.env.FRONTEND_URL;
@@ -35,6 +36,7 @@ app.use("/uploads/qrcodes", express.static("uploads/qrcodes"));
 
 
 // ROUTES
+
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/tickets", ticketRoutes);
@@ -43,6 +45,7 @@ app.use("/api/webhook", webhookRoutes);
 app.use("/api/stats", statRoutes);
 app.use("/api/profile", userRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/settings", settingsRoutes)
 
 const http = require("http");
 const { Server } = require("socket.io");
