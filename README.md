@@ -18,8 +18,8 @@ It enables organizers to **create, manage, and promote events**, while users can
 
 ### 🧩 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/tickispot.git
-cd tickispot
+git clone https://github.com/Dcrony/Eventer.git
+cd eventer
 📦 2. Install Dependencies
 Frontend:
 
@@ -33,6 +33,7 @@ bash
 Copy code
 cd server
 npm install
+
 🔐 Environment Variables
 Create .env files in both client and server directories:
 
@@ -42,16 +43,19 @@ Copy code
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+PAYSTACK_SECRET=paystack_api_secret
+PAYSTACK_CALLBACK=paystack_callback
+
+
 🌐 Client .env
 env
 Copy code
 REACT_APP_EMAILJS_SERVICE_ID=your_emailjs_service_id
 REACT_APP_EMAILJS_TEMPLATE_ID=your_emailjs_template_id
 REACT_APP_EMAILJS_USER_ID=your_emailjs_user_id
-REACT_APP_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5000/api
+
+
 ✅ Important:
 Add these to .gitignore to protect your environment variables:
 
@@ -67,17 +71,19 @@ Copy code
 git rm --cached .env
 git commit -m "Removed .env from tracking"
 git push
+
 🧠 Running the App
 Start Backend:
 bash
 Copy code
 cd server
-npm run dev
+npm start
+
 Start Frontend:
 bash
 Copy code
 cd client
-npm start
+npm run dev
 App runs locally at:
 
 Frontend → http://localhost:3000
