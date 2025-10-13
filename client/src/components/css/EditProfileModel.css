@@ -88,11 +88,11 @@
 }
 
 .cancel-btn {
-  background-color: #e5e7eb;
+  background-color: #7e7f83;
 }
 
 .cancel-btn:hover {
-  background-color: #d1d5db;
+  background-color: #abadb1;
 }
 
 /* Alerts */
@@ -142,7 +142,7 @@
 
 /* ✅ Scroll Styling */
 .settings-modal::-webkit-scrollbar {
-  width: 4px; /* width of scrollbar */
+  width: 5px; /* width of scrollbar */
   
 }
 
@@ -151,14 +151,14 @@
 }
 
 .settings-modal::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1; /* default scrollbar color */
+  background-color: #6d6f70; /* default scrollbar color */
   border-radius: 10px;
   transition: background-color 0.3s ease;
 }
 
 .settings-modal::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8; /* darker when hovered */
-  width: 6px;
+  background-color: #6366f1; /* darker when hovered */
+
 }
 
 /* 🌙 Dark Mode Scrollbar */
