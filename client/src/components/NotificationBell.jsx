@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import { Bell } from "lucide-react";
+import React, { useContext, useState } from "react";
 import { useNotifications } from "../hooks/useNotifications";
 import { useSocket } from "../hooks/useSocket";
+import { Bell } from "lucide-react";
+import { ThemeContext } from "../contexts/ThemeContexts"; // still used for theme detection
+
 
 const NotificationBell = ({ userId }) => {
   const { notifications, setNotifications, loading, markAsRead } = useNotifications();
   const [open, setOpen] = useState(false);
+    const { darkMode } = useContext(ThemeContext); // only read mode, no toggle
+  
 
   // Listen for live notifications
   useSocket(userId, (data) => {

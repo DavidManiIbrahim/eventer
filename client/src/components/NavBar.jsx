@@ -5,6 +5,10 @@ import { ThemeContext } from "../contexts/ThemeContexts"; // still used for them
 import "./css/NavBar.css";
 import NotificationBell from "./NotificationBell";
 
+
+const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+
+
 export default function NavBar() {
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,7 +62,7 @@ export default function NavBar() {
               {/* User Profile Dropdown */}
               <div className="relative group">
                 <img
-                  src={`http://localhost:5000/uploads/profile_pic/${user.profilePic}`}
+                  src={`${PORT_URL}/uploads/profile_pic/${user.profilePic}`}
                   alt="Profile"
                   className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 cursor-pointer"
                 />

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import "./css/LiveChat.css"; // ✅ Import dark mode CSS
+import "./css/LiveChat.css"; 
 
 export default function LiveChat({ eventId, username }) {
   const [message, setMessage] = useState("");
@@ -9,7 +9,7 @@ export default function LiveChat({ eventId, username }) {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io(`http://localhost:5000`);
     socketRef.current = socket;
 
     socket.emit("joinRoom", eventId);

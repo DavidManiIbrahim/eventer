@@ -1,8 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
 import LiveChat from "../components/LiveChats";
-import "./CSS/MyTickets.css"; // ✅ Import CSS for dark mode
-import { ThemeContext } from "../contexts/ThemeContexts"; // ✅ Use global theme
+import "./CSS/MyTickets.css"; 
+import { ThemeContext } from "../contexts/ThemeContexts"; 
+
+const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
 
 export default function MyTickets() {
   const [tickets, setTickets] = useState([]);
@@ -54,7 +56,7 @@ export default function MyTickets() {
                     <img
                       src={`${
                         import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                        "http://localhost:5000"
+                        `${PORT_URL}`
                       }/uploads/event_image/${event.image}`}
                       alt={event.title}
                       className="event-image"
@@ -113,7 +115,7 @@ export default function MyTickets() {
                       <img
                         src={`${
                           import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                          "http://localhost:5000"
+                          `${PORT_URL}`
                         }/uploads/${ticket.qrCode}`}
                         alt="Ticket QR Code"
                         className="qr-image"
@@ -121,7 +123,7 @@ export default function MyTickets() {
                       <a
                         href={`${
                           import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                          "http://localhost:5000"
+                          `${PORT_URL}`
                         }/uploads/${ticket.qrCode}`}
                         download={`ticket-${ticket._id}.png`}
                         className="download-btn"

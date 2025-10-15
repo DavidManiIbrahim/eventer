@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./CSS/home.css";
 
+const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const TicketValidationPage = () => {
   const { ticketId } = useParams();
   const [result, setResult] = useState(null);
@@ -12,7 +14,7 @@ const TicketValidationPage = () => {
     const validateTicket = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/tickets/validate/${ticketId}`
+          `${PORT_URL}/api/tickets/validate/${ticketId}`
         );
         setResult(res.data);
       } catch (err) {

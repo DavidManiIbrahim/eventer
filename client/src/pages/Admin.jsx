@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./CSS/UserManagement.css"; // import your CSS file
 
+const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [toast, setToast] = useState(null);
@@ -12,7 +14,7 @@ const UserManagement = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/profile", {
+        const res = await axios.get(`${PORT_URL}/api/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);
@@ -33,7 +35,7 @@ const UserManagement = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        `http://localhost:5000/api/profile/${id}/role`,
+        `${PORT_URL}/api/profile/${id}/role`,
         { role },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -49,7 +51,7 @@ const UserManagement = () => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/profile/${id}`, {
+      await axios.delete(`${PORT_URL}/api/profile/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(users.filter((u) => u._id !== id));

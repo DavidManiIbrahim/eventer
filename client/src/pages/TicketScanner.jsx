@@ -12,7 +12,7 @@ export default function TicketScanner() {
   const [scanned, setScanned] = useState(false);
 
 
-  const playBeep = (file = "/beep.m4a") => {
+  const playBeep = (file = "./sound/beep.m4a") => {
     const audio = new Audio(file);
     audio.play().catch(() => {});
   };
@@ -37,7 +37,7 @@ export default function TicketScanner() {
         const ticketId = extractTicketId(decodedText);
         if (!ticketId) {
           setError("Invalid QR format");
-          playBeep("/bbb.wav");
+          playBeep("./sound/bbb.wav");
           vibrate(200);
           setCooldown(true);
           setTimeout(() => setCooldown(false), 1200);
@@ -50,11 +50,11 @@ export default function TicketScanner() {
           setError(null);
 
           if (res.data.success) {
-            playBeep("/beep-valid.mp3");
+            playBeep("./sound/beep-valid.mp3");
             vibrate(200);
             stopScanner(); // stop on success
           } else {
-            playBeep("/bbb.wav");
+            playBeep("./sound/bbb.wav");
             vibrate(300);
             setCooldown(true);
             setScanned(true);
@@ -64,7 +64,7 @@ export default function TicketScanner() {
         } catch (err) {
           console.error(err);
           setError("Failed to validate ticket.");
-          playBeep("/bbb.wav");
+          playBeep("./sound/bbb.wav");
           vibrate(300);
           setCooldown(true);
           setScanned(true);

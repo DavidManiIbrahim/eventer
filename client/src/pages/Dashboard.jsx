@@ -3,6 +3,8 @@ import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import "./CSS/Dashboard.css";
 
+const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
   const [stats, setStats] = useState(null);
@@ -149,7 +151,7 @@ export default function Dashboard() {
             >
               <div className="flex items-center gap-3 p-4 border-b">
                 <img
-                  src={`http://localhost:5000/uploads/profile_pic/${event.createdBy?.profilePic}`}
+                  src={`${PORT_URL}/uploads/profile_pic/${event.createdBy?.profilePic}`}
                   alt={event.createdBy?.username}
                   onError={(e) => (e.target.style.display = "none")}
                   className="w-10 h-10 rounded-full object-cover"
@@ -161,7 +163,7 @@ export default function Dashboard() {
                 <img
                   src={`${
                     import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                    "http://localhost:5000"
+                    `${PORT_URL}`
                   }/uploads/event_image/${event.image}`}
                   alt={`${event.title} poster`}
                   className="event-image w-full h-48 object-cover"

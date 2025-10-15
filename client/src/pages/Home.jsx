@@ -3,6 +3,8 @@ import API from "../api/axios";
 import { Link } from "react-router-dom";
 import "./CSS/home.css";
 
+const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+
 export default function Home() {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
@@ -96,7 +98,7 @@ export default function Home() {
                       <img
                         src={`${
                           import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                          "http://localhost:5000"
+                          `${PORT_URL}`
                         }/uploads/profile_pic/${event.createdBy?.profilePic}`}
                         alt={event.createdBy?.username || "Creator"}
                         onError={(e) => {
@@ -116,7 +118,7 @@ export default function Home() {
                       <img
                         src={`${
                           import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                          "http://localhost:5000"
+                          `${PORT_URL}`  
                         }/uploads/event_image/${event.image}`}
                         alt={`${event.title} poster`}
                         className="event-image w-full h-48 object-cover"

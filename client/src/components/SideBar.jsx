@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import { getCurrentUser } from "../utils/auth";
-import "./css/sidebar.css"; // ✅ Import sidebar CSS file
+import "./css/sidebar.css"; 
+import {BarcodeIcon, Circle, CrossIcon, HomeIcon, Moon, Proportions, Settings, Sun, Ticket } from "lucide-react";
+
 
 export default function Sidebar() {
   const [user, setUser] = useState(null);
@@ -26,13 +28,13 @@ export default function Sidebar() {
   if (!user) return null;
 
   const menuItems = [
-    { to: "/dashboard", label: "Dashboard", icon: "🎛" },
-    { to: "/events", label: "Home", icon: "🎫" },
-    { to: "/admin/dashboard", label: "Stats", icon: "📊" },
-    { to: "/my-tickets", label: "My Tickets", icon: "🎟" },
-    { to: "/live/events", label: "Live", icon: "⭕" },
-    { to: "/create", label: "Create", icon: "➕", highlight: true },
-    { to: "/settings", label: "Settings", icon: "⚙" },
+    { to: "/dashboard", label: "Dashboard", icon: <BarcodeIcon/> },
+    { to: "/events", label: "Home", icon: <HomeIcon/> },
+    { to: "/admin/dashboard", label: "Stats", icon: <Proportions/> },
+    { to: "/my-tickets", label: "My Tickets", icon: <Ticket/> },
+    { to: "/live/events", label: "Live", icon: <Circle/> },
+    { to: "/create", label: "Create", icon: <CrossIcon/>, highlight: true },
+    { to: "/settings", label: "Settings", icon: <Settings/> },
   ];
 
   return (
@@ -78,8 +80,8 @@ export default function Sidebar() {
 
       {/* Theme Toggle */}
       <div className="px-2 py-4 border-t">
-        <button onClick={toggleTheme} className="theme-toggle w-full">
-          <span className="text-lg">{darkMode ? "☀️" : "🌙"}</span>
+        <button onClick={toggleTheme} className="theme-toggle w-full flex justify-around align-middle">
+          <span className="text-lg">{darkMode ? <Sun/> : <Moon/>}</span>
           {!collapsed && (
             <span className="font-medium">
               {darkMode ? "Light Mode" : "Dark Mode"}

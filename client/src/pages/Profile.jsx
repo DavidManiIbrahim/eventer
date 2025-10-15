@@ -2,7 +2,9 @@ import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
 import { useParams } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
-import "./CSS/Profile.css"; // link to the dark-mode-aware CSS
+import "./CSS/Profile.css"; 
+
+const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const Profile = () => {
   const { id } = useParams();
@@ -51,7 +53,7 @@ const Profile = () => {
         />
         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
           <img
-            src={`http://localhost:5000/uploads/profile_pic/${profile.profilePic}`}
+            src={`${PORT_URL}/uploads/profile_pic/${profile.profilePic}`}
             alt="profile"
             className="h-32 w-32 rounded-full border-4 border-white shadow-lg object-cover"
           />
@@ -106,7 +108,7 @@ const Profile = () => {
                 <div key={event._id} className="event-card">
                   {event.image && (
                     <img
-                      src={`http://localhost:5000/uploads/event_image/${event.image}`}
+                      src={`${PORT_URL}/uploads/event_image/${event.image}`}
                       alt={event.title}
                       className="h-40 w-full object-cover"
                     />
@@ -163,7 +165,7 @@ const Profile = () => {
                 <div key={event._id} className="event-card">
                   {event.image && (
                     <img
-                      src={`http://localhost:5000/uploads/event_image/${event.image}`}
+                      src={`${PORT_URL}/uploads/event_image/${event.image}`}
                       alt={event.title}
                       className="h-40 w-full object-cover"
                     />
