@@ -10,7 +10,7 @@ const NotificationBell = ({ userId }) => {
   const { darkMode } = useContext(ThemeContext);
   const dropdownRef = useRef(null);
 
-  // Listen for real-time notifications
+  // ✅ Listen for new notifications in real time
   useSocket(userId, (data) => {
     setNotifications((prev) => [
       { ...data, _id: Date.now(), read: false },
@@ -20,7 +20,7 @@ const NotificationBell = ({ userId }) => {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  // Close dropdown when clicking outside
+  // ✅ Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -51,13 +51,12 @@ const NotificationBell = ({ userId }) => {
       {/* ===== Dropdown Panel ===== */}
       {open && (
         <div
-          className={`absolute right-0 mt-2 w-72 shadow-lg rounded-xl border transition-colors ${
+          className={`absolute right-0 mt-2 w-72 shadow-lg rounded-xl border transition-colors z-50 ${
             darkMode
               ? "bg-gray-800 border-gray-700"
               : "bg-white border-gray-100"
           }`}
         >
-          {/* Header */}
           <div
             className={`p-3 border-b text-sm font-semibold ${
               darkMode ? "border-gray-700 text-gray-200" : "border-gray-100 text-gray-700"

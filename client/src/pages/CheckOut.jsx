@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom"; 
+import { useLocation, useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import "./CSS/Checkout.css"; // 👈 add this line for dark mode CSS
 
@@ -8,24 +8,33 @@ export default function Checkout() {
 
   if (!state || !state.event || !state.quantity || !state.user) {
     console.error("Invalid checkout state:", state);
-    return <p className="text-red-500 text-center mt-10">❌ Error: Invalid checkout details.</p>;
+    return (
+      <p className="text-red-500 text-center mt-10">
+        ❌ Error: Invalid checkout details.
+      </p>
+    );
   }
 
   const { event, quantity, user } = state;
 
-  const handleConfirmPayment = async () => {
-    try {
-      const res = await API.post("/payment/initiate", {
-        email: user.email,
-        amount: event.ticketPrice * quantity,
-        metadata: { eventId: event._id, quantity },
-      });
-      window.location.href = res.data.url; // Redirect to Paystack
-    } catch (err) {
-      console.error(err);
-      alert("⚠️ Payment failed to start");
-    }
-  };
+const handleConfirmPayment = async () => {
+  try {
+    const res = await API.post("/payment/initiate", {
+      email: user.email,
+      amount: event.ticketPrice * quantity,
+      metadata: { 
+        eventId: event._id, 
+        userId: user._id, 
+        quantity 
+      },
+    });
+    window.location.href = res.data.url; // Redirect to Paystack
+  } catch (err) {
+    console.error(err);
+    alert("⚠️ Payment failed to start");
+  }
+};
+
 
   return (
     <div className="checkout-container min-h-screen flex items-center justify-center px-4">
@@ -37,7 +46,9 @@ export default function Checkout() {
 
         {/* Event Details */}
         <div className="mb-6">
-          <h2 className="text-xl font-semibold checkout-subtitle">{event.title}</h2>
+          <h2 className="text-xl font-semibold checkout-subtitle">
+            {event.title}
+          </h2>
           <p className="checkout-text mt-1">{event.description}</p>
           <p className="checkout-muted text-sm mt-2">
             📅 {new Date(event.date).toLocaleDateString()} at {event.time}
@@ -47,14 +58,18 @@ export default function Checkout() {
 
         {/* Buyer Info */}
         <div className="border-t border-gray-200 pt-4 mb-6 checkout-border">
-          <h3 className="text-lg font-semibold checkout-subtitle">Buyer Info</h3>
+          <h3 className="text-lg font-semibold checkout-subtitle">
+            Buyer Info
+          </h3>
           <p className="checkout-text">👤 {user.username}</p>
           <p className="checkout-text">📧 {user.email}</p>
         </div>
 
         {/* Order Summary */}
         <div className="border-t border-gray-200 pt-4 mb-6 checkout-border">
-          <h3 className="text-lg font-semibold checkout-subtitle">Order Summary</h3>
+          <h3 className="text-lg font-semibold checkout-subtitle">
+            Order Summary
+          </h3>
           <p className="checkout-text">🧾 Quantity: {quantity}</p>
           <p className="checkout-total font-bold text-lg">
             💰 Total: ₦{event.ticketPrice * quantity}

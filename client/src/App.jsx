@@ -51,6 +51,7 @@ function Layout() {
         <Route path="/checkout/:eventId" element={<Checkout />} />
         <Route path="/scanner" element={<TicketScanner />} />
         <Route path="/validate/:ticketId" element={<TicketValidationPage />} />
+        
       </Routes>
     </>
   );

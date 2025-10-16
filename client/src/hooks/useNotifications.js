@@ -1,14 +1,30 @@
 import { useEffect, useState } from "react";
-import axios from "../api/axios";
+import axios from "axios";
+
+// ✅ Automatically detect environment and set base URL
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://your-live-api-domain.com/api"
+    : "http://localhost:5000/api");
 
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Automatically attach token
+  const axiosInstance = axios.create({
+    baseURL: API_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  // ✅ Fetch notifications on load
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get("/notifications");
+        const res = await axiosInstance.get("/notifications/my");
         setNotifications(res.data);
       } catch (err) {
         console.error("Error fetching notifications:", err);
@@ -19,34 +35,44 @@ export const useNotifications = () => {
     fetchNotifications();
   }, []);
 
+  // ✅ Mark single notification as read
   const markAsRead = async (id) => {
     try {
-      await axios.put(`/notifications/${id}/read`);
+      await axiosInstance.put(`/notifications/${id}/read`);
       setNotifications((prev) =>
         prev.map((n) => (n._id === id ? { ...n, read: true } : n))
       );
     } catch (err) {
-      console.error(err);
+      console.error("Error marking notification as read:", err);
     }
   };
 
+  // ✅ Mark all as read
   const markAllAsRead = async () => {
     try {
-      await axios.put("/notifications/mark-all");
+      await axiosInstance.put("/notifications/mark-all");
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     } catch (err) {
-      console.error(err);
+      console.error("Error marking all as read:", err);
     }
   };
 
+  // ✅ Delete a notification
   const deleteNotification = async (id) => {
     try {
-      await axios.delete(`/notifications/${id}`);
+      await axiosInstance.delete(`/notifications/${id}`);
       setNotifications((prev) => prev.filter((n) => n._id !== id));
     } catch (err) {
-      console.error(err);
+      console.error("Error deleting notification:", err);
     }
   };
 
-  return { notifications, setNotifications, loading, markAsRead, markAllAsRead, deleteNotification };
+  return {
+    notifications,
+    setNotifications,
+    loading,
+    markAsRead,
+    markAllAsRead,
+    deleteNotification,
+  };
 };

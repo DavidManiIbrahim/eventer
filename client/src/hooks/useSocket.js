@@ -1,23 +1,35 @@
-import { useEffect } from "react";
+// src/hooks/useSocket.js
+import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
-const SOCKET_URL = "http://localhost:5000";
-
 export const useSocket = (userId, onNotification) => {
+  const socketRef = useRef(null);
+
   useEffect(() => {
     if (!userId) return;
 
-    const socket = io(SOCKET_URL);
+    const SOCKET_URL =
+      import.meta.env.VITE_SOCKET_URL ||
+      (process.env.NODE_ENV === "production"
+        ? "https://your-live-api-domain.com"
+        : "http://localhost:5000");
 
-    // Register user ID for personal notifications
-    socket.emit("registerUser", userId);
-
-    // Listen for personal notifications
-    socket.on(`notify_${userId}`, (data) => {
-      console.log("📩 New notification received:", data);
-      onNotification(data);
+    // ✅ connect socket
+    socketRef.current = io(SOCKET_URL, {
+      transports: ["websocket"],
+      query: { userId },
     });
 
-    return () => socket.disconnect();
-  }, [userId]);
+    // ✅ listen for notification event
+    socketRef.current.on("notification", (data) => {
+      if (onNotification) onNotification(data);
+    });
+
+    // ✅ cleanup
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, [userId, onNotification]);
+
+  return socketRef.current;
 };

@@ -2,6 +2,7 @@ require("dotenv").config();
 const axios = require("axios");
 const Event = require("../models/Event");
 const Ticket = require("../models/Ticket");
+const User = require("../models/User"); 
 const QRCode = require("qrcode");
 const fs = require("fs");
 const path = require("path");
@@ -9,14 +10,16 @@ const sendEmail = require("../utils/email");
 
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET;
 const FRONTEND_URL = process.env.FRONTEND_URL;
-const successURL = `${process.env.FRONTEND_URL}/success`;
-const failedURL = `${process.env.FRONTEND_URL}/failed`;
+const successURL = `${FRONTEND_URL}/success`;
+const failedURL = `${FRONTEND_URL}/failed`;
 
-console.log("PAYSTACK KEY:", PAYSTACK_SECRET);
+// ✅ Use fallback for callback_url
+const PAYSTACK_CALLBACK =
+  process.env.PAYSTACK_CALLBACK || `${process.env.BACKEND_URL}/api/payment/verify`;
 
-//Initiate Payment
+// 🟢 INITIATE PAYMENT
 exports.initiatePayment = async (req, res) => {
-  const { email, amount } = req.body;
+  const { email, amount, metadata } = req.body;
 
   try {
     const response = await axios.post(
@@ -24,12 +27,8 @@ exports.initiatePayment = async (req, res) => {
       {
         email,
         amount: amount * 100,
-        callback_url: process.env.PAYSTACK_CALLBACK,
-        metadata: {
-          eventId: req.body.metadata.eventId,
-          userId: req.user.id,
-          quantity: req.body.metadata.quantity,
-        },
+        callback_url: PAYSTACK_CALLBACK,
+        metadata,
       },
       {
         headers: {
@@ -39,15 +38,14 @@ exports.initiatePayment = async (req, res) => {
       }
     );
 
-    res.status(200).json({ url: response.data.data.authorization_url });
+    return res.status(200).json({ url: response.data.data.authorization_url });
   } catch (err) {
-    console.error(err.response?.data || err.message);
-    res.status(500).json({ message: "Payment initialization failed" });
+    console.error("❌ Payment initialization failed:", err.response?.data || err.message);
+    return res.status(500).json({ message: "Payment initialization failed" });
   }
 };
 
-// Verify Payment
-
+// 🟢 VERIFY PAYMENT
 exports.verifyPayment = async (req, res) => {
   const { reference } = req.query;
 
@@ -66,80 +64,86 @@ exports.verifyPayment = async (req, res) => {
     );
 
     const data = response.data.data;
-
-    // Safely destructure metadata
     const { eventId, userId, quantity } = data.metadata || {};
 
+
+    if (!eventId || !userId || !quantity) {
+      return res.status(400).json({ message: "Incomplete metadata" });
+    }
+
     if (data.status === "success") {
-      // Check if ticket already exists
-      const existingTicket = await Ticket.findOne({
-        reference: data.reference,
-      });
+      // Avoid duplicate tickets
+      const existingTicket = await Ticket.findOne({ reference: data.reference });
       if (existingTicket) return res.redirect(successURL);
 
-      // Get event
+      // Fetch event and user
       const event = await Event.findById(eventId);
-      const user = await User.findById(userId); // ✅ fetch user
-      if (!event || event.totalTickets < quantity) {
-        return res
-          .status(400)
-          .json({ message: "Invalid event or not enough tickets" });
+      const user = await User.findById(userId);
+const data = response.data.data;
+
+
+  console.log("✅ Paystack verification response:", data);
+
+
+      if (!event || !user) {
+        return res.status(400).json({ message: "Invalid event or user" });
       }
 
-      // Create ticket
+      if (event.totalTickets < quantity) {
+        return res.status(400).json({ message: "Not enough tickets available" });
+      }
+
+      // Create new ticket
       const ticket = new Ticket({
         event: eventId,
         buyer: userId,
         quantity,
-        amount: data.amount / 100, // ✅ convert from kobo to Naira
+        amount: data.amount / 100,
         reference: data.reference,
       });
 
-      // Update ticketsSold in Event
+      // Update event tickets
       await Event.findByIdAndUpdate(eventId, {
-        $inc: { ticketsSold: quantity }, // increment
+        $inc: { ticketsSold: quantity },
       });
 
-      // Ensure QR folder exists
+      // Generate and store QR code
       const qrDir = path.join(__dirname, "../uploads/qrcodes");
-      if (!fs.existsSync(qrDir)) {
-        fs.mkdirSync(qrDir, { recursive: true });
-      }
+      if (!fs.existsSync(qrDir)) fs.mkdirSync(qrDir, { recursive: true });
 
-      // Generate QR code
       const qrData = `${FRONTEND_URL}/tickets/validate/${ticket._id}`;
       const qrFileName = `${ticket._id}.png`;
       const qrFilePath = path.join(qrDir, qrFileName);
-
       await QRCode.toFile(qrFilePath, qrData);
 
-      // Save filename to DB
       ticket.qrCode = `qrcodes/${qrFileName}`;
       await ticket.save();
 
-      // Reduce available tickets
+      // Decrease available tickets
       event.totalTickets -= quantity;
       await event.save();
 
-      // Send confirmation email with QR
+      // Send confirmation email
       await sendEmail(
         user.email,
-        "🎟️ Your Ticket Confirmation",
-        `<h2>Thanks for your purchase, ${user.name}!</h2>
-   <p>Your ticket is confirmed for <b>${event.title}</b></p>
-   <p>Show this QR code at entrance:</p>
-   <img src="${FRONTEND_URL}/uploads/${ticket.qrCode}" alt="QR Code" />`
+        "🎟️ Ticket Confirmation",
+        `<h2>Hi ${user.name},</h2>
+         <p>Your ticket for <b>${event.title}</b> has been confirmed!</p>
+         <p>Show this QR code at the entrance:</p>
+         <img src="${FRONTEND_URL}/uploads/${ticket.qrCode}" alt="QR Code" />`
       );
 
       return res.redirect(successURL);
-    } else {
-      return res.redirect(failedURL);
     }
+
+    return res.redirect(failedURL);
   } catch (error) {
     console.error(
-      "Payment verification error:",
+      "❌ Payment verification error:",
       error.response?.data || error.message
     );
     return res.status(500).send("Verification failed");
   }
+
+
 };
