@@ -33,12 +33,4 @@ body.dark-mode .event-card h3 {
   color: #ddd;
 }
 
-body.dark-mode .dashboard-layout button {
-  color: #f5f5f5;
-  border: none;
-}
 
-/* Button hover adjustment */
-body.dark-mode .dashboard-layout button:hover {
-  filter: brightness(1.2);
-}

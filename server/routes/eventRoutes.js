@@ -24,16 +24,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ✅ ROUTES
 
-// Create new event
 router.post("/create", authMiddleware, upload.single("image"), createEvent);
 
 // Public route - fetch all events
 router.get("/", getAllEvents);
-
-// Get single event
-router.get("/:id", getEventById);
 
 // Authenticated routes
 router.get("/my-events", authMiddleware, getMyEvents);
@@ -41,5 +36,8 @@ router.get("/buyers/:eventId", authMiddleware, getEventBuyers);
 router.patch("/toggle-live", authMiddleware, toggleLiveStream);
 router.put("/update/:eventId", authMiddleware, updateEvent);
 router.delete("/delete/:eventId", authMiddleware, deleteEvent);
+
+
+router.get("/:id", getEventById);
 
 module.exports = router;

@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+:root {
+  --bg-color: #f5f5f5;
+  --text-color: #111;
+  --card-bg: #fff;
+}
+
+
+
 /* Default Light Mode */
 body {
   background-color: #f5f5f5;
@@ -11,13 +19,6 @@ body {
 body.dark-mode {
   background-color: #121212;
   color: #f1f1f1;
-}
-
-/* You can define reusable variables too */
-:root {
-  --bg-color: #f5f5f5;
-  --text-color: #111;
-  --card-bg: #fff;
 }
 
 body.dark-mode {

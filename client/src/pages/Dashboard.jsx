@@ -3,7 +3,7 @@ import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import "./CSS/Dashboard.css";
 
-const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
@@ -77,14 +77,12 @@ export default function Dashboard() {
 
   const handleEdit = (id) => navigate(`/edit/${id}`);
 
-  function StatCard({ title, value }) {
-    return (
-      <div className="stat-card bg-white shadow rounded-xl p-4 text-center border transition-all">
-        <h3 className="text-sm text-gray-600">{title}</h3>
-        <p className="text-2xl font-bold text-indigo-600">{value}</p>
-      </div>
-    );
-  }
+  const StatCard = ({ title, value }) => (
+    <div className="stat-card bg-white shadow rounded-xl p-4 text-center border transition-all hover:scale-105">
+      <h3 className="text-sm text-gray-600">{title}</h3>
+      <p className="text-2xl font-bold text-indigo-600">{value}</p>
+    </div>
+  );
 
   return (
     <div className="dashboard-layout min-h-screen bg-gray-50 pt-16 pl-72 px-6">
@@ -111,7 +109,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Stats Section */}
+      {/* Stats */}
       {!loading && !error && stats && (
         <div className="stats-wrapper bg-white shadow rounded-xl p-6 mb-10 border transition-all">
           <h4 className="text-lg font-semibold mb-4">📊 Stats Overview</h4>
@@ -138,7 +136,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* My Events Section */}
+      {/* Events */}
       <h4 className="text-lg font-semibold mb-4">Your Events</h4>
       {events.length === 0 ? (
         <p className="text-gray-500">You haven’t created any events yet.</p>
@@ -147,46 +145,63 @@ export default function Dashboard() {
           {events.map((event) => (
             <div
               key={event._id}
-              className="event-card bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-lg transition"
+              className="event-card bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              <div className="flex items-center gap-3 p-4 border-b">
-                <img
-                  src={`${PORT_URL}/uploads/profile_pic/${event.createdBy?.profilePic}`}
-                  alt={event.createdBy?.username}
-                  onError={(e) => (e.target.style.display = "none")}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-                <h3 className="text-lg font-semibold">{event.title}</h3>
-              </div>
-
               {event.image && (
                 <img
-                  src={`${
-                    import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                    `${PORT_URL}`
-                  }/uploads/event_image/${event.image}`}
-                  alt={`${event.title} poster`}
-                  className="event-image w-full h-48 object-cover"
-                  onError={(e) => (e.target.style.display = "none")}
+                  src={`${PORT_URL}/uploads/event_image/${event.image}`}
+                  alt={event.title}
+                  className="w-full h-48 object-cover"
                 />
               )}
 
-              <div className="p-4 space-y-2 text-sm text-gray-700">
-                <p>
-                  {new Date(event.date).toLocaleDateString("en-US", {
+              <div className="p-4 space-y-2">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {event.title}
+                  </h3>
+                  {event.liveStream?.isLive && (
+                    <span className="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full font-medium">
+                      LIVE
+                    </span>
+                  )}
+                </div>
+                <p className="text-gray-600 text-sm capitalize">
+                  {event.description || "No description provided."}
+                </p>
+                <p className="text-gray-700 text-sm">
+                  📅{" "}
+                  {new Date(event.startDate).toLocaleDateString("en-US", {
                     weekday: "short",
                     year: "numeric",
                     month: "short",
                     day: "numeric",
                   })}{" "}
-                  • {event.location}
+                  at {event.startTime || "TBA"} • 📍 {event.location}
                 </p>
-                <p>Tickets left: {event.totalTickets}</p>
+                {event.pricing?.length > 0 && (
+                  <div>
+                    <p>💰 Pricing:</p>
+                    {event.pricing.map((price, index) => (
+                      <p key={index} className="ml-3">
+                        • {price.type}: ₦{price.price}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                <p>
+                              🎟 Tickets: {event.ticketsSold}/{event.totalTickets}
+                            </p>
+                            <p>🕹 Event Type: {event.eventType}</p>
+                            {event.category && <p>🏷 Category: {event.category}</p>}
+                
               </div>
 
               <div className="flex justify-between items-center gap-2 p-4 border-t">
                 <button
-                  onClick={() => toggleLive(event._id, event.liveStream?.isLive)}
+                  onClick={() =>
+                    toggleLive(event._id, event.liveStream?.isLive)
+                  }
                   className={`px-3 py-2 rounded-lg text-sm font-medium ${
                     event.liveStream?.isLive
                       ? "bg-red-100 text-red-600 hover:bg-red-200"

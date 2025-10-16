@@ -61,8 +61,7 @@ export default function EventDetail() {
 
   return (
     <div
-      className={`event-detail min-h-screen py-12 px-4 transition-colors duration-300 ${
-        theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"
+      className={`event-detail min-h-screen py-12 px-4 transition-colors duration-300 ${theme ? "dark-mode" : ""}
       }`}
     >
       <div

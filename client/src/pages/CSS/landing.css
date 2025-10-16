@@ -307,10 +307,6 @@ p {
   color: #f1f5f9;
 }
 
-.dark-mode p {
-  color: #d1d5db;
-}
-
 .dark-mode .landing-header {
   background: rgba(17, 24, 39, 0.95);
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);

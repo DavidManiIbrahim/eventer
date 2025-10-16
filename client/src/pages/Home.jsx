@@ -143,6 +143,20 @@ export default function Home() {
                             </p>
 
                             <p>
+                              📅{" "}
+                              {new Date(event.endDate).toLocaleDateString(
+                                "en-US",
+                                {
+                                  weekday: "short",
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                }
+                              )}{" "}
+                              at {event.endTime || "TBA"}
+                            </p>
+
+                            <p>
                               🎟 Tickets: {event.ticketsSold}/{event.totalTickets}
                             </p>
 
@@ -177,7 +191,7 @@ export default function Home() {
                             <img
                               src={`${
                                 import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                                PORT_URL
+                               `${PORT_URL}`
                               }/uploads/profile_pic/${event.createdBy.profilePic}`}
                               alt="Creator"
                               className="w-10 h-10 rounded-full object-cover"

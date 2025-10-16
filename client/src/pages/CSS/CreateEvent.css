@@ -89,6 +89,7 @@ body.modal-open {
 /* Inputs */
 .input-field {
   width: 100%;
+  height: 2.8rem;
   padding: 0.8rem 1rem;
   border-radius: 0.75rem;
   border: 1px solid #d1d5db;
@@ -104,14 +105,98 @@ body.modal-open {
   outline: none;
 }
 
+.date-time-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.date-time-row .input-field {
+  flex: 1;
+  height: 2.8rem;
+}
+
+.upload-box {
+  width: 100%;
+  border: 2px dashed #d1d5db;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  background: transparent;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.upload-box:hover {
+  background: #e5e7eb;
+  border-color: #6366f1;
+}
+
+.upload-box .image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.upload-box .upload-text {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 1rem 0;
+}
+
+
+
+textarea.input-field {
+  min-height: 100px;
+  resize: vertical;
+}
+
+form .submit-btn {
+  width: 100%;
+  padding: 0.9rem;
+  margin-top: 2rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: #4f46e5;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+form .submit-btn:hover {
+  background: #4338ca;
+}
+
+form .field-label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: block;
+  color: #fafafa;
+}
+
 /* Pricing */
 .pricing-section {
   background: #f9fafb;
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
   padding: 1rem;
-  margin-top: 1rem;
+  margin: 1rem 0;
 }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.pricing-grid input {
+  margin-top: 0.3rem;
+}
+
 
 /* Info Sidebar */
 .info-sidebar {
@@ -153,6 +238,38 @@ body.modal-open {
 
 /* Dark Mode */
 .dark-mode .create-event-container {
+  background: #1f1f1f;
+}
+
+.dark-mode .event-type-selection .event-type-btn {
+  background: #2d2d2d;
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+.dark-mode .event-type-selection .event-type-btn.active {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.dark-mode .input-field {
+  background: #2d2d2d;
+  border-color: #4b5563;
+  color: #f1f5f9;
+}
+.dark-mode .input-field:focus {
+  background: #1f1f1f;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+}
+
+.dark-mode .pricing-section {
+  background: #2d2d2d;
+  border-color: #4b5563;
+  color: #f1f5f9;
+}
+
+.dark-mode .form-wrapper {
   background: #1f1f1f;
 }
 

@@ -21,23 +21,17 @@
   transition: background-color 0.2s, color 0.2s;
 }
 
-.menu-item:hover {
-  background-color: #f3f4f6;
-}
-
-.menu-item.highlight {
-  background-color: #6366f1;
+/* Active route background */
+.menu-item.active {
+  background-color: #4f46e5; /* solid blue */
   color: #fff;
 }
 
-.menu-item.isActive {
-  background-color: #3b82f6;
-  color: #fff;
-}
+
 
 /* Tooltip */
 .tooltip {
-  background-color: #111827;
+  background-color: #172238;
   color: #fff;
   pointer-events: none;
 }
@@ -50,13 +44,9 @@
 }
 
 .dark-mode .menu-item:hover {
-  background-color: #1f2937;
+  background-color: #756ff3;
 }
 
-.dark-mode .menu-item.highlight {
-  background-color: #4f46e5;
-  color: #fff;
-}
 
 .dark-mode .tooltip {
   background-color: #374151;

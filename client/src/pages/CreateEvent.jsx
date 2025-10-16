@@ -195,25 +195,7 @@ export default function CreateEvent({ isOpen, onClose }) {
               required
             />
 
-            {/* Image Upload */}
-            <label htmlFor="imageUpload" className="upload-box">
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="image-preview"
-                />
-              ) : (
-                <span className="upload-text">📸 Upload Event Image</span>
-              )}
-            </label>
-            <input
-              id="imageUpload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageChange}
-            />
+            
 
             {/* Pricing */}
             <div className="pricing-section">
@@ -257,6 +239,26 @@ export default function CreateEvent({ isOpen, onClose }) {
               placeholder="Stream URL (optional)"
               className="input-field"
               onChange={handleChange}
+            />
+
+            {/* Image Upload */}
+            <label htmlFor="imageUpload" className="upload-box">
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="image-preview"
+                />
+              ) : (
+                <span className="upload-text">📸 Upload Event Image</span>
+              )}
+            </label>
+            <input
+              id="imageUpload"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
             />
 
             <button type="submit" className="submit-btn">

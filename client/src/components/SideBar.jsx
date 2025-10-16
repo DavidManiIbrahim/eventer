@@ -51,7 +51,7 @@ export default function Sidebar() {
     {
       label: "Create",
       icon: <PlusCircle />,
-      action: () => setShowCreateEvent(true), 
+      action: () => setShowCreateEvent(true),
       highlight: true,
     },
     { to: "/settings", label: "Settings", icon: <Settings /> },
@@ -66,7 +66,10 @@ export default function Sidebar() {
       >
         {/* Collapse Button */}
         <div className="flex justify-end p-2 pt-4">
-          <button onClick={() => setCollapsed(!collapsed)} className="collapse-btn">
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="collapse-btn"
+          >
             {collapsed ? (
               <ChevronRight className="w-5 h-5" />
             ) : (
@@ -85,11 +88,7 @@ export default function Sidebar() {
               <button
                 key={item.label}
                 onClick={item.action}
-                className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg w-full text-left transition-all ${
-                  item.highlight
-                    ? "bg-blue-600 hover:bg-blue-500 text-gray"
-                    : "hover:bg-blue-900 dark:hover:bg-blue-700 d"
-                }`}
+                className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg w-full text-left transition-all`}
               >
                 <span className="text-lg">{item.icon}</span>
                 {!collapsed && (
@@ -106,9 +105,7 @@ export default function Sidebar() {
                 key={item.to}
                 to={item.to}
                 className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg transition-all ${
-                  isActive
-                    ? "bg-blue-600 shadow text-gray"
-                    : "hover:bg-blue-400 dark:hover:bg-blue-700"
+                  isActive ? "active" : ""
                 }`}
               >
                 <span className="text-lg">{item.icon}</span>
