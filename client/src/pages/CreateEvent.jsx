@@ -1,21 +1,28 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import "./CSS/CreateEvent.css";
-import { ThemeContext } from "../contexts/ThemeContexts"; // 🌙 for dark mode toggle
+import { ThemeContext } from "../contexts/ThemeContexts";
 
-export default function CreateEvent() {
+export default function CreateEvent({ isOpen, onClose }) {
   const [form, setForm] = useState({
     title: "",
     description: "",
     category: "",
-    date: "",
-    time: "",
     location: "",
-    ticketPrice: "",
-    totalTickets: "",
     streamType: "YouTube",
     streamURL: "",
+    eventType: "In-person",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    pricing: [
+      { type: "Regular", price: "" },
+      { type: "VIP", price: "" },
+      { type: "VVIP", price: "" },
+    ],
+    totalTickets: "",
   });
 
   const [imageFile, setImageFile] = useState(null);
@@ -23,9 +30,27 @@ export default function CreateEvent() {
   const { darkMode } = useContext(ThemeContext);
   const navigate = useNavigate();
 
+  // Disable scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => (document.body.style.overflow = "auto");
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePricingChange = (index, value) => {
+    const updatedPricing = [...form.pricing];
+    updatedPricing[index].price = value;
+    setForm((prev) => ({ ...prev, pricing: updatedPricing }));
   };
 
   const handleImageChange = (e) => {
@@ -40,7 +65,10 @@ export default function CreateEvent() {
     e.preventDefault();
     try {
       const formData = new FormData();
-      Object.entries(form).forEach(([key, value]) => formData.append(key, value));
+      Object.entries(form).forEach(([key, value]) => {
+        if (key === "pricing") formData.append(key, JSON.stringify(value));
+        else formData.append(key, value);
+      });
       if (imageFile) formData.append("image", imageFile);
 
       await API.post("/events/create", formData, {
@@ -49,6 +77,7 @@ export default function CreateEvent() {
 
       alert("✅ Event created successfully!");
       navigate("/events");
+      onClose();
     } catch (err) {
       console.error(err);
       alert("❌ Failed to create event");
@@ -56,57 +85,108 @@ export default function CreateEvent() {
   };
 
   return (
-    <div className={`create-event-page ${darkMode ? "dark-mode" : ""}`}>
-      <div className="form-wrapper">
-        <h2 className="form-title">🎉 Create New Event</h2>
+    <div
+      className={`create-event-overlay ${darkMode ? "dark-mode" : ""}`}
+      onClick={(e) => {
+        if (e.target.classList.contains("create-event-overlay")) onClose();
+      }}
+    >
+      <div className="create-event-container">
+        <div className="form-wrapper">
+          <button className="close-btn" onClick={onClose}>
+            ✕
+          </button>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Title */}
-          <input
-            name="title"
-            placeholder="Event Title"
-            className="input-field"
-            onChange={handleChange}
-            required
-          />
+          <h2 className="form-title">🎉 Create New Event</h2>
 
-          {/* Description */}
-          <textarea
-            name="description"
-            placeholder="Event Description"
-            rows="4"
-            className="input-field"
-            onChange={handleChange}
-            required
-          ></textarea>
-
-          {/* Category, Date, Time */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input
-              name="category"
-              placeholder="Category"
-              className="input-field"
-              onChange={handleChange}
-              required
-            />
-            <input
-              name="date"
-              type="date"
-              className="input-field"
-              onChange={handleChange}
-              required
-            />
-            <input
-              name="time"
-              type="time"
-              className="input-field"
-              onChange={handleChange}
-              required
-            />
+          {/* Event Type Selection */}
+          <div className="event-type-selection">
+            {["In-person", "Virtual", "Hybrid"].map((type) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() =>
+                  setForm((prev) => ({ ...prev, eventType: type }))
+                }
+                className={`event-type-btn ${
+                  form.eventType === type ? "active" : ""
+                }`}
+              >
+                {type}
+              </button>
+            ))}
           </div>
 
-          {/* Location & Image Upload */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit}>
+            <input
+              name="title"
+              placeholder="Event Name"
+              className="input-field"
+              onChange={handleChange}
+              required
+            />
+
+            <textarea
+              name="description"
+              placeholder="Event Description"
+              rows="4"
+              className="input-field"
+              onChange={handleChange}
+              required
+            ></textarea>
+
+            <input
+              name="category"
+              placeholder="Category (e.g. Tech, Music, Business)"
+              className="input-field"
+              onChange={handleChange}
+              required
+            />
+
+            {/* Date and Time */}
+            <div className="date-time-row">
+              <div>
+                <label className="field-label">Start Date</label>
+                <input
+                  type="date"
+                  name="startDate"
+                  className="input-field"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="field-label">Start Time</label>
+                <input
+                  type="time"
+                  name="startTime"
+                  className="input-field"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="field-label">End Date</label>
+                <input
+                  type="date"
+                  name="endDate"
+                  className="input-field"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="field-label">End Time</label>
+                <input
+                  type="time"
+                  name="endTime"
+                  className="input-field"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
             <input
               name="location"
               placeholder="Event Location"
@@ -115,10 +195,8 @@ export default function CreateEvent() {
               required
             />
 
-            <label
-              htmlFor="imageUpload"
-              className="upload-box"
-            >
+            {/* Image Upload */}
+            <label htmlFor="imageUpload" className="upload-box">
               {imagePreview ? (
                 <img
                   src={imagePreview}
@@ -136,18 +214,24 @@ export default function CreateEvent() {
               className="hidden"
               onChange={handleImageChange}
             />
-          </div>
 
-          {/* Ticket Price & Total Tickets */}
-          <div className="grid grid-cols-2 gap-4">
-            <input
-              name="ticketPrice"
-              type="number"
-              placeholder="₦ Ticket Price"
-              className="input-field"
-              onChange={handleChange}
-              required
-            />
+            {/* Pricing */}
+            <div className="pricing-section">
+              <h3>💳 Pricing Categories</h3>
+              {form.pricing.map((item, index) => (
+                <div key={index} className="pricing-grid">
+                  <span>{item.type}</span>
+                  <input
+                    type="number"
+                    placeholder={`₦ ${item.type} Price`}
+                    className="input-field"
+                    value={item.price}
+                    onChange={(e) => handlePricingChange(index, e.target.value)}
+                  />
+                </div>
+              ))}
+            </div>
+
             <input
               name="totalTickets"
               type="number"
@@ -156,13 +240,8 @@ export default function CreateEvent() {
               onChange={handleChange}
               required
             />
-          </div>
 
-          {/* Stream Type */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-600 dark:text-gray-300">
-              Stream Type
-            </label>
+            <label className="field-label">Stream Type</label>
             <select
               name="streamType"
               value={form.streamType}
@@ -172,21 +251,29 @@ export default function CreateEvent() {
               <option value="YouTube">YouTube</option>
               <option value="Facebook">Facebook</option>
             </select>
-          </div>
 
-          {/* Stream URL */}
-          <input
-            name="streamURL"
-            placeholder="Stream URL (optional)"
-            className="input-field"
-            onChange={handleChange}
-          />
+            <input
+              name="streamURL"
+              placeholder="Stream URL (optional)"
+              className="input-field"
+              onChange={handleChange}
+            />
 
-          {/* Submit */}
-          <button type="submit" className="submit-btn">
-            🚀 Create Event
-          </button>
-        </form>
+            <button type="submit" className="submit-btn">
+              🚀 Create Event
+            </button>
+          </form>
+        </div>
+
+        {/* Info Sidebar */}
+        <div className="info-sidebar">
+          <img src="/event-illustration.svg" alt="Create event" />
+          <h2>Create your event</h2>
+          <p>
+            Start creating your event by providing the basic details now and
+            complete it later if needed.
+          </p>
+        </div>
       </div>
     </div>
   );

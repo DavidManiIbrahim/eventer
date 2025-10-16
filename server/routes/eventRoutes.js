@@ -1,89 +1,45 @@
 const express = require("express");
 const router = express.Router();
-const multer = require('multer');
-const path = require('path')
-
-// Import controllers and middleware
-const {authMiddleware} = require("../middleware/authMiddleware");
-
+const path = require("path");
+const multer = require("multer");
+const { authMiddleware } = require("../middleware/authMiddleware");
 const {
+  createEvent,
+  getAllEvents,
+  getEventById,
   getMyEvents,
+  getEventBuyers,
+  toggleLiveStream,
   updateEvent,
   deleteEvent,
-  getEventBuyers,
-  getEventById,
-  getAllEvents,
-  toggleLiveStream,
 } = require("../controllers/eventController");
 
-
-
-const Event = require('../models/Event');
-
-// Multer setup
+// ✅ Multer configuration for image upload
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/event_image');
-  },
+  destination: (req, file, cb) => cb(null, "uploads/event_image"),
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
+  },
 });
 const upload = multer({ storage });
 
-// Route to create event with image upload
-router.post('/create', authMiddleware, upload.single('image'), async (req, res) => {
-  try {
-    const { title, description, category, date, time, location, ticketPrice, totalTickets, streamType, streamURL } = req.body;
-    const imagePath = req.file ? req.file.filename : '';
+// ✅ ROUTES
 
-    const newEvent = new Event({
-      title,
-      description,
-      category,
-      date,
-      time,
-      location,
-      image: imagePath,
-      ticketPrice,
-      totalTickets,
-      liveStream: {
-        isLive: false,
-        streamType,
-        streamURL,
-      },
-      createdBy: req.user.id // ✅ from auth middleware
-    });
+// Create new event
+router.post("/create", authMiddleware, upload.single("image"), createEvent);
 
-    await newEvent.save();
-    res.status(201).json({ message: 'Event created', event: newEvent });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err });
-  }
-});
+// Public route - fetch all events
+router.get("/", getAllEvents);
 
-router.get("/", getAllEvents); // public route
-router.patch("/toggle-live", authMiddleware, toggleLiveStream);
-router.get("/my-events", authMiddleware, getMyEvents);
+// Get single event
 router.get("/:id", getEventById);
+
+// Authenticated routes
+router.get("/my-events", authMiddleware, getMyEvents);
+router.get("/buyers/:eventId", authMiddleware, getEventBuyers);
+router.patch("/toggle-live", authMiddleware, toggleLiveStream);
 router.put("/update/:eventId", authMiddleware, updateEvent);
 router.delete("/delete/:eventId", authMiddleware, deleteEvent);
-router.get("/buyers/:eventId", authMiddleware, getEventBuyers);
-
-// events route
-router.get("/events", async (req, res) => {
-  try {
-    const events = await Event.find()
-      .populate("createdBy", "username profilePic"); // only get username & profilePic
-    res.json(events);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
-
 
 module.exports = router;

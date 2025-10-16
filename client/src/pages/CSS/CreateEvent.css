@@ -1,133 +1,167 @@
-/* ---------- Base Styles ---------- */
-.create-event-page {
-  padding: 5rem 2rem;
-  background: #f9fafb;
-  min-height: 100vh;
-  transition: background 0.3s, color 0.3s;
+/* Overlay */
+.create-event-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 24, 39, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
 }
 
-.form-wrapper {
+/* Main container */
+.create-event-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   background: #ffffff;
-  max-width: 700px;
-  margin: 0 auto;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 1rem;
+  max-width: 1000px;
+  width: 95%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: popIn 0.3s ease forwards;
+}
+
+/* Disable scroll bleed */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #ef4444;
+}
+
+/* Left side form */
+.form-wrapper {
   padding: 2rem;
-  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
 .form-title {
-  font-size: 1.75rem;
+  font-size: 1.7rem;
   font-weight: 700;
-  color: #111827;
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
-/* ---------- Input Fields ---------- */
+/* Event Type Buttons */
+.event-type-selection {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.event-type-btn {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid #d1d5db;
+  background: #f9fafb;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.event-type-btn.active {
+  background: #6366f1;
+  color: white;
+  border-color: #6366f1;
+}
+
+/* Inputs */
 .input-field {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.8rem 1rem;
   border-radius: 0.75rem;
   border: 1px solid #d1d5db;
   background: #f9fafb;
-  color: #1f2937;
+  margin-bottom: 1rem;
   transition: all 0.2s;
 }
 
 .input-field:focus {
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  background: #ffffff;
   outline: none;
-  background: #fff;
 }
 
-/* ---------- Upload Box ---------- */
-.upload-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px dashed #9ca3af;
+/* Pricing */
+.pricing-section {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
   padding: 1rem;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  margin-top: 1rem;
 }
 
-.upload-box:hover {
-  border-color: #6366f1;
+/* Info Sidebar */
+.info-sidebar {
   background: #f3f4f6;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.upload-text {
-  color: #6b7280;
+.info-sidebar img {
+  width: 90px;
+  margin: 0 auto 1rem;
+}
+
+.info-sidebar h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.info-sidebar p {
+  color: #4b5563;
   font-size: 0.95rem;
 }
 
-.image-preview {
-  width: 96px;
-  height: 96px;
-  border-radius: 0.5rem;
-  object-fit: cover;
+/* Animation */
+@keyframes popIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-/* ---------- Submit Button ---------- */
-.submit-btn {
-  width: 100%;
-  padding: 0.85rem;
-  border-radius: 0.75rem;
-  background: #6366f1;
-  color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: background 0.2s, transform 0.1s;
+/* Dark Mode */
+.dark-mode .create-event-container {
+  background: #1f1f1f;
 }
 
-.submit-btn:hover {
-  background: #4f46e5;
-  transform: translateY(-1px);
-}
-
-/* ---------- 🌙 Dark Mode ---------- */
-.dark-mode.create-event-page {
-  background: #1a1a1a;
-  color: #f9fafb;
-}
-
-.dark-mode .form-wrapper {
+.dark-mode .info-sidebar {
   background: #2d2d2d;
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
-}
-
-.dark-mode .form-title {
-  color: #f1f5f9;
+  color: #e5e7eb;
 }
 
 .dark-mode .input-field {
-  background: #1a1a1a;
-  border-color: #475569;
-  color: #f1f5f9;
-}
-
-.dark-mode .input-field:focus {
-  border-color: #4f5168;
-  box-shadow: 0 0 0 3px rgba(79, 82, 110, 0.3);
   background: #2d2d2d;
-}
-
-.dark-mode .upload-box {
-  border-color: #475569;
-  background: #334155;
-}
-
-.dark-mode .upload-text {
-  color: #cbd5e1;
-}
-
-.dark-mode .submit-btn {
-  background: #4f46e5;
-}
-
-.dark-mode .submit-btn:hover {
-  background: #4338ca;
+  color: #f1f5f9;
 }

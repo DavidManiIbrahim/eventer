@@ -5,15 +5,20 @@
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* ✨ Premium Hover Animation */
 .home-page .event-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s;
 }
 
- .home-page .event-card:hover {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+.home-page .event-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
+
 
 .home-page .search-input {
   background: #fff;
@@ -49,6 +54,11 @@
   background: #121212;
   color: #f8fafc;
 }
+
+.dark-mode .home-page .event-card:hover {
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.08);
+}
+
 
 .dark-mode .search-input {
   background: #1e293b;
