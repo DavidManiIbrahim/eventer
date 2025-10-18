@@ -3,6 +3,28 @@ import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import "./CSS/CreateEvent.css";
 import { ThemeContext } from "../contexts/ThemeContexts";
+import { Building2, Globe2, MonitorPlay } from "lucide-react"; 
+
+const eventTypes = [
+  {
+    id: 1,
+    icon: <Building2 className="w-5 h-5" />,
+    name: "In-person",
+    hint: "Attendees will join the event at a physical location.",
+  },
+  {
+    id: 2,
+    icon: <MonitorPlay className="w-5 h-5" />,
+    name: "Virtual",
+    hint: "Attendees will join the event online via a streaming platform.",
+  },
+  {
+    id: 3,
+    icon: <Globe2 className="w-5 h-5" />,
+    name: "Hybrid",
+    hint: "Attendees can choose to join either in-person or online.",
+  },
+];
 
 export default function CreateEvent({ isOpen, onClose }) {
   const [form, setForm] = useState({
@@ -32,11 +54,7 @@ export default function CreateEvent({ isOpen, onClose }) {
 
   // Disable scroll when modal is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
     return () => (document.body.style.overflow = "auto");
   }, [isOpen]);
 
@@ -101,18 +119,22 @@ export default function CreateEvent({ isOpen, onClose }) {
 
           {/* Event Type Selection */}
           <div className="event-type-selection">
-            {["In-person", "Virtual", "Hybrid"].map((type) => (
+            {eventTypes.map((type) => (
               <button
-                key={type}
+                key={type.id}
                 type="button"
                 onClick={() =>
-                  setForm((prev) => ({ ...prev, eventType: type }))
+                  setForm((prev) => ({ ...prev, eventType: type.name }))
                 }
                 className={`event-type-btn ${
-                  form.eventType === type ? "active" : ""
+                  form.eventType === type.name ? "active" : ""
                 }`}
               >
-                {type}
+                <div className="flex justify-between align-center">
+                  <div className="icon">{type.icon}</div>
+                  <div className="type-name">{type.name}</div>
+                </div>
+                <div className="type-hint">{type.hint}</div>
               </button>
             ))}
           </div>
@@ -195,8 +217,6 @@ export default function CreateEvent({ isOpen, onClose }) {
               required
             />
 
-            
-
             {/* Pricing */}
             <div className="pricing-section">
               <h3>💳 Pricing Categories</h3>
@@ -208,7 +228,9 @@ export default function CreateEvent({ isOpen, onClose }) {
                     placeholder={`₦ ${item.type} Price`}
                     className="input-field"
                     value={item.price}
-                    onChange={(e) => handlePricingChange(index, e.target.value)}
+                    onChange={(e) =>
+                      handlePricingChange(index, e.target.value)
+                    }
                   />
                 </div>
               ))}

@@ -24,33 +24,54 @@ const getUserProfile = async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    // ✅ Use req.user.id consistently instead of req.params.id
+    const userId = req.user.id;
+
     // Fetch tickets purchased by this user
-    const tickets = await Ticket.find({ buyer: req.params.id })
-      .populate("event") // Assuming your Ticket schema has event: { type: mongoose.Schema.Types.ObjectId, ref: "Event" }
+    const tickets = await Ticket.find({ buyer: userId })
+      .populate("event")
       .exec();
 
-    // Fetch events created by this user (if organizer/admin)
-    const createdEvents = await Event.find({ createdBy: req.params.id }).exec();
+    // Fetch events created by this user
+    const createdEvents = await Event.find({ createdBy: userId }).exec();
 
-res.json({
+    // Helper to safely format dates
+    const formatDate = (date) => {
+      if (!date) return "No date";
+      return new Date(date).toLocaleString("en-US", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+    };
+
+    // ✅ Safely transform the data
+    res.json({
       ...user.toObject(),
-      tickets: tickets.map(t => ({
-        ...t.toObject(),
-        event: {
-          ...t.event.toObject(),
-          date: formatDate(t.event.date)  // formatted date here
-        }
-      })),
-      createdEvents: createdEvents.map(e => ({
+      tickets: tickets
+        .filter((t) => t.event) // remove broken ones
+        .map((t) => ({
+          ...t.toObject(),
+          event: {
+            ...t.event.toObject(),
+            date: formatDate(t.event.date),
+          },
+        })),
+      createdEvents: createdEvents.map((e) => ({
         ...e.toObject(),
-        date: formatDate(e.date)          // formatted date here
-      }))
+        date: formatDate(e.date),
+      })),
     });
   } catch (error) {
     console.error("Error fetching profile:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 // @desc   Update logged-in user profile (with password + bio support)

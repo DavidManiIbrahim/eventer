@@ -57,6 +57,7 @@ export default function Sidebar() {
       label: "Create",
       icon: <PlusCircle />,
       action: () => setShowCreateEvent(true),
+      highlight: true,
     },
     { to: "/settings", label: "Settings", icon: <Settings /> },
   ];
@@ -89,14 +90,16 @@ export default function Sidebar() {
               <button
                 key={item.label}
                 onClick={item.action}
-                className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg w-full text-left transition-all`}
+                className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg w-full text-left transition-all ${
+                  item.highlight ? "highlight" : ""
+                }`}
               >
                 <span className="text-lg">{item.icon}</span>
                 {expand && (
                   <span className="text-sm font-medium">{item.label}</span>
                 )}
                 {!expand && (
-                  <span className="tooltip absolute left-16 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
+                  <span className="tooltip absolute left-10 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
                     {item.label}
                   </span>
                 )}
@@ -114,7 +117,7 @@ export default function Sidebar() {
                   <span className="text-sm font-medium">{item.label}</span>
                 )}
                 {!expand && (
-                  <span className="tooltip absolute left-16 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
+                  <span className="tooltip absolute left-10 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
                     {item.label}
                   </span>
                 )}
