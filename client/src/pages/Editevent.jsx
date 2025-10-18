@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../api/axios";
-import "./CSS/EditEvent.css"; // ✅ Import dark mode CSS
+import "./CSS/EditEvent.css";
 
 export default function EditEvent() {
   const { eventId } = useParams();
@@ -9,14 +9,26 @@ export default function EditEvent() {
   const [form, setForm] = useState({
     title: "",
     description: "",
+    category: "",
     location: "",
-    date: "",
-    time: "",
-    ticketPrice: "",
-    totalTickets: "",
     streamType: "YouTube",
     streamURL: "",
+    eventType: "In-person",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    pricing: [
+      { type: "Regular", price: "" },
+      { type: "VIP", price: "" },
+      { type: "VVIP", price: "" },
+    ],
+    totalTickets: "",
   });
+
+  
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
     API.get(`/events/${eventId}`)
@@ -28,9 +40,31 @@ export default function EditEvent() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handlePricingChange = (index, value) => {
+    const updatedPricing = [...form.pricing];
+    updatedPricing[index].price = value;
+    setForm((prev) => ({ ...prev, pricing: updatedPricing }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        if (key === "pricing") formData.append(key, JSON.stringify(value));
+        else formData.append(key, value);
+      });
+      if (imageFile) formData.append("image", imageFile);
+
+      
       await API.put(`/events/update/${eventId}`, form);
       alert("✅ Event updated successfully!");
       navigate("/dashboard");
@@ -47,129 +81,168 @@ export default function EditEvent() {
           ✏️ Edit Event
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Title */}
-          <div>
-            <label className="form-label">Title</label>
+        {/* Event Type Selection */}
+          <div className="event-type-selection">
+            {["In-person", "Virtual", "Hybrid"].map((type) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() =>
+                  setForm((prev) => ({ ...prev, eventType: type }))
+                }
+                className={`event-type-btn ${
+                  form.eventType === type ? "active" : ""
+                }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+
+          <form onSubmit={handleSubmit}>
             <input
               name="title"
-              value={form.title}
+              placeholder="Event Name"
+              className="input-field"
               onChange={handleChange}
-              placeholder="Event title"
               required
-              className="form-input"
             />
-          </div>
 
-          {/* Description */}
-          <div>
-            <label className="form-label">Description</label>
             <textarea
               name="description"
-              value={form.description}
-              onChange={handleChange}
-              placeholder="Event description"
-              required
+              placeholder="Event Description"
               rows="4"
-              className="form-input"
-            />
-          </div>
+              className="input-field"
+              onChange={handleChange}
+              required
+            ></textarea>
 
-          {/* Location */}
-          <div>
-            <label className="form-label">Location</label>
+            <input
+              name="category"
+              placeholder="Category (e.g. Tech, Music, Business)"
+              className="input-field"
+              onChange={handleChange}
+              required
+            />
+
+            {/* Date and Time */}
+            <div className="date-time-row">
+              <div>
+                <label className="field-label">Start Date</label>
+                <input
+                  type="date"
+                  name="startDate"
+                  className="input-field"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="field-label">Start Time</label>
+                <input
+                  type="time"
+                  name="startTime"
+                  className="input-field"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="field-label">End Date</label>
+                <input
+                  type="date"
+                  name="endDate"
+                  className="input-field"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="field-label">End Time</label>
+                <input
+                  type="time"
+                  name="endTime"
+                  className="input-field"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
             <input
               name="location"
-              value={form.location}
+              placeholder="Event Location"
+              className="input-field"
               onChange={handleChange}
-              placeholder="Event location"
               required
-              className="form-input"
             />
-          </div>
 
-          {/* Date & Time */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="form-label">Date</label>
-              <input
-                name="date"
-                type="date"
-                value={form.date}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
+            
+
+            {/* Pricing */}
+            <div className="pricing-section">
+              <h3>💳 Pricing Categories</h3>
+              {form.pricing.map((item, index) => (
+                <div key={index} className="pricing-grid">
+                  <span>{item.type}</span>
+                  <input
+                    type="number"
+                    placeholder={`₦ ${item.type} Price`}
+                    className="input-field"
+                    value={item.price}
+                    onChange={(e) => handlePricingChange(index, e.target.value)}
+                  />
+                </div>
+              ))}
             </div>
 
-            <div>
-              <label className="form-label">Time</label>
-              <input
-                name="time"
-                type="time"
-                value={form.time}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </div>
-          </div>
+            <input
+              name="totalTickets"
+              type="number"
+              placeholder="Total Tickets"
+              className="input-field"
+              onChange={handleChange}
+              required
+            />
 
-          {/* Ticket Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="form-label">Ticket Price ($)</label>
-              <input
-                name="ticketPrice"
-                type="number"
-                value={form.ticketPrice}
-                onChange={handleChange}
-                placeholder="Enter ticket price"
-                required
-                className="form-input"
-              />
-            </div>
+            <label className="field-label">Stream Type</label>
+            <select
+              name="streamType"
+              value={form.streamType}
+              className="input-field"
+              onChange={handleChange}
+            >
+              <option value="YouTube">YouTube</option>
+              <option value="Facebook">Facebook</option>
+            </select>
 
-            <div>
-              <label className="form-label">Total Tickets</label>
-              <input
-                name="totalTickets"
-                type="number"
-                value={form.totalTickets}
-                onChange={handleChange}
-                placeholder="Number of tickets"
-                required
-                className="form-input"
-              />
-            </div>
-          </div>
+            <input
+              name="streamURL"
+              placeholder="Stream URL (optional)"
+              className="input-field"
+              onChange={handleChange}
+            />
 
-          {/* Streaming Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="form-label">Stream Type</label>
-              <select
-                name="streamType"
-                value={form.streamType}
-                onChange={handleChange}
-                className="form-input"
-              >
-                <option value="YouTube">YouTube</option>
-                <option value="Facebook">Facebook</option>
-              </select>
-            </div>
+            {/* Image Upload */}
+            <label htmlFor="imageUpload" className="upload-box">
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="image-preview"
+                />
+              ) : (
+                <span className="upload-text">📸 Upload Event Image</span>
+              )}
+            </label>
+            <input
+              id="imageUpload"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
 
-            <div>
-              <label className="form-label">Stream URL</label>
-              <input
-                name="streamURL"
-                value={form.streamURL}
-                onChange={handleChange}
-                placeholder="Paste stream link"
-                className="form-input"
-              />
-            </div>
-          </div>
 
           {/* Submit Button */}
           <div className="pt-4">

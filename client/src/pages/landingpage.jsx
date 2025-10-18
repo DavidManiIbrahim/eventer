@@ -126,7 +126,7 @@ export default function LandingPage() {
       <section className="hero">
         <div
           className="hero-slide"
-          style={{ backgroundImage: `url(${heroSlides[currentSlide].image})` }}
+          // style={{ backgroundImage: `url(${heroSlides[currentSlide].image})` }}
         >
           <div className="slide-content">
             <h1>{heroSlides[currentSlide].title}</h1>

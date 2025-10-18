@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
 import LiveChat from "../components/LiveChats";
-import "./CSS/MyTickets.css"; 
-import { ThemeContext } from "../contexts/ThemeContexts"; 
+import "./CSS/MyTickets.css";
+import { ThemeContext } from "../contexts/ThemeContexts";
 
 const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
 
@@ -25,118 +25,118 @@ export default function MyTickets() {
   };
 
   return (
-    <div className={`tickets-page ${darkMode ? "dark-mode" : ""}`}>
+    <div className={`tickets-page pl-22 ${darkMode ? "dark-mode" : ""}`}>
       <div className="container">
-        <h2 className="page-title">
-          🎟️ My Tickets
-        </h2>
+        <h2 className="page-title">🎟️ My Tickets</h2>
 
         {tickets.length === 0 ? (
           <p className="no-tickets">You haven’t purchased any tickets yet.</p>
         ) : (
           <div className="tickets-grid">
             {tickets.map((ticket) => {
-  const event = ticket?.event;
-  if (!event) return null; // ✅ skip tickets missing event data
+              const event = ticket?.event;
+              if (!event) return null; // ✅ skip tickets missing event data
 
-  return (
-    <div key={ticket._id} className="ticket-card">
-      {/* Event Creator */}
-      <div className="event-header">
-        {event.createdBy?.profilePic && (
-          <img
-            src={`/uploads/${event.createdBy.profilePic}`}
-            alt={event.createdBy?.username || "Creator"}
-            className="creator-avatar"
-          />
-        )}
-        <h3 className="event-title">{event.title}</h3>
-      </div>
+              return (
+                <div key={ticket._id} className="ticket-card">
+                  {/* Event Creator */}
+                  <div className="event-header">
+                    {event.createdBy?.profilePic && (
+                      <img
+                        src={`/uploads/${event.createdBy.profilePic}`}
+                        alt={event.createdBy?.username || "Creator"}
+                        className="creator-avatar"
+                      />
+                    )}
+                    <h3 className="event-title">{event.title}</h3>
+                  </div>
 
-      {/* Event Image */}
-      {event.image && (
-        <img
-          src={`${
-            import.meta.env.VITE_API_URL?.replace("/api", "") || PORT_URL
-          }/uploads/event_image/${event.image}`}
-          alt={event.title}
-          className="event-image"
-        />
-      )}
+                  {/* Event Image */}
+                  {event.image && (
+                    <img
+                      src={`${
+                        import.meta.env.VITE_API_URL?.replace("/api", "") ||
+                        PORT_URL
+                      }/uploads/event_image/${event.image}`}
+                      alt={event.title}
+                      className="event-image"
+                    />
+                  )}
 
-      {/* Ticket Info */}
-      <div className="ticket-info">
-        <p>
-          <span>Quantity:</span> {ticket.quantity}
-        </p>
-        <p>
-          <span>Date:</span>{" "}
-          {event.startDate
-            ? new Date(event.startDate).toLocaleString("en-US", {
-                weekday: "short",
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })
-            : "N/A"}
-          <span className="location"> • {event.location}</span>
-        </p>
-        <p>
-          <span>Price Paid:</span> ₦
-          {(event.ticketPrice || 0) * (ticket.quantity || 1)}
-        </p>
-      </div>
+                  {/* Ticket Info */}
+                  <div className="ticket-info">
+                    <p>
+                      <span>Quantity:</span> {ticket.quantity}
+                    </p>
+                    <p>
+                      <span>Date:</span>{" "}
+                      {event.startDate
+                        ? new Date(event.startDate).toLocaleString("en-US", {
+                            weekday: "short",
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          })
+                        : "N/A"}
+                      <span className="location"> • {event.location}</span>
+                    </p>
+                    <p>
+                      <span>Price Paid:</span> ₦
+                      {(event.ticketPrice || 0) * (ticket.quantity || 1)}
+                    </p>
+                  </div>
 
-      {/* Live Event */}
-      {event.liveStream?.isLive && (
-        <div className="live-section">
-          <span className="live-badge">🔴 LIVE NOW</span>
-          <button
-            onClick={() => handleJoinChat(event._id)}
-            className="join-btn"
-          >
-            Join Live Chat
-          </button>
+                  {/* Live Event */}
+                  {event.liveStream?.isLive && (
+                    <div className="live-section">
+                      <span className="live-badge">🔴 LIVE NOW</span>
+                      <button
+                        onClick={() => handleJoinChat(event._id)}
+                        className="join-btn"
+                      >
+                        Join Live Chat
+                      </button>
 
-          {showChat && activeEventId === event._id && (
-            <div className="chat-wrapper">
-              <LiveChat
-                eventId={event._id}
-                username={user?.username || "Guest"}
-              />
-            </div>
-          )}
-        </div>
-      )}
+                      {showChat && activeEventId === event._id && (
+                        <div className="chat-wrapper">
+                          <LiveChat
+                            eventId={event._id}
+                            username={user?.username || "Guest"}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-      {/* QR Code */}
-      {ticket.qrCode && (
-        <div className="qr-section">
-          <img
-            src={`${
-              import.meta.env.VITE_API_URL?.replace("/api", "") || PORT_URL
-            }/uploads/${ticket.qrCode}`}
-            alt="Ticket QR Code"
-            className="qr-image"
-          />
-          <a
-            href={`${
-              import.meta.env.VITE_API_URL?.replace("/api", "") || PORT_URL
-            }/uploads/${ticket.qrCode}`}
-            download={`ticket-${ticket._id}.png`}
-            className="download-btn"
-          >
-            ⬇️ Download QR
-          </a>
-        </div>
-      )}
-    </div>
-  );
-})}
-
+                  {/* QR Code */}
+                  {ticket.qrCode && (
+                    <div className="qr-section">
+                      <img
+                        src={`${
+                          import.meta.env.VITE_API_URL?.replace("/api", "") ||
+                          PORT_URL
+                        }/uploads/${ticket.qrCode}`}
+                        alt="Ticket QR Code"
+                        className="qr-image"
+                      />
+                      <a
+                        href={`${
+                          import.meta.env.VITE_API_URL?.replace("/api", "") ||
+                          PORT_URL
+                        }/uploads/${ticket.qrCode}`}
+                        download={`ticket-${ticket._id}.png`}
+                        className="download-btn"
+                      >
+                        ⬇️ Download QR
+                      </a>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

@@ -17,7 +17,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { darkMode} = useContext(ThemeContext);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -68,19 +68,19 @@ export default function Register() {
   return (
     <div
       className={`flex min-h-screen items-center justify-center transition-all duration-300 ${
-        theme === "dark"
+        darkMode === "dark"
           ? "bg-gray-900 text-white"
           : "bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800"
       }`}
     >
       <div
         className={`w-full max-w-md rounded-2xl shadow-xl p-8 transition-all duration-300 ${
-          theme === "dark" ? "bg-gray-800 border border-gray-700" : "bg-white"
+          darkMode === "dark" ? "bg-gray-800 border border-gray-700" : "bg-white"
         }`}
       >
         <h2
           className={`text-2xl font-bold text-center mb-6 ${
-            theme === "dark" ? "text-indigo-400" : "text-indigo-600"
+            darkMode === "dark" ? "text-indigo-400" : "text-indigo-600"
           }`}
         >
           Create an Account
@@ -105,7 +105,7 @@ export default function Register() {
             onChange={handleChange}
             required
             className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
-              theme === "dark"
+              darkMode === "dark"
                 ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
                 : "border-gray-300"
             }`}
@@ -119,7 +119,7 @@ export default function Register() {
             onChange={handleChange}
             required
             className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
-              theme === "dark"
+              darkMode === "dark"
                 ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
                 : "border-gray-300"
             }`}
@@ -133,7 +133,7 @@ export default function Register() {
             onChange={handleChange}
             required
             className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
-              theme === "dark"
+              darkMode === "dark"
                 ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
                 : "border-gray-300"
             }`}
@@ -141,7 +141,7 @@ export default function Register() {
 
           <label
             className={`flex items-center space-x-2 ${
-              theme === "dark" ? "text-gray-300" : "text-gray-600"
+              darkMode === "dark" ? "text-gray-300" : "text-gray-600"
             }`}
           >
             <input
@@ -165,7 +165,7 @@ export default function Register() {
 
         <p
           className={`text-center text-sm mt-6 ${
-            theme === "dark" ? "text-gray-400" : "text-gray-500"
+            darkMode === "dark" ? "text-gray-400" : "text-gray-500"
           }`}
         >
           Already have an account?{" "}

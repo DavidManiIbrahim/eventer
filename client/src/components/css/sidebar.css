@@ -1,14 +1,14 @@
 /* Default (light mode) */
 .sidebar {
-  width: 16rem;
+  width: 4rem;
   background-color: #ffffff;
   color: #1f2937;
   border-right: 1px solid #e5e7eb;
   transition: background-color 0.3s, color 0.3s;
 }
 
-.sidebar.collapsed {
-  width: 4rem;
+.sidebar.expand {
+  width: 16rem;
 }
 
 /* Buttons and hover states */
@@ -26,6 +26,11 @@
   background-color: #4f46e5; /* solid blue */
   color: #fff;
 }
+
+/* .menu-item.highlight {
+  background-color: #5950f3;
+  color: #fff;
+} */
 
 
 

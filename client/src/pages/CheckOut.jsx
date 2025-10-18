@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../api/axios";
-import "./CSS/Checkout.css"; // 👈 add this line for dark mode CSS
 
 export default function Checkout() {
   const { state } = useLocation();

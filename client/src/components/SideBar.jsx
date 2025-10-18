@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import { getCurrentUser } from "../utils/auth";
-import CreateEvent from "../pages/CreateEvent"; // ✅ Import the modal component
+import CreateEvent from "../pages/CreateEvent";
 import "./css/sidebar.css";
 
 import {
@@ -21,7 +21,7 @@ import {
 
 export default function Sidebar() {
   const [user, setUser] = useState(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const [expand, setexpand] = useState(false);
   const { darkMode, toggleTheme } = useContext(ThemeContext);
   const location = useLocation();
   const [showCreateEvent, setShowCreateEvent] = useState(false); // ✅ Modal state
@@ -30,20 +30,25 @@ export default function Sidebar() {
     const currentUser = getCurrentUser();
     if (currentUser) setUser(currentUser);
 
-    const savedCollapsed = localStorage.getItem("sidebarCollapsed");
-    if (savedCollapsed !== null) {
-      setCollapsed(savedCollapsed === "true");
+    const savedexpand = localStorage.getItem("sidebarexpand");
+    if (savedexpand !== null) {
+      setexpand(savedexpand === "true");
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("sidebarCollapsed", collapsed);
-  }, [collapsed]);
+    localStorage.setItem("sidebarexpand", expand);
+  }, [expand]);
 
   if (!user) return null;
 
   const menuItems = [
-    { to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
+    {
+      to: "/dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard />,
+      highlight: true,
+    },
     { to: "/events", label: "Home", icon: <Home /> },
     { to: "/admin/dashboard", label: "Stats", icon: <BarChart3 /> },
     { to: "/my-tickets", label: "My Tickets", icon: <Ticket /> },
@@ -52,7 +57,6 @@ export default function Sidebar() {
       label: "Create",
       icon: <PlusCircle />,
       action: () => setShowCreateEvent(true),
-      highlight: true,
     },
     { to: "/settings", label: "Settings", icon: <Settings /> },
   ];
@@ -61,19 +65,16 @@ export default function Sidebar() {
     <>
       <aside
         className={`sidebar fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300 pt-12 z-40 ${
-          collapsed ? "collapsed" : ""
+          expand ? "expand" : ""
         } ${darkMode ? "dark-mode" : ""}`}
       >
         {/* Collapse Button */}
         <div className="flex justify-end p-2 pt-4">
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="collapse-btn"
-          >
-            {collapsed ? (
-              <ChevronRight className="w-5 h-5" />
-            ) : (
+          <button onClick={() => setexpand(!expand)} className="collapse-btn">
+            {expand ? (
               <ChevronLeft className="w-5 h-5" />
+            ) : (
+              <ChevronRight className="w-5 h-5" />
             )}
           </button>
         </div>
@@ -91,10 +92,10 @@ export default function Sidebar() {
                 className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg w-full text-left transition-all`}
               >
                 <span className="text-lg">{item.icon}</span>
-                {!collapsed && (
+                {expand && (
                   <span className="text-sm font-medium">{item.label}</span>
                 )}
-                {collapsed && (
+                {!expand && (
                   <span className="tooltip absolute left-16 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
                     {item.label}
                   </span>
@@ -106,13 +107,13 @@ export default function Sidebar() {
                 to={item.to}
                 className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg transition-all ${
                   isActive ? "active" : ""
-                }`}
+                } ${item.highlight ? "highlight" : ""}`}
               >
                 <span className="text-lg">{item.icon}</span>
-                {!collapsed && (
+                {expand && (
                   <span className="text-sm font-medium">{item.label}</span>
                 )}
-                {collapsed && (
+                {!expand && (
                   <span className="tooltip absolute left-16 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
                     {item.label}
                   </span>
@@ -135,7 +136,7 @@ export default function Sidebar() {
                 <Moon />
               )}
             </span>
-            {!collapsed && (
+            {expand && (
               <span className="font-medium">
                 {darkMode ? "Light Mode" : "Dark Mode"}
               </span>

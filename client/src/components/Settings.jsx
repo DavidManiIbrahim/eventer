@@ -4,10 +4,11 @@ import API from "../api/axios";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import "./css/Settings.css";
 import SettingsModal from "./EditProfileModal";
+import { ToggleLeft, ToggleRight } from "lucide-react";
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { darkMode, toggleTheme } = useContext(ThemeContext);
   const [user, setUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -67,11 +68,9 @@ export default function Settings() {
       setSaving(true);
       const token = localStorage.getItem("token");
 
-      await API.put(
-        `/settings/${id}/privacy`,
-        privacy,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await API.put(`/settings/${id}/privacy`, privacy, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       alert("✅ Privacy settings saved successfully!");
     } catch (error) {
@@ -95,11 +94,9 @@ export default function Settings() {
       setSaving(true);
       const token = localStorage.getItem("token");
 
-      await API.put(
-        `/settings/notifications/${id}`,
-        notifications,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await API.put(`/settings/notifications/${id}`, notifications, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       alert("✅ Notification settings saved!");
     } catch (error) {
@@ -117,7 +114,12 @@ export default function Settings() {
 
   // ⚠️ Handle Account Deletion
   const deleteAccount = async () => {
-    if (!window.confirm("Are you sure you want to delete your account? This cannot be undone!")) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete your account? This cannot be undone!"
+      )
+    )
+      return;
     try {
       const token = localStorage.getItem("token");
       await API.delete(`/profile/${user._id}`, {
@@ -143,7 +145,9 @@ export default function Settings() {
 
   return (
     <div
-      className="min-h-screen flex ml-64 pt-16 settings-container"
+      className={`min-h-screen flex pl-16 pt-16 settings-container ${
+        darkMode ? "dark-mode" : ""
+      }`}
       style={{
         backgroundColor: "var(--bg-color)",
         color: "var(--text-color)",
@@ -152,7 +156,7 @@ export default function Settings() {
     >
       {/* Sidebar */}
       <aside
-        className="w-64 border-r hidden md:block sidebar"
+        className="w-64 border-r hidden md:block "
         style={{
           backgroundColor: "var(--card-bg)",
           borderColor: "var(--border-color)",
@@ -227,14 +231,15 @@ export default function Settings() {
                 onClick={toggleTheme}
                 className="theme-toggle-btn"
                 style={{
+                  display: "flex",
                   backgroundColor: "var(--card-bg)",
                   color: "var(--text-color)",
                   border: "1px solid var(--border-color)",
                 }}
               >
-                {theme === "light"
-                  ? "🌙 Enable Dark Mode"
-                  : "☀️ Enable Light Mode"}
+                <span>{darkMode ? <ToggleLeft className="text-amber-300" /> : <ToggleRight className="text-cyan-900" />}</span>
+                
+                {/* <span>{darkMode ? "Enable Light Mode" : " Enable Dark Mode"}</span> */}
               </button>
             </div>
           </div>
@@ -269,7 +274,9 @@ export default function Settings() {
         {/* 🔔 NOTIFICATION TAB */}
         {activeTab === "notifications" && (
           <div className="card">
-            <h3 className="text-lg font-semibold mb-4">🔔 Notification Settings</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              🔔 Notification Settings
+            </h3>
             <div className="privacy-options">
               {Object.keys(notifications).map((key) => (
                 <label key={key} className="privacy-toggle">
@@ -312,7 +319,9 @@ export default function Settings() {
         {activeTab === "apps" && (
           <div className="card">
             <h3 className="text-lg font-semibold mb-4">🔗 Connected Apps</h3>
-            <p>Manage integrations with third-party apps (Google, Facebook, etc).</p>
+            <p>
+              Manage integrations with third-party apps (Google, Facebook, etc).
+            </p>
             <button className="save-btn">Connect New App</button>
           </div>
         )}

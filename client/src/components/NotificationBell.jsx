@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { useNotifications } from "../hooks/useNotifications";
 import { useSocket } from "../hooks/useSocket";
 import { Bell } from "lucide-react";

@@ -3,6 +3,7 @@ import API from "../api/axios";
 import { useParams } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import "./CSS/Profile.css"; 
+import edit from "../components/EditProfile"
 
 const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
 
@@ -10,7 +11,7 @@ const Profile = () => {
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [activeTab, setActiveTab] = useState("upcoming");
-  const { theme } = useContext(ThemeContext); // to re-render when theme changes
+  const { darkMode } = useContext(ThemeContext); // to re-render when theme changes
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -70,7 +71,7 @@ const Profile = () => {
           </div>
           <div className="flex gap-3">
             <button className="btn-primary">Dashboard</button>
-            <button className="btn-warning">Edit Profile</button>
+            <button className="btn-warning"><a href={edit}>Edit Profile</a></button>
           </div>
         </div>
 

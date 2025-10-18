@@ -14,16 +14,17 @@ export default function EventDetail() {
   const [buying, setBuying] = useState({});
   const [showChat, setShowChat] = useState(false);
   const [activeEventId, setActiveEventId] = useState(null);
+  const [zeroTicket, setZeroTicket] = useState()
 
-  const { theme } = useContext(ThemeContext); // ✅ Access current theme
+  const { darkMode } = useContext(ThemeContext); // ✅ Access current theme
   const user = JSON.parse(localStorage.getItem("user"));
   const isLoggedIn = !!localStorage.getItem("token");
   const navigate = useNavigate();
 
   // ✅ Apply dark/light mode dynamically
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
+    document.documentElement.setAttribute("data-theme", darkMode);
+  }, [darkMode]);
 
   useEffect(() => {
     API.get(`/events/${eventId}`)
@@ -37,6 +38,8 @@ export default function EventDetail() {
   const handleQuantityChange = (e, eventId) => {
     setBuying((prev) => ({ ...prev, [eventId]: e.target.value }));
   };
+
+  
 
   const handleBuy = () => {
     const quantity = parseInt(buying[event._id]) || 1;
@@ -61,12 +64,12 @@ export default function EventDetail() {
 
   return (
     <div
-      className={`event-detail min-h-screen py-12 px-4 transition-colors duration-300 ${theme ? "dark-mode" : ""}
+      className={`event-detail min-h-screen py-12 px-4 transition-colors duration-300 ${darkMode ? "dark-mode" : ""}
       }`}
     >
       <div
         className={`max-w-5xl mx-auto rounded-2xl shadow-lg overflow-hidden relative transition-all duration-300 ${
-          theme === "dark" ? "bg-gray-800" : "bg-white"
+          darkMode === "dark" ? "bg-gray-800" : "bg-white"
         }`}
       >
         {/* ✅ Event Banner */}
@@ -95,7 +98,7 @@ export default function EventDetail() {
           {event.category && (
             <p
               className={`mt-2 text-sm italic ${
-                theme === "dark" ? "text-gray-300" : "text-gray-600"
+                darkMode === "dark" ? "text-gray-300" : "text-gray-600"
               }`}
             >
               🏷 Category: {event.category}
@@ -104,7 +107,7 @@ export default function EventDetail() {
 
           <p
             className={`mt-4 leading-relaxed text-lg ${
-              theme === "dark" ? "text-gray-200" : "text-gray-700"
+              darkMode === "dark" ? "text-gray-200" : "text-gray-700"
             }`}
           >
             {event.description}
@@ -113,7 +116,7 @@ export default function EventDetail() {
           {/* ✅ Event Meta Info */}
           <div
             className={`mt-6 grid grid-cols-1 sm:grid-cols-2 gap-y-3 ${
-              theme === "dark" ? "text-gray-300" : "text-gray-700"
+              darkMode === "dark" ? "text-gray-300" : "text-gray-700"
             }`}
           >
             <p>📍 <strong>Location:</strong> {event.location}</p>
@@ -183,7 +186,7 @@ export default function EventDetail() {
           {isLoggedIn && (
             <div
               className={`ticket-purchase mt-10 border-t pt-6 ${
-                theme === "dark" ? "border-gray-700" : "border-gray-200"
+                darkMode === "dark" ? "border-gray-700" : "border-gray-200"
               }`}
             >
               <h3 className="text-lg font-semibold mb-3">🎫 Purchase Tickets</h3>
@@ -192,7 +195,7 @@ export default function EventDetail() {
                   type="number"
                   min="1"
                   className={`w-20 border rounded-lg px-2 py-2 text-center ${
-                    theme === "dark"
+                    darkMode === "dark"
                       ? "bg-gray-700 border-gray-600 text-gray-100"
                       : "bg-white border-gray-300 text-gray-900"
                   }`}
@@ -213,7 +216,7 @@ export default function EventDetail() {
           {event.createdBy && (
             <div
               className={`organizer-info mt-10 border-t pt-6 flex items-center gap-4 ${
-                theme === "dark" ? "border-gray-700" : "border-gray-200"
+                darkMode === "dark" ? "border-gray-700" : "border-gray-200"
               }`}
             >
               {event.createdBy.profilePic ? (
@@ -234,7 +237,7 @@ export default function EventDetail() {
                 <p className="font-semibold">{event.createdBy.username}</p>
                 <p
                   className={`text-sm ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    darkMode === "dark" ? "text-gray-400" : "text-gray-500"
                   }`}
                 >
                   Event Organizer
@@ -248,12 +251,12 @@ export default function EventDetail() {
         {showChat && activeEventId === event._id && (
           <div
             className={`chat-sidebar fixed top-0 right-0 w-full md:w-1/3 h-full z-50 shadow-2xl transition-all duration-300 ${
-              theme === "dark" ? "bg-gray-800 text-gray-100" : "bg-white"
+              darkMode === "dark" ? "bg-gray-800 text-gray-100" : "bg-white"
             }`}
           >
             <div
               className={`chat-header flex justify-between items-center p-4 border-b ${
-                theme === "dark"
+                darkMode === "dark"
                   ? "bg-indigo-700 border-gray-700"
                   : "bg-indigo-600 text-white"
               }`}

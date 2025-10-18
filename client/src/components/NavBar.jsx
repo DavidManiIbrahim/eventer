@@ -4,6 +4,7 @@ import { logout, getCurrentUser } from "../utils/auth";
 import { ThemeContext } from "../contexts/ThemeContexts"; // still used for theme detection
 import "./css/NavBar.css";
 import NotificationBell from "./NotificationBell";
+import { ClosedCaption } from "lucide-react";
 
 
 const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
@@ -118,10 +119,17 @@ export default function NavBar() {
 
 {/* Mobile Nav Modal */}
 <div className={`mobile-nav md:hidden ${isMenuOpen ? "show" : ""}`}>
+  
   {user ? (
     <>
-      <p className="text-sm">
-        Welcome, <strong>{user.username}</strong>
+      <p className=" flex justify-between text-sm">
+        <span>Welcome, <strong>{user.username}</strong></span>
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="md:hidden focus:outline-none  hover:text-red-500"
+        >
+          {isMenuOpen ? <ClosedCaption/> : "☰"}
+        </button>
       </p>
       <Link to="/events" className="nav-link" onClick={() => setIsMenuOpen(false)}>
         🎫 Events

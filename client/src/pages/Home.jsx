@@ -13,7 +13,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { theme } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
 
   useEffect(() => {
     setLoading(true);
@@ -43,9 +43,9 @@ export default function Home() {
   };
 
   return (
-    <div data-theme={theme}>
-      <div className="home-page min-h-screen px-4 py-8">
-        <div className="max-w-7xl mx-auto pt-16 pl-64">
+    <div data-theme={darkMode}>
+      <div className="home-page min-h-screen py-8">
+        <div className="max-w-7xl mx-auto pt-16 pl-20">
           {/* ✅ Page Title */}
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-8 text-primary">
             TickiSpot Events

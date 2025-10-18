@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../api/axios";
 
 // ✅ Automatically detect environment and set base URL
 const API_URL =
@@ -13,7 +13,7 @@ export const useNotifications = () => {
   const [loading, setLoading] = useState(true);
 
   // ✅ Automatically attach token
-  const axiosInstance = axios.create({
+  const axiosInstance = API.create({
     baseURL: API_URL,
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,

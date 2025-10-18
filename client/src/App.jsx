@@ -6,9 +6,9 @@ import Register from "./pages/Register";
 import CreateEvent from "./pages/CreateEvent";
 import MyTickets from "./pages/MyTickets";
 import Dashboard from "./pages/Dashboard";
-import EditEvent from "./pages/Editevent";
+import EditEvent from "./pages/EditEvent";
 import NavBar from "./components/NavBar";
-import Success from "./pages/success";
+import Success from "./pages/Success";
 import StatsDashboard from "./pages/StatsDashboard";
 import Sidebar from "./components/SideBar";
 import LiveEvent from "./components/LiveEvents";
@@ -18,7 +18,8 @@ import EventDetail from "./pages/EventDetails";
 import Checkout from "./pages/CheckOut";
 import TicketScanner from "./pages/TicketScanner";
 import TicketValidationPage from "./pages/ValidateTicket";
-import UserManagement from "./pages/admin";
+import UserManagement from "./pages/Admin";
+import Pricing from "./pages/pricing";
 
 
 function Layout() {
@@ -51,6 +52,7 @@ function Layout() {
         <Route path="/checkout/:eventId" element={<Checkout />} />
         <Route path="/scanner" element={<TicketScanner />} />
         <Route path="/validate/:ticketId" element={<TicketValidationPage />} />
+        <Route path="/pricing" element={<Pricing />} />
         
       </Routes>
     </>

@@ -10,7 +10,7 @@
   justify-content: center;
   align-items: center;
   z-index: 999;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(2px);
   overflow-y: auto;
 }
 
@@ -107,13 +107,19 @@ body.modal-open {
 
 .date-time-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns:repeat(2, 1fr);
   gap: 1rem;
 }
 
 .date-time-row .input-field {
   flex: 1;
   height: 2.8rem;
+}
+
+@media (max-width: 520px) {
+  .date-time-row {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .upload-box {
@@ -236,6 +242,13 @@ form .field-label {
   }
 }
 
+@media (max-width: 520px ) {
+  .info-sidebar{
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
 /* Dark Mode */
 .dark-mode .create-event-container {
   background: #1f1f1f;
@@ -281,4 +294,36 @@ form .field-label {
 .dark-mode .input-field {
   background: #2d2d2d;
   color: #f1f5f9;
+}
+
+
+/* ✅ Scroll Styling */
+.form-wrapper::-webkit-scrollbar {
+  width: 5px; /* width of scrollbar */
+  
+}
+
+.form-wrapper::-webkit-scrollbar-track {
+  background: transparent; /* scrollbar background */
+}
+
+.form-wrapper::-webkit-scrollbar-thumb {
+  background-color: #6d6f70; /* default scrollbar color */
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.form-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #6366f1; /* darker when hovered */
+  cursor: pointer;
+}
+
+/* 🌙 Dark Mode Scrollbar */
+.dark-mode .form-wrapper::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* dark scrollbar thumb */
+}
+
+.dark-mode .form-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #6366f1;
+  
 }

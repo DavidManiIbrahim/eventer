@@ -85,7 +85,7 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="dashboard-layout min-h-screen bg-gray-50 pt-16 pl-72 px-6">
+    <div className="dashboard-layout min-h-screen bg-gray-50 pt-16 px-22">
       <h2 className="text-3xl font-bold mb-8">🎛 Organizer Dashboard</h2>
 
       {/* Loading */}
@@ -190,11 +190,10 @@ export default function Dashboard() {
                   </div>
                 )}
                 <p>
-                              🎟 Tickets: {event.ticketsSold}/{event.totalTickets}
-                            </p>
-                            <p>🕹 Event Type: {event.eventType}</p>
-                            {event.category && <p>🏷 Category: {event.category}</p>}
-                
+                  🎟 Tickets: {event.ticketsSold}/{event.totalTickets}
+                </p>
+                <p>🕹 Event Type: {event.eventType}</p>
+                {event.category && <p>🏷 Category: {event.category}</p>}
               </div>
 
               <div className="flex justify-between items-center gap-2 p-4 border-t">
