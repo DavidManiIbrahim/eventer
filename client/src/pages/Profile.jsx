@@ -2,8 +2,8 @@ import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
 import { useParams } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
-import "./CSS/Profile.css"; 
-import edit from "../components/EditProfile"
+import "./CSS/Profile.css";
+import edit from "../components/EditProfile";
 
 const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
 
@@ -38,7 +38,7 @@ const Profile = () => {
 
   return (
     <div
-      className="min-h-screen ml-64 profile-container"
+      className="min-h-screen pl-18 profile-container"
       style={{
         backgroundColor: "var(--bg-color)",
         color: "var(--text-color)",
@@ -71,7 +71,9 @@ const Profile = () => {
           </div>
           <div className="flex gap-3">
             <button className="btn-primary">Dashboard</button>
-            <button className="btn-warning"><a href={edit}>Edit Profile</a></button>
+            <button className="btn-warning" onClick={edit}>
+              Edit Profile
+            </button>
           </div>
         </div>
 
