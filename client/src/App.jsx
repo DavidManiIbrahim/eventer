@@ -1,26 +1,26 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import LandingPage from "../src/pages/LandingPage.jsx";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import CreateEvent from "./pages/CreateEvent";
-import MyTickets from "./pages/MyTickets";
-import Dashboard from "./pages/Dashboard";
-import EditEvent from "./pages/EditEvent";
-import NavBar from "./components/NavBar";
-import Success from "./pages/Success";
-import StatsDashboard from "./pages/StatsDashboard";
-import Sidebar from "./components/SideBar";
-import LiveEvent from "./components/LiveEvents";
-import Settings from "./components/Settings";
-import Profile from "./pages/Profile";
-import EventDetail from "./pages/EventDetails";
-import Checkout from "./pages/CheckOut";
-import TicketScanner from "./pages/TicketScanner";
-import TicketValidationPage from "./pages/ValidateTicket";
-import UserManagement from "./pages/Admin";
-import Donate from "./pages/Donate";
-import Pricing from "./pages/pricing";
+import LandingPage from "../src/pages/LandingPage";
+import Login from "../src/pages/Login";
+import Register from "../src/pages/Register";
+import CreateEvent from "../src/pages/CreateEvent";
+import MyTickets from "../src/pages/MyTickets";
+import Dashboard from "../src/pages/Dashboard";
+import EditEvent from "../src/pages/EditEvent";
+import NavBar from "../src/components/NavBar";
+import Success from "../src/pages/Success";
+import StatsDashboard from "../src/pages/StatsDashboard";
+import Sidebar from "../src/components/SideBar";
+import LiveEvent from "../src/components/LiveEvents";
+import Settings from "../src/components/Settings";
+import Profile from "../src/pages/Profile";
+import EventDetail from "../src/pages/EventDetails";
+import Checkout from "../src/pages/CheckOut";
+import TicketScanner from "../src/pages/TicketScanner";
+import TicketValidationPage from "../src/pages/ValidateTicket";
+import UserManagement from "../src/pages/Admin";
+import Donate from "../src/pages/Donate";
+import Pricing from "../src/pages/pricing";
 
 
 function Layout() {
