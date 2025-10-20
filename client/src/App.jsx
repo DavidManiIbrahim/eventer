@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import LandingPage from "../src/pages/LandingPage";
+import LandingPage from "../src/pages/LandingPage.jsx";
 import Login from "../src/pages/Login";
 import Register from "../src/pages/Register";
 import CreateEvent from "../src/pages/CreateEvent";
 import MyTickets from "../src/pages/MyTickets";
 import Dashboard from "../src/pages/Dashboard";
-import EditEvent from "../src/pages/EditEvent";
+import EditEvent from "../src/pages/EditEvent.jsx";
 import NavBar from "../src/components/NavBar";
 import Success from "../src/pages/Success";
 import StatsDashboard from "../src/pages/StatsDashboard";
