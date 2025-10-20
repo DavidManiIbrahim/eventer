@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import LandingPage from "./pages/LandingPage";
+// import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CreateEvent from "./pages/CreateEvent";
@@ -35,7 +35,7 @@ function Layout() {
       {!hideNavAndSidebar && <Sidebar />}
       
       <Routes>
-        <Route path="/login" element={<LandingPage />} />
+        {/* <Route path="/login" element={<LandingPage />} /> */}
         <Route path="/events" element={<Home />} />
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
