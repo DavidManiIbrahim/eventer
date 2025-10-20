@@ -39,7 +39,7 @@ p {
 
 .logo h1 {
   font-size: 1.5rem;
-  color: #007bff;
+  color: #4f46e5;
 }
 
 .nav-menu {
@@ -56,7 +56,12 @@ p {
 }
 
 .nav-link:hover {
-  color: #007bff;
+  color: #4f46e5;
+}
+
+.nav-menu .log{
+  display: flex;
+  gap: 10px;
 }
 
 /* Buttons */
@@ -70,12 +75,12 @@ p {
 }
 
 .btn-primary {
-  background: #007bff;
+  background: #4f46e5;
   color: #fff;
 }
 
 .btn-primary:hover {
-  background: #0056d2;
+  background: #5f57f5;
 }
 
 .btn-secondary {
@@ -89,13 +94,13 @@ p {
 }
 
 .btn-outline {
-  border: 1px solid #007bff;
-  color: #007bff;
+  border: 1px solid #4f46e5;
+  color: #4f46e5;
   background: transparent;
 }
 
 .btn-outline:hover {
-  background: #007bff;
+  background: #4f46e5;
   color: #fff;
 }
 
@@ -135,7 +140,7 @@ p {
 .slide-content h1 {
   font-size: 2.8rem;
   margin-bottom: 1rem;
-  color: #007bff;
+  color: #4f46e5;
 }
 
 .slide-content p {
@@ -172,7 +177,7 @@ p {
 }
 
 .indicator.active {
-  background: #007bff;
+  background: #4f46e5;
 }
 
 /* Features Section */
@@ -216,13 +221,13 @@ p {
 .feature-icon {
   font-size: 2rem;
   margin-bottom: 1rem;
-  color: #007bff;
+  color: #4f46e5;
 }
 
 /* CTA Section */
 .cta-section {
   padding: 5rem 2rem;
-  background: linear-gradient(135deg, #007bff, #0056d2);
+  background: linear-gradient(135deg,  #1753b3, #4f46e5);
   color: #fff;
   text-align: center;
 }
@@ -313,7 +318,11 @@ p {
 }
 
 .dark-mode .logo h1 {
-  color: #3b82f6;
+  color: #4f46e5;
+}
+
+.dark-mode .nav-menu{
+  background-color: transparent;
 }
 
 .dark-mode .nav-link {
@@ -321,16 +330,16 @@ p {
 }
 
 .dark-mode .nav-link:hover {
-  color: #60a5fa;
+  color: #4f46e5;
 }
 
 .dark-mode .btn-primary {
-  background: #3b82f6;
+  background: #4f46e5;
   color: #fff;
 }
 
 .dark-mode .btn-primary:hover {
-  background: #2563eb;
+  background: #6159f3;
 }
 
 .dark-mode .btn-secondary {
@@ -340,13 +349,13 @@ p {
 }
 
 .dark-mode .btn-outline {
-  border: 1px solid #60a5fa;
-  color: #60a5fa;
+  border: 1px solid #4f46e5;
+  color: #4f46e5;
   background: transparent;
 }
 
 .dark-mode .btn-outline:hover {
-  background: #3b82f6;
+  background: #4f46e5;
   color: #fff;
 }
 
@@ -361,11 +370,11 @@ p {
 }
 
 .dark-mode .feature-icon {
-  color: #3b82f6;
+  color: #4f46e5;
 }
 
 .dark-mode .cta-section {
-  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  background: linear-gradient(135deg, #1753b3, #4f46e5);
 }
 
 .dark-mode .landing-footer {

@@ -19,6 +19,7 @@ import Checkout from "./pages/CheckOut";
 import TicketScanner from "./pages/TicketScanner";
 import TicketValidationPage from "./pages/ValidateTicket";
 import UserManagement from "./pages/Admin";
+import Donate from "./pages/Donate";
 import Pricing from "./pages/pricing";
 
 
@@ -52,8 +53,8 @@ function Layout() {
         <Route path="/checkout/:eventId" element={<Checkout />} />
         <Route path="/scanner" element={<TicketScanner />} />
         <Route path="/validate/:ticketId" element={<TicketValidationPage />} />
-        <Route path="/pricing" element={<Pricing />} />
-        
+        <Route path="/donate" element={<Donate/>} />
+        <Route path="/pricing" element={<Pricing/>} />
       </Routes>
     </>
   );

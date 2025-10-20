@@ -145,7 +145,7 @@ export default function Settings() {
 
   return (
     <div
-      className={`min-h-screen flex pl-16 pt-16 settings-container ${
+      className={`min-h-screen flex pl-14 pt-16 settings-container ${
         darkMode ? "dark-mode" : ""
       }`}
       style={{

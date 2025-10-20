@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./CSS/landing.css";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContexts";
+import { TicketCheck, ToggleLeft, ToggleRight } from "lucide-react";
 
 export default function LandingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { darkMode, toggleTheme } = useContext(ThemeContext);
 
   // Detect system dark mode and apply
   useEffect(() => {
@@ -19,7 +23,9 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
     document.body.classList.toggle("dark-mode", prefersDark);
   }, []);
 
@@ -92,7 +98,7 @@ export default function LandingPage() {
       <header className="landing-header">
         <div className="header-content">
           <div className="logo">
-            <h1>🎫 TickiSpot</h1>
+            <h1><TicketCheck/> TickiSpot</h1>
           </div>
           <nav className="nav-menu">
             <Link to="/events" className="nav-link">
@@ -104,12 +110,18 @@ export default function LandingPage() {
             <Link to="/contact" className="nav-link">
               Contact
             </Link>
+            <Link to="/pricing" className="nav-link">
+              Pricing
+            </Link>
+            <Link to="/donate" className="nav-link">
+              Donate
+            </Link>
             {isLoggedIn ? (
               <Link to="/dashboard" className="btn btn-primary">
                 Dashboard
               </Link>
             ) : (
-              <div className="lo">
+              <div className="log">
                 <Link to="/login" className="btn btn-primary">
                   Login
                 </Link>
@@ -118,6 +130,25 @@ export default function LandingPage() {
                 </Link>
               </div>
             )}
+            <button
+              onClick={toggleTheme}
+              className="theme-toggle-btn"
+              style={{
+                display: "flex",
+                border: "1px solid var(--border-color)",
+                padding:"6px",
+                borderRadius:"10px",
+              }}
+            >
+              <span>
+                {darkMode ? (
+                  <ToggleLeft className="text-amber-300" />
+                ) : (
+                  <ToggleRight className="text-cyan-900" />
+                )}
+              </span>
+
+            </button>
           </nav>
         </div>
       </header>
@@ -126,7 +157,7 @@ export default function LandingPage() {
       <section className="hero">
         <div
           className="hero-slide"
-          // style={{ backgroundImage: `url(${heroSlides[currentSlide].image})` }}
+          style={{ backgroundImage: `url(${heroSlides[currentSlide].image})` }}
         >
           <div className="slide-content">
             <h1>{heroSlides[currentSlide].title}</h1>
@@ -173,7 +204,7 @@ export default function LandingPage() {
 
       {/* Features */}
       <section className="features">
-        <div className="container">
+        <div className="feature-content">
           <h2>Powerful Event Management Tools</h2>
           <p className="section-subtitle">
             Everything you need to create, manage, and monetize your events
@@ -216,7 +247,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="landing-footer">
-        <div className="container">
+        <div className="">
           <div className="footer-content">
             <div className="footer-section">
               <h3>🎫 TickiSpot</h3>

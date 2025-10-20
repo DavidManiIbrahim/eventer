@@ -133,7 +133,7 @@
 }
 
 .download-btn {
-  background: #2563eb;
+  background: #4f46e5;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -143,7 +143,7 @@
 }
 
 .download-btn:hover {
-  background: #1d4ed8;
+  background: #574ff3;
 }
 
 /* ---------- 🌙 Dark Mode ---------- */
@@ -171,11 +171,11 @@
 }
 
 .dark-mode .download-btn {
-  background: #3b82f6;
+  background: #4f46e5;
 }
 
 .dark-mode .download-btn:hover {
-  background: #2563eb;
+  background: #645cf3;
 }
 
 .dark-mode .join-btn {

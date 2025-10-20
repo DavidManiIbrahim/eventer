@@ -1,9 +1,9 @@
 import React from 'react'
 
-const pricing = () => {
+const Pricing = () => {
   return (
-    <div className='text-5xl text-center'>pricing</div>
+    <div className='pt-20' >Pricing</div>
   )
 }
 
-export default pricing
+export default Pricing

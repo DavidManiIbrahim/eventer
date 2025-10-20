@@ -94,6 +94,27 @@ body.dark-mode .modal {
   color: #fff;
 }
 
+.navbar .btn-primary{
+  background-color: #4f46e5;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.navbar .btn-outline{
+  border:1px solid #4f46e5;
+  padding: 4px;
+  border-radius: 10px;
+  color: #4f46e5;
+  
+}
+
+.navbar .btn-outline:hover{
+  background-color: #4f46e5;
+  padding: 4px;
+  border-radius: 10px;
+  color: #fff;
+}
+
 
 /* Mobile Nav Modal */
 .mobile-nav {
