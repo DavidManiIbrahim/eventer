@@ -1,9 +1,8 @@
 import React from 'react'
 
-const Donate = () => {
+export default function Donate () {
   return (
     <div className='pt-40' >Donate</div>
   )
 }
 
-export default Donate
