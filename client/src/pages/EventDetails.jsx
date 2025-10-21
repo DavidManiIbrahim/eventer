@@ -14,7 +14,7 @@ export default function EventDetail() {
   const [buying, setBuying] = useState({});
   const [showChat, setShowChat] = useState(false);
   const [activeEventId, setActiveEventId] = useState(null);
-  const [zeroTicket, setZeroTicket] = useState()
+  const [zeroTicket, setZeroTicket] = useState();
 
   const { darkMode } = useContext(ThemeContext); // ✅ Access current theme
   const user = JSON.parse(localStorage.getItem("user"));
@@ -39,8 +39,6 @@ export default function EventDetail() {
     setBuying((prev) => ({ ...prev, [eventId]: e.target.value }));
   };
 
-  
-
   const handleBuy = () => {
     const quantity = parseInt(buying[event._id]) || 1;
     if (!user || !user.email) {
@@ -64,7 +62,9 @@ export default function EventDetail() {
 
   return (
     <div
-      className={`event-detail min-h-screen py-12 px-4 transition-colors duration-300 ${darkMode ? "dark-mode" : ""}
+      className={`event-detail min-h-screen py-12 px-4 transition-colors duration-300 ${
+        darkMode ? "dark-mode" : ""
+      }
       }`}
     >
       <div
@@ -113,24 +113,66 @@ export default function EventDetail() {
             {event.description}
           </p>
 
-          {/* ✅ Event Meta Info */}
+          {/* ✅ Event Meta Info (Updated) */}
           <div
             className={`mt-6 grid grid-cols-1 sm:grid-cols-2 gap-y-3 ${
               darkMode === "dark" ? "text-gray-300" : "text-gray-700"
             }`}
           >
-            <p>📍 <strong>Location:</strong> {event.location}</p>
             <p>
-              📅 <strong>Date:</strong>{" "}
-              {new Date(event.date).toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              📍 <strong>Location:</strong> {event.location || "Not specified"}
             </p>
-            <p>⏰ <strong>Time:</strong> {event.time}</p>
-            <p>💰 <strong>Ticket Price:</strong> ₦{event.ticketPrice}</p>
+
+            {/* Dates */}
+            <p>
+              📅 <strong>Start Date:</strong>{" "}
+              {event.startDate
+                ? new Date(event.startDate).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : "N/A"}
+            </p>
+            <p>
+              🕒 <strong>Start Time:</strong> {event.startTime || "N/A"}
+            </p>
+
+            <p>
+              📅 <strong>End Date:</strong>{" "}
+              {event.endDate
+                ? new Date(event.endDate).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : "N/A"}
+            </p>
+            <p>
+              🕒 <strong>End Time:</strong> {event.endTime || "N/A"}
+            </p>
+
+            <p>
+              🏷 <strong>Event Type:</strong> {event.eventType || "In-person"}
+            </p>
+
+            {/* Pricing */}
+            {event.pricing?.length > 0 && (
+              <div className="col-span-2 mt-2">
+                <p className="font-semibold mb-1">💰 Ticket Options:</p>
+                <ul className="ml-5 list-disc">
+                  {event.pricing.map((price, index) => (
+                    <li key={index}>
+                      {price.type}: ₦{price.price.toLocaleString()}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Tickets */}
             <p>
               🎟 <strong>Tickets Available:</strong>{" "}
               {event.totalTickets - (event.ticketsSold || 0)} /{" "}
@@ -189,7 +231,9 @@ export default function EventDetail() {
                 darkMode === "dark" ? "border-gray-700" : "border-gray-200"
               }`}
             >
-              <h3 className="text-lg font-semibold mb-3">🎫 Purchase Tickets</h3>
+              <h3 className="text-lg font-semibold mb-3">
+                🎫 Purchase Tickets
+              </h3>
               <div className="flex items-center gap-3">
                 <input
                   type="number"

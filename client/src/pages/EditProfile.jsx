@@ -59,7 +59,6 @@ export default function EditProfile() {
     return `${PORT_URL}/${path.replace(/^\/+/, "")}`;
   };
 
-  console.log(buildImageUrl(user?.coverPic));
 
   const handleImageUpload = async (e, type) => {
     const file = e.target.files?.[0];
