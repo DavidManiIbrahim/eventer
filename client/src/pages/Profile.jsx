@@ -1,18 +1,22 @@
 import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import "./CSS/Profile.css";
-import edit from "../components/EditProfile";
+import EditProfileModal from "../components/EditProfileModal";
 
-const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-const Profile = () => {
+export default function Profile() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { darkMode } = useContext(ThemeContext);
+
   const [profile, setProfile] = useState(null);
   const [activeTab, setActiveTab] = useState("upcoming");
-  const { darkMode } = useContext(ThemeContext); // to re-render when theme changes
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // ✅ Fetch profile
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -28,6 +32,8 @@ const Profile = () => {
     fetchProfile();
   }, [id]);
 
+
+
   if (!profile)
     return (
       <div className="flex flex-col items-center justify-center py-12 profile-container">
@@ -38,40 +44,56 @@ const Profile = () => {
 
   return (
     <div
-      className="min-h-screen pl-18 profile-container"
+      className={`min-h-screen pl-18 profile-container ${
+        darkMode ? "dark-mode" : ""
+      }`}
       style={{
         backgroundColor: "var(--bg-color)",
         color: "var(--text-color)",
         transition: "all 0.3s ease",
       }}
     >
-      {/* Cover + Profile Image */}
+      {/* ===== Cover + Profile Image ===== */}
       <div className="relative">
         <img
-          src="/cover.jpg"
+          src={
+            profile.coverPic
+              ? `${PORT_URL}/uploads/cover_pic/${profile.coverPic}`
+              : "/cover.jpg"
+          }
           alt="cover"
           className="h-48 w-full object-cover shadow"
         />
         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
           <img
-            src={`${PORT_URL}/uploads/profile_pic/${profile.profilePic}`}
+            src={
+              profile.profilePic
+                ? `${PORT_URL}/uploads/profile_pic/${profile.profilePic}`
+                : "/default-avatar.png"
+            }
             alt="profile"
             className="h-32 w-32 rounded-full border-4 border-white shadow-lg object-cover"
           />
         </div>
       </div>
 
-      {/* User Info */}
+      {/* ===== User Info ===== */}
       <div className="max-w-6xl mx-auto mt-20 px-6">
         <div className="flex flex-col md:flex-row md:justify-between items-center md:items-start gap-4">
           <div className="text-center md:text-left">
             <h1 className="text-3xl font-bold">{profile.name}</h1>
-            <p className="">@{profile.username}</p>
-            <p className="mt-2 text-gray-600">{profile.bio}</p>
+            <p className="text-gray-500">@{profile.username}</p>
+            {profile.bio && <p className="mt-2 text-gray-600">{profile.bio}</p>}
           </div>
+
           <div className="flex gap-3">
-            <button className="btn-primary">Dashboard</button>
-            <button className="btn-warning" onClick={edit}>
+            <button className="btn-primary" onClick={() => navigate("/dashboard")}>
+              Dashboard
+            </button>
+            <button
+              className="btn-warning"
+              onClick={() => navigate("/edit-profile")}
+            >
               Edit Profile
             </button>
           </div>
@@ -79,7 +101,7 @@ const Profile = () => {
 
         <hr className="my-8 divider" />
 
-        {/* Toggle Tabs */}
+        {/* ===== Tabs ===== */}
         <div className="flex gap-4 tab-container p-3 rounded-lg">
           <button
             className={`tab-btn ${activeTab === "upcoming" ? "active" : ""}`}
@@ -103,7 +125,7 @@ const Profile = () => {
           )}
         </div>
 
-        {/* Events Section */}
+        {/* ===== Events Section ===== */}
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {activeTab === "upcoming" &&
             (profile.tickets?.length ? (
@@ -119,7 +141,6 @@ const Profile = () => {
                   <div className="p-4">
                     <h3 className="font-bold text-lg">{event.title}</h3>
                     <p className="text-sm mt-1">{event.description}</p>
-
                     <div className="mt-2 text-sm">📍 {event.location}</div>
                     <div className="mt-1 text-sm">
                       📅{" "}
@@ -143,7 +164,6 @@ const Profile = () => {
                         </span>
                       )}
                     </div>
-
                     <div className="mt-2 font-medium text-indigo-600">
                       🎟 ₦{event.ticketPrice}
                     </div>
@@ -151,7 +171,6 @@ const Profile = () => {
                       Tickets Left:{" "}
                       {event.totalTickets - (event.ticketsSold || 0)}
                     </div>
-
                     <button className="mt-4 btn-primary w-full">
                       View Details
                     </button>
@@ -176,13 +195,11 @@ const Profile = () => {
                   <div className="p-4">
                     <h3 className="font-bold text-lg">{event.title}</h3>
                     <p className="text-sm mt-1">{event.description}</p>
-
                     <div className="mt-2 text-sm">📍 {event.location}</div>
                     <div className="mt-1 text-sm">
                       📅 {new Date(event.date).toLocaleDateString()} at{" "}
                       {event.time}
                     </div>
-
                     <div className="mt-2 font-medium text-indigo-600">
                       🎟 ₦{event.ticketPrice}
                     </div>
@@ -190,7 +207,6 @@ const Profile = () => {
                       Tickets Left:{" "}
                       {event.totalTickets - (event.ticketsSold || 0)}
                     </div>
-
                     <button className="mt-4 btn-warning w-full">
                       Manage Event
                     </button>
@@ -200,12 +216,12 @@ const Profile = () => {
             ) : (
               <p>No created events</p>
             ))}
-        </div>
 
-        {activeTab === "past" && <p>No past events</p>}
+          {activeTab === "past" && <p>No past events</p>}
+        </div>
       </div>
+
+      
     </div>
   );
-};
-
-export default Profile;
+}

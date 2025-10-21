@@ -40,6 +40,10 @@ const UserSchema = new mongoose.Schema(
       enum: ["admin", "organizer", "user"],
       default: "user",
     },
+    coverPic: {
+      type: String,
+      default: "1754696275588.jpg",
+    },
     profilePic: {
       type: String,
       default: "1754696275588.jpg",

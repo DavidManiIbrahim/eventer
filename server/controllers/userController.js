@@ -2,18 +2,9 @@ const User = require("../models/User");
 const Event = require("../models/Event");
 const Ticket = require("../models/Ticket"); 
 
-
-const formatDate = (date) => {
-  return new Date(date).toLocaleString("en-US", {
-    weekday: "short",   // Sat
-    day: "2-digit",     // 14
-    month: "short",     // Sept
-    year: "numeric",    // 2025
-    hour: "numeric",    // 2
-    minute: "2-digit",  // 00
-    hour12: true        // pm
-  });
-};
+// @desc   Get logged-in user profile with tickets and created events
+// @route  GET /api/users/me
+// @access Private
 
 const getUserProfile = async (req, res) => {
   try {
@@ -125,11 +116,31 @@ const uploadProfilePic = async (req, res) => {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
     const user = await User.findById(req.user._id);
-    user.profilePic = `/uploads/${req.file.filename}`;
+    user.profilePic = `${req.file.filename}`;
     await user.save();
 
     res.json({ message: "Profile picture updated", profilePic: user.profilePic });
   } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+// @desc   Upload cover picture
+// @route  POST /api/users/me/cover
+// @access Private
+const uploadCoverPic = async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Save file path (you can adjust the path based on your static folder setup)
+    user.coverPic = `${req.file.filename}`;
+    await user.save();
+
+    res.json({ message: "Cover picture updated", coverPic: user.coverPic });
+  } catch (error) {
+    console.error("Cover picture upload error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -220,6 +231,7 @@ module.exports = {
   getUserProfile,
   updateMyProfile,
   uploadProfilePic,
+  uploadCoverPic,
   getMyTickets,
   updateUserRole,
   getAllUsers,

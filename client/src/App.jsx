@@ -12,6 +12,7 @@ import Sidebar from "./components/SideBar";
 import LiveEvent from "./components/LiveEvents";
 import Settings from "./components/Settings";
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 import EventDetail from "./pages/EventDetails";
 import Checkout from "./pages/CheckOut";
 import TicketScanner from "./pages/TicketScanner";
@@ -45,6 +46,7 @@ function Layout() {
         <Route path="/live/events" element={<LiveEvent />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/profile/:id" element={<Profile />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/admin/users" element={<UserManagement />} />
         <Route path="/checkout/:eventId" element={<Checkout />} />
         <Route path="/scanner" element={<TicketScanner />} />
