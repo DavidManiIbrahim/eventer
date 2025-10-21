@@ -75,7 +75,7 @@ const UserManagement = () => {
 
 
   return (
-    <div className="user-management pt-20 px-6 pl-72 min-h-screen">
+    <div className="user-management pt-20 px-20 min-h-screen">
       <h2 className="text-2xl font-bold mb-4">User Management</h2>
 
       {/* Search and Filter Section */}

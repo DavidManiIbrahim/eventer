@@ -17,7 +17,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { darkMode} = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -27,15 +27,15 @@ export default function Register() {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      setError("Only image files are allowed");
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file && file.type.startsWith("image/")) {
+  //     setImageFile(file);
+  //     setImagePreview(URL.createObjectURL(file));
+  //   } else {
+  //     setError("Only image files are allowed");
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,22 +67,12 @@ export default function Register() {
 
   return (
     <div
-      className={`flex min-h-screen items-center justify-center transition-all duration-300 ${
-        darkMode === "dark"
-          ? "bg-gray-900 text-white"
-          : "bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800"
-      }`}
+      className={`flex min-h-screen items-center justify-center transition-all duration-300 `}
     >
       <div
-        className={`w-full max-w-md rounded-2xl shadow-xl p-8 transition-all duration-300 ${
-          darkMode === "dark" ? "bg-gray-800 border border-gray-700" : "bg-white"
-        }`}
+        className={`w-full max-w-md rounded-2xl shadow-xl p-8 transition-all duration-300 `}
       >
-        <h2
-          className={`text-2xl font-bold text-center mb-6 ${
-            darkMode === "dark" ? "text-indigo-400" : "text-indigo-600"
-          }`}
-        >
+        <h2 className={`text-2xl font-bold text-center mb-6`}>
           Create an Account
         </h2>
 
@@ -104,11 +94,7 @@ export default function Register() {
             value={form.username}
             onChange={handleChange}
             required
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
-              darkMode === "dark"
-                ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
-                : "border-gray-300"
-            }`}
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none `}
           />
 
           <input
@@ -118,11 +104,7 @@ export default function Register() {
             value={form.email}
             onChange={handleChange}
             required
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
-              darkMode === "dark"
-                ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
-                : "border-gray-300"
-            }`}
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none `}
           />
 
           <input
@@ -132,18 +114,10 @@ export default function Register() {
             value={form.password}
             onChange={handleChange}
             required
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none ${
-              darkMode === "dark"
-                ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
-                : "border-gray-300"
-            }`}
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none `}
           />
 
-          <label
-            className={`flex items-center space-x-2 ${
-              darkMode === "dark" ? "text-gray-300" : "text-gray-600"
-            }`}
-          >
+          <label className={`flex items-center space-x-2 `}>
             <input
               type="checkbox"
               name="isOrganizer"
@@ -163,11 +137,7 @@ export default function Register() {
           </button>
         </form>
 
-        <p
-          className={`text-center text-sm mt-6 ${
-            darkMode === "dark" ? "text-gray-400" : "text-gray-500"
-          }`}
-        >
+        <p className={`text-center text-sm mt-6 `}>
           Already have an account?{" "}
           <span
             className="text-indigo-500 cursor-pointer hover:underline"

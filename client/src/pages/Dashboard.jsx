@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import "./CSS/Dashboard.css";
+import "./CSS/Dashboard.css"; 
+import EditEvent from "../components/EditEvent";
 
 const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -13,6 +14,26 @@ export default function Dashboard() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
+  // 🟢 For Modal Control
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+
+  // 🟢 Functions
+  const handleEditClick = (id) => {
+    setSelectedEventId(id);
+    setEditModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setEditModalOpen(false);
+    setSelectedEventId(null);
+  };
+
+  const handleEventUpdated = () => {
+    API.get("/events/my-events").then((res) => setEvents(res.data));
+  };
+
+  // 🧩 Fetch dashboard data
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -35,6 +56,7 @@ export default function Dashboard() {
       });
   }, [token]);
 
+  // 🟢 Toggle Live Event
   const toggleLive = async (id, currentStatus) => {
     try {
       await API.patch("/events/toggle-live", {
@@ -57,6 +79,7 @@ export default function Dashboard() {
     }
   };
 
+  // 🗑 Delete Event
   const handleDelete = async (id) => {
     const eventToDelete = events.find((e) => e._id === id);
     const confirmed = window.confirm(
@@ -75,8 +98,6 @@ export default function Dashboard() {
     }
   };
 
-  const handleEdit = (id) => navigate(`/edit/${id}`);
-
   const StatCard = ({ title, value }) => (
     <div className="stat-card bg-white shadow rounded-xl p-4 text-center border transition-all hover:scale-105">
       <h3 className="text-sm text-gray-600">{title}</h3>
@@ -88,7 +109,7 @@ export default function Dashboard() {
     <div className="dashboard-layout min-h-screen bg-gray-50 pt-16 px-22">
       <h2 className="text-3xl font-bold mb-8">🎛 Organizer Dashboard</h2>
 
-      {/* Loading */}
+      {/* 🔄 Loading */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-500 mb-4"></div>
@@ -96,7 +117,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Error */}
+      {/* ❌ Error */}
       {error && (
         <div className="text-center py-10 text-red-600">
           <p className="mb-2">❌ {error}</p>
@@ -109,7 +130,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Stats */}
+      {/* 📊 Stats */}
       {!loading && !error && stats && (
         <div className="stats-wrapper bg-white shadow rounded-xl p-6 mb-10 border transition-all">
           <h4 className="text-lg font-semibold mb-4">📊 Stats Overview</h4>
@@ -136,7 +157,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Events */}
+      {/* 🎫 Events */}
       <h4 className="text-lg font-semibold mb-4">Your Events</h4>
       {events.length === 0 ? (
         <p className="text-gray-500">You haven’t created any events yet.</p>
@@ -145,7 +166,7 @@ export default function Dashboard() {
           {events.map((event) => (
             <div
               key={event._id}
-              className="event-card bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="event-card bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-xl transform hover:scale-101 transition-all duration-300"
             >
               {event.image && (
                 <img
@@ -179,6 +200,7 @@ export default function Dashboard() {
                   })}{" "}
                   at {event.startTime || "TBA"} • 📍 {event.location}
                 </p>
+
                 {event.pricing?.length > 0 && (
                   <div>
                     <p>💰 Pricing:</p>
@@ -209,12 +231,14 @@ export default function Dashboard() {
                 >
                   {event.liveStream?.isLive ? "🔴 Stop Live" : "🟢 Go Live"}
                 </button>
+
                 <button
-                  onClick={() => handleEdit(event._id)}
+                  onClick={() => handleEditClick(event._id)} // ✅ corrected name
                   className="px-3 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 text-sm font-medium"
                 >
                   ✏️ Edit
                 </button>
+
                 <button
                   onClick={() => handleDelete(event._id)}
                   className="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 text-sm font-medium"
@@ -226,6 +250,14 @@ export default function Dashboard() {
           ))}
         </div>
       )}
+
+      {/* ✅ Place the EditEvent modal here once */}
+      <EditEvent
+        isOpen={editModalOpen}
+        onClose={handleModalClose}
+        eventId={selectedEventId}
+        onEventUpdated={handleEventUpdated}
+      />
     </div>
   );
 }

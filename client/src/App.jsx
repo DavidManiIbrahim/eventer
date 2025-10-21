@@ -3,10 +3,8 @@ import Home from "./pages/Home";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import CreateEvent from "./pages/CreateEvent";
 import MyTickets from "./pages/MyTickets";
 import Dashboard from "./pages/Dashboard";
-import EditEvent from "./pages/EditEvent";
 import NavBar from "./components/NavBar";
 import Success from "./pages/Success";
 import StatsDashboard from "./pages/StatsDashboard";
@@ -39,12 +37,10 @@ function Layout() {
         <Route path="/events" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/create" element={<CreateEvent />} />
         <Route path="/my-tickets" element={<MyTickets />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/dashboard" element={<StatsDashboard />} />
         <Route path="/Eventdetail/:eventId" element={<EventDetail />} />
-        <Route path="/edit/:eventId" element={<EditEvent />} />
         <Route path="/success" element={<Success />} />
         <Route path="/live/events" element={<LiveEvent />} />
         <Route path="/settings" element={<Settings />} />

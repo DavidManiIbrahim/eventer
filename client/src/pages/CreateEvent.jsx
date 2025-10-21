@@ -3,7 +3,7 @@ import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import "./CSS/CreateEvent.css";
 import { ThemeContext } from "../contexts/ThemeContexts";
-import { Building2, Globe2, MonitorPlay } from "lucide-react"; 
+import { Building2, Globe2, MonitorPlay } from "lucide-react";
 
 const eventTypes = [
   {
@@ -228,9 +228,7 @@ export default function CreateEvent({ isOpen, onClose }) {
                     placeholder={`₦ ${item.type} Price`}
                     className="input-field"
                     value={item.price}
-                    onChange={(e) =>
-                      handlePricingChange(index, e.target.value)
-                    }
+                    onChange={(e) => handlePricingChange(index, e.target.value)}
                   />
                 </div>
               ))}
@@ -263,8 +261,9 @@ export default function CreateEvent({ isOpen, onClose }) {
               onChange={handleChange}
             />
 
-            {/* Image Upload */}
-            <label htmlFor="imageUpload" className="upload-box">
+            
+            <label className="form-label">Event Image</label>
+            <div className="image-upload">
               {imagePreview ? (
                 <img
                   src={imagePreview}
@@ -272,16 +271,14 @@ export default function CreateEvent({ isOpen, onClose }) {
                   className="image-preview"
                 />
               ) : (
-                <span className="upload-text">📸 Upload Event Image</span>
+                <span>📸 Upload an event image</span>
               )}
-            </label>
-            <input
-              id="imageUpload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageChange}
-            />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </div>
 
             <button type="submit" className="submit-btn">
               🚀 Create Event

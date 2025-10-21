@@ -1,5 +1,7 @@
 const Event = require("../models/Event");
 const Ticket = require("../models/Ticket");
+const fs = require("fs");
+const path = require("path");
 
 // ✅ Create new event
 exports.createEvent = async (req, res) => {
@@ -131,18 +133,46 @@ exports.toggleLiveStream = async (req, res) => {
 exports.updateEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
-    const updates = req.body;
-
     const event = await Event.findById(eventId);
     if (!event) return res.status(404).json({ message: "Event not found" });
     if (event.createdBy.toString() !== req.user.id)
       return res.status(403).json({ message: "Unauthorized" });
 
+    // ✅ Parse JSON fields if needed
+    let updates = { ...req.body };
+    if (updates.pricing) {
+      try {
+        updates.pricing = JSON.parse(updates.pricing);
+      } catch {
+        // ignore if not JSON
+      }
+    }
+
+    // ✅ Handle uploaded image (if new one is provided)
+    if (req.file) {
+      // Delete old image if exists
+      if (event.image) {
+        const oldImagePath = path.join(
+          __dirname,
+          "../uploads/event_image",
+          event.image
+        );
+        if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
+      }
+
+      updates.image = req.file.filename;
+    }
+
+    // ✅ Apply updates
     Object.assign(event, updates);
     await event.save();
 
-    res.status(200).json({ message: "✅ Event updated", event });
+    res.status(200).json({
+      message: "✅ Event updated successfully",
+      event,
+    });
   } catch (err) {
+    console.error("Update Event Error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };

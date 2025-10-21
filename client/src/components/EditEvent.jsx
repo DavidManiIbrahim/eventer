@@ -1,49 +1,97 @@
-import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../api/axios";
-import "./CSS/EditEvent.css";
+import "./css/Editevent.css";
+import { Building2, Globe2, MonitorPlay } from "lucide-react";
 
-export default function EditEvent() {
-  const { eventId } = useParams();
-  const navigate = useNavigate();
+
+export default function EditEvent({ isOpen, onClose, eventId, onEventUpdated }) {
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     title: "",
     description: "",
     category: "",
     location: "",
-    streamType: "YouTube",
-    streamURL: "",
     eventType: "In-person",
     startDate: "",
     startTime: "",
     endDate: "",
     endTime: "",
+    totalTickets: "",
     pricing: [
       { type: "Regular", price: "" },
       { type: "VIP", price: "" },
       { type: "VVIP", price: "" },
     ],
-    totalTickets: "",
   });
-
-  
-  const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
+ const eventTypes = [
+  {
+    id: 1,
+    icon: <Building2 className="w-5 h-5" />,
+    name: "In-person",
+    hint: "Attendees will join the event at a physical location.",
+  },
+  {
+    id: 2,
+    icon: <MonitorPlay className="w-5 h-5" />,
+    name: "Virtual",
+    hint: "Attendees will join the event online via a streaming platform.",
+  },
+  {
+    id: 3,
+    icon: <Globe2 className="w-5 h-5" />,
+    name: "Hybrid",
+    hint: "Attendees can choose to join either in-person or online.",
+  },
+];
+
+
+  // 🧭 Fetch Event Data
   useEffect(() => {
+    if (!eventId || !isOpen) return;
+    setLoading(true);
+
     API.get(`/events/${eventId}`)
-      .then((res) => setForm(res.data))
-      .catch((err) => console.error("Failed to load event", err));
-  }, [eventId]);
+      .then((res) => {
+        const data = res.data;
+        setForm({
+          title: data.title || "",
+          description: data.description || "",
+          category: data.category || "",
+          location: data.location || "",
+          eventType: data.eventType || "In-person",
+          startDate: data.startDate?.split("T")[0] || "",
+          startTime: data.startTime || "",
+          endDate: data.endDate?.split("T")[0] || "",
+          endTime: data.endTime || "",
+          totalTickets: data.totalTickets || "",
+          pricing: data.pricing?.length
+            ? data.pricing
+            : [
+                { type: "Regular", price: "" },
+                { type: "VIP", price: "" },
+                { type: "VVIP", price: "" },
+              ],
+        });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+        if (data.image) {
+          setImagePreview(
+            `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/uploads/event_image/${data.image}`
+          );
+        }
+      })
+      .catch(() => alert("❌ Failed to load event details"))
+      .finally(() => setLoading(false));
+  }, [eventId, isOpen]);
 
-  const handlePricingChange = (index, value) => {
-    const updatedPricing = [...form.pricing];
-    updatedPricing[index].price = value;
-    setForm((prev) => ({ ...prev, pricing: updatedPricing }));
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handlePricingChange = (i, value) => {
+    const updated = [...form.pricing];
+    updated[i].price = value;
+    setForm((prev) => ({ ...prev, pricing: updated }));
   };
 
   const handleImageChange = (e) => {
@@ -57,54 +105,74 @@ export default function EditEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const formData = new FormData();
+
       Object.entries(form).forEach(([key, value]) => {
         if (key === "pricing") formData.append(key, JSON.stringify(value));
         else formData.append(key, value);
       });
+
       if (imageFile) formData.append("image", imageFile);
 
-      
-      await API.put(`/events/update/${eventId}`, form);
+      await API.put(`/events/update/${eventId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
       alert("✅ Event updated successfully!");
-      navigate("/dashboard");
+      onEventUpdated();
+      onClose();
     } catch (err) {
       console.error(err);
       alert("❌ Failed to update event");
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="edit-event-page min-h-screen flex items-center justify-center p-6">
-      <div className="edit-event-card w-full max-w-2xl rounded-2xl shadow-lg p-8">
-        <h2 className="edit-event-title text-2xl font-bold mb-6 flex items-center gap-2">
-          ✏️ Edit Event
-        </h2>
+    <div className={`edit-overlay ${isOpen ? "show" : ""}`}>
+      <div className="edit-modal scale-in">
+        <div className="edit-header">
+          <h2>✏️ Edit Event</h2>
+          <button onClick={onClose} className="close-btn">×</button>
+        </div>
 
-        {/* Event Type Selection */}
-          <div className="event-type-selection">
-            {["In-person", "Virtual", "Hybrid"].map((type) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() =>
-                  setForm((prev) => ({ ...prev, eventType: type }))
-                }
-                className={`event-type-btn ${
-                  form.eventType === type ? "active" : ""
-                }`}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
+        {loading ? (
+          <div className="loading">Loading event details...</div>
+        ) : (
+          <form onSubmit={handleSubmit} className="edit-form">
 
-          <form onSubmit={handleSubmit}>
+            {/* 🧭 Event Type Selection */}
+            <div className="event-type-selection">
+              {eventTypes.map((type) => (
+                <button
+                  key={type.id}
+                  type="button"
+                  onClick={() =>
+                    setForm((prev) => ({ ...prev, eventType: type.name }))
+                  }
+                  className={`event-type-btn ${
+                    form.eventType === type.name ? "active" : ""
+                  }`}
+                >
+                  <div className="flex justify-between align-center">
+                    <div className="icon">{type.icon}</div>
+                    <div className="type-name">{type.name}</div>
+                  </div>
+                  <div className="type-hint">{type.hint}</div>
+                </button>
+              ))}
+            </div>
+
             <input
               name="title"
               placeholder="Event Name"
               className="input-field"
               onChange={handleChange}
+              value={form.title}
               required
             />
 
@@ -114,6 +182,7 @@ export default function EditEvent() {
               rows="4"
               className="input-field"
               onChange={handleChange}
+              value={form.description}
               required
             ></textarea>
 
@@ -122,6 +191,7 @@ export default function EditEvent() {
               placeholder="Category (e.g. Tech, Music, Business)"
               className="input-field"
               onChange={handleChange}
+              value={form.category}
               required
             />
 
@@ -134,6 +204,7 @@ export default function EditEvent() {
                   name="startDate"
                   className="input-field"
                   onChange={handleChange}
+                  value={form.startDate}
                   required
                 />
               </div>
@@ -144,6 +215,7 @@ export default function EditEvent() {
                   name="startTime"
                   className="input-field"
                   onChange={handleChange}
+                  value={form.startTime}
                   required
                 />
               </div>
@@ -154,6 +226,7 @@ export default function EditEvent() {
                   name="endDate"
                   className="input-field"
                   onChange={handleChange}
+                  value={form.endDate}
                   required
                 />
               </div>
@@ -164,6 +237,7 @@ export default function EditEvent() {
                   name="endTime"
                   className="input-field"
                   onChange={handleChange}
+                  value={form.endTime}
                   required
                 />
               </div>
@@ -174,10 +248,9 @@ export default function EditEvent() {
               placeholder="Event Location"
               className="input-field"
               onChange={handleChange}
+              value={form.location}
               required
             />
-
-            
 
             {/* Pricing */}
             <div className="pricing-section">
@@ -202,13 +275,15 @@ export default function EditEvent() {
               placeholder="Total Tickets"
               className="input-field"
               onChange={handleChange}
+              value={form.totalTickets}
               required
             />
 
+            {/* Stream Type */}
             <label className="field-label">Stream Type</label>
             <select
               name="streamType"
-              value={form.streamType}
+              value={form.streamType || ""}
               className="input-field"
               onChange={handleChange}
             >
@@ -221,10 +296,12 @@ export default function EditEvent() {
               placeholder="Stream URL (optional)"
               className="input-field"
               onChange={handleChange}
+              value={form.streamURL || ""}
             />
 
             {/* Image Upload */}
-            <label htmlFor="imageUpload" className="upload-box">
+            <label className="form-label">Event Image</label>
+            <div className="image-upload">
               {imagePreview ? (
                 <img
                   src={imagePreview}
@@ -232,25 +309,21 @@ export default function EditEvent() {
                   className="image-preview"
                 />
               ) : (
-                <span className="upload-text">📸 Upload Event Image</span>
+                <span>📸 Upload an event image</span>
               )}
-            </label>
-            <input
-              id="imageUpload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageChange}
-            />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </div>
 
-
-          {/* Submit Button */}
-          <div className="pt-4">
-            <button type="submit" className="submit-btn w-full py-3 font-semibold rounded-lg shadow-md transition">
-              ✅ Update Event
+            {/* Save Button */}
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? "Saving..." : "💾 Save Changes"}
             </button>
-          </div>
-        </form>
+          </form>
+        )}
       </div>
     </div>
   );

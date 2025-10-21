@@ -10,7 +10,7 @@ export default function Login() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { darkMode} = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,22 +53,12 @@ export default function Login() {
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center transition-all duration-300 ${
-        darkMode === "dark"
-          ? "bg-gray-900 text-white"
-          : "bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800"
-      }`}
+      className={`min-h-screen flex items-center justify-center transition-all duration-300 `}
     >
       <div
-        className={`w-full max-w-md rounded-2xl shadow-xl p-8 transition-all duration-300 ${
-          darkMode === "dark" ? "bg-gray-800 border border-gray-700" : "bg-white"
-        }`}
+        className={`w-full max-w-md rounded-2xl shadow-xl p-8 transition-all duration-300 `}
       >
-        <h2
-          className={`text-2xl font-bold text-center mb-6 ${
-            darkMode === "dark" ? "text-indigo-400" : "text-indigo-600"
-          }`}
-        >
+        <h2 className={`text-2xl font-bold text-center mb-6 `}>
           Login to Your Account
         </h2>
 
@@ -90,11 +80,7 @@ export default function Login() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
-              darkMode === "dark"
-                ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
-                : "border-gray-300"
-            }`}
+            className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-400 `}
           />
           {errors.email && (
             <p className="text-red-500 text-xs mt-1">{errors.email}</p>
@@ -106,11 +92,7 @@ export default function Login() {
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
-            className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
-              darkMode === "dark"
-                ? "bg-gray-700 text-white border-gray-600 placeholder-gray-400"
-                : "border-gray-300"
-            }`}
+            className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-400 `}
           />
           {errors.password && (
             <p className="text-red-500 text-xs mt-1">{errors.password}</p>
@@ -125,11 +107,7 @@ export default function Login() {
           </button>
         </form>
 
-        <p
-          className={`text-center text-sm mt-6 ${
-            darkMode === "dark" ? "text-gray-400" : "text-gray-500"
-          }`}
-        >
+        <p className={`text-center text-sm mt-6 `}>
           Don’t have an account?{" "}
           <span
             className="text-indigo-500 hover:underline cursor-pointer"
@@ -138,8 +116,6 @@ export default function Login() {
             Sign up
           </span>
         </p>
-
-        
       </div>
     </div>
   );

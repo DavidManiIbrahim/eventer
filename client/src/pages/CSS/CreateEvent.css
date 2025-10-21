@@ -213,36 +213,36 @@ body.modal-open {
   }
 }
 
-.upload-box {
-  width: 100%;
-  border: 2px dashed #d1d5db;
+.image-upload {
+  border: 2px dashed var(--input-border);
   border-radius: 0.75rem;
   padding: 1rem;
   text-align: center;
   cursor: pointer;
-  background: transparent;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-.upload-box:hover {
-  background: #e5e7eb;
-  border-color: #6366f1;
+.image-upload:hover {
+  border-color: var(--focus-ring);
+  background: rgba(59, 130, 246, 0.05);
 }
 
-.upload-box .image-preview {
-  max-width: 100%;
+.image-upload input {
+  display: none;
+}
+
+.image-preview {
+  width: 100%;
   max-height: 200px;
-  margin-top: 1rem;
-  border-radius: 0.5rem;
   object-fit: cover;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  transition: transform 0.3s ease;
 }
 
-.upload-box .upload-text {
-  color: #6b7280;
-  font-size: 0.95rem;
-  margin: 1rem 0;
+.image-preview:hover {
+  transform: scale(1.02);
 }
-
 
 
 textarea.input-field {
