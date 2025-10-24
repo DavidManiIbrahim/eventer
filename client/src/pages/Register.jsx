@@ -27,15 +27,6 @@ export default function Register() {
     }));
   };
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file && file.type.startsWith("image/")) {
-  //     setImageFile(file);
-  //     setImagePreview(URL.createObjectURL(file));
-  //   } else {
-  //     setError("Only image files are allowed");
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

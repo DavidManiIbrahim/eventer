@@ -46,18 +46,31 @@ export default function EditProfile() {
   };
 
   // ✅ Normalize file path so images always render correctly
-  const buildImageUrl = (path) => {
+const buildImageUrl = (path, type = "profile") => {
     if (!path) return "";
-    // If backend returns full path like "/uploads/profile_pic/filename.jpg"
-    if (path.startsWith("/uploads")) return `${PORT_URL}${path}`;
-    // If backend returns just the filename
-    if (!path.includes("/")) {
-      if (path.includes("cover"))
-        return `${PORT_URL}/uploads/cover_pic/${path}`;
-      return `${PORT_URL}/uploads/profile_pic/${path}`;
+    // If already a full URL, return as-is
+    if (/^https?:\/\//i.test(path)) return path;
+
+    // strip leading slashes
+    const normalized = path.replace(/^\/+/, "");
+
+    // If path already references uploads/profile_pic or uploads/cover_pic or includes "uploads"
+    if (
+        normalized.startsWith("uploads") ||
+        /profile_pic|cover_pic/.test(normalized)
+    ) {
+        return `${PORT_URL}/${normalized}`;
     }
-    return `${PORT_URL}/${path.replace(/^\/+/, "")}`;
-  };
+
+    // If backend returned just a filename (no slash), pick folder based on type
+    if (!normalized.includes("/")) {
+        if (type === "cover") return `${PORT_URL}/uploads/cover_pic/${normalized}`;
+        return `${PORT_URL}/uploads/profile_pic/${normalized}`;
+    }
+
+    // Fallback: join with base URL
+    return `${PORT_URL}/${normalized}`;
+};
 
 
   const handleImageUpload = async (e, type) => {
@@ -129,7 +142,7 @@ export default function EditProfile() {
       {/* ===== Cover Section ===== */}
       <div className="cover-section">
         <img
-          src={previewCover || buildImageUrl(user.coverPic) || "/cover.jpg"}
+          src={previewCover || buildImageUrl(user.coverPic, "cover") || "/cover.jpg"}
           alt="Cover"
           className="cover-image"
         />
@@ -148,7 +161,7 @@ export default function EditProfile() {
           <img
             src={
               previewPic ||
-              buildImageUrl(user.profilePic) ||
+              buildImageUrl(user.profilePic, "profile") ||
               "/default-avatar.png"
             }
             alt="Profile"

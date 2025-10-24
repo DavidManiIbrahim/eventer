@@ -18,9 +18,15 @@ import Checkout from "./pages/CheckOut";
 import TicketScanner from "./pages/TicketScanner";
 import TicketValidationPage from "./pages/ValidateTicket";
 import UserManagement from "./pages/Admin";
-import Donate from "./pages/Donate";
-import Pricing from "./pages/pricing";
 
+import AboutUs from "./pages/AboutUs"
+import Contact from "./pages/Contact"
+import Pricing from "./pages/Pricing"
+import Donation from "./pages/Donation"
+import HelpCenter from "./pages/HelpCenter"
+import Documentation from "./pages/Documentation"
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService"
 
 function Layout() {
   const location = useLocation();
@@ -32,7 +38,7 @@ function Layout() {
     <>
       {!hideNavAndSidebar && <NavBar />}
       {!hideNavAndSidebar && <Sidebar />}
-      
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/events" element={<Home />} />
@@ -51,8 +57,15 @@ function Layout() {
         <Route path="/checkout/:eventId" element={<Checkout />} />
         <Route path="/scanner" element={<TicketScanner />} />
         <Route path="/validate/:ticketId" element={<TicketValidationPage />} />
-        <Route path="/donate" element={<Donate/>} />
-        <Route path="/pricing" element={<Pricing/>} />
+
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/donate" element={<Donation />} />
+        <Route path="/help" element={<HelpCenter />} />
+        <Route path="/docs" element={<Documentation />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
       </Routes>
     </>
   );
