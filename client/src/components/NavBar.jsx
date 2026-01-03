@@ -42,7 +42,7 @@ export default function NavBar() {
   return (
     <nav className="navbar fixed w-full z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-        {/* Desktop Nav */}
+        {/* Left side - Desktop Nav */}
         <div className="hidden md:flex items-center space-x-6">
           {user ? (
             <>
@@ -53,34 +53,6 @@ export default function NavBar() {
               {/* Notification */}
               <div className="relative">
                 <NotificationBell />
-              </div>
-
-              {/* User Profile Dropdown */}
-              <div className="relative group">
-                <img
-                  src={`${PORT_URL}/uploads/profile_pic/${user.profilePic}`}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 cursor-pointer"
-                />
-
-                {/* Dropdown */}
-                <div className="dropdown absolute right-0 mt-2 w-48 shadow-lg rounded-lg opacity-0 group-hover:opacity-100 transition duration-200">
-                  <Link to={`/profile/${user.id}`} className="dropdown-item">
-                    👤 Profile
-                  </Link>
-                  <Link to="/dashboard" className="dropdown-item">
-                    📋 Dashboard
-                  </Link>
-                  <Link to="/admin/dashboard" className="dropdown-item">
-                    📊 Stats
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="dropdown-item logout"
-                  >
-                    🚪 Logout
-                  </button>
-                </div>
               </div>
             </>
           ) : (
@@ -95,13 +67,46 @@ export default function NavBar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden focus:outline-none"
-        >
-          {isMenuOpen ? "✖" : "☰"}
-        </button>
+        {/* Right side - Profile & Mobile Menu */}
+        <div className="flex items-center space-x-4">
+          {/* User Profile Dropdown - Desktop */}
+          {user && (
+            <div className="hidden md:block relative group">
+              <img
+                src={`${PORT_URL}/uploads/profile_pic/${user.profilePic}`}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 cursor-pointer"
+              />
+
+              {/* Dropdown */}
+              <div className="dropdown absolute right-0 mt-2 w-48 shadow-lg rounded-lg opacity-0 group-hover:opacity-100 transition duration-200">
+                <Link to={`/profile/${user.id}`} className="dropdown-item">
+                  👤 Profile
+                </Link>
+                <Link to="/dashboard" className="dropdown-item">
+                  📋 Dashboard
+                </Link>
+                <Link to="/admin/dashboard" className="dropdown-item">
+                  📊 Stats
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="dropdown-item logout"
+                >
+                  🚪 Logout
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden focus:outline-none"
+          >
+            {isMenuOpen ? "✖" : "☰"}
+          </button>
+        </div>
       </div>
 
      {/* Mobile Menu Overlay */}
