@@ -1,19 +1,19 @@
 :root {
-  --page-bg: #f9fafb;
+  --page-bg: #ffffff;
   --card-bg: #ffffff;
-  --text-color: #111827;
-  --input-border: #d1d5db;
-  --accent: #4f46e5;
-  --accent-hover: #4338ca;
+  --text-color: #000000;
+  --input-border: rgba(0, 0, 0, 0.1);
+  --accent: #ec4899;
+  --accent-hover: #db2777;
 }
 
 .dark-mode {
-  --page-bg: #0b0b0b;
-  --card-bg: #1f2937;
-  --text-color: #f9fafb;
-  --input-border: #374151;
-  --accent: #6366f1;
-  --accent-hover: #818cf8;
+  --page-bg: #000000;
+  --card-bg: #1a1a1a;
+  --text-color: #e5e5e5;
+  --input-border: rgba(255, 255, 255, 0.1);
+  --accent: #ec4899;
+  --accent-hover: #db2777;
 }
 
 .editprofile-page {
@@ -21,6 +21,34 @@
   min-height: 100vh;
   color: var(--text-color);
   transition: background 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+.editprofile-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.4;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.dark-mode .editprofile-page::before {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+.editprofile-form {
+  position: relative;
+  z-index: 1;
 }
 
 /* ===== Cover Section ===== */
@@ -99,58 +127,106 @@
   max-width: 600px;
   margin: 6rem auto 4rem auto;
   background: var(--card-bg);
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  padding: 2.5rem;
+  border-radius: 24px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .editprofile-form {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .editprofile-form h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   color: var(--text-color);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .editprofile-form label {
   display: block;
-  font-weight: 500;
-  margin-top: 1rem;
-  margin-bottom: 0.3rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  letter-spacing: -0.01em;
 }
 
 .editprofile-form input,
 .editprofile-form textarea {
   width: 100%;
-  padding: 0.8rem;
-  border-radius: 0.6rem;
-  border: 1px solid var(--input-border);
-  background: transparent;
+  padding: 0.875rem 1.25rem;
+  border-radius: 12px;
+  border: 2px solid var(--input-border);
+  background: var(--card-bg);
   color: var(--text-color);
-  transition: border 0.3s ease, box-shadow 0.3s ease;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .editprofile-form input:focus,
 .editprofile-form textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);
   outline: none;
+  transform: translateY(-1px);
+}
+
+.editprofile-form textarea {
+  resize: vertical;
+  min-height: 120px;
 }
 
 .editprofile-form button {
-  margin-top: 1.8rem;
+  margin-top: 2rem;
   width: 100%;
-  padding: 0.9rem;
+  padding: 1rem 2rem;
   font-weight: 600;
-  border: none;
-  border-radius: 0.6rem;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
   background: var(--accent);
   color: #fff;
   font-size: 1rem;
+  font-family: inherit;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.editprofile-form button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.editprofile-form button:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .editprofile-form button:hover {
   background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+}
+
+.editprofile-form button:active {
+  transform: translateY(0);
 }
 
 /* ===== Loading State ===== */

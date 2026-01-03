@@ -24,6 +24,7 @@ exports.register = async (req, res) => {
 
     // Create new user
     const newUser = new User({
+      name: username, // Use username as name since form only sends username
       username,
       email,
       password: hashedPassword,

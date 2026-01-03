@@ -1,7 +1,9 @@
 import { useState, useContext } from "react";
 import API from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
+import { TicketCheck, ArrowRight, UserPlus } from "lucide-react";
+import "./CSS/forms.css";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -10,8 +12,6 @@ export default function Register() {
     password: "",
     isOrganizer: false,
   });
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,6 @@ export default function Register() {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,86 +56,103 @@ export default function Register() {
   };
 
   return (
-    <div
-      className={`flex min-h-screen items-center justify-center transition-all duration-300 `}
-    >
-      <div
-        className={`w-full max-w-md rounded-2xl shadow-xl p-8 transition-all duration-300 `}
-      >
-        <h2 className={`text-2xl font-bold text-center mb-6`}>
-          Create an Account
-        </h2>
+    <div className={`form-page ${darkMode ? "dark-mode" : ""}`}>
+      <div className="form-grid-background"></div>
+      <div className="form-container">
+        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+          <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "inherit", marginBottom: "1rem" }}>
+            <TicketCheck size={32} style={{ color: "#ec4899" }} />
+          </Link>
+          <h1 className="form-title">Create Account</h1>
+          <p className="form-subtitle">Join TickiSpot and start creating amazing events</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit}>
           {error && (
-            <div className="rounded-lg bg-red-100 text-red-600 px-4 py-2 text-sm">
+            <div className="form-alert form-alert-error">
               {error}
             </div>
           )}
           {success && (
-            <div className="rounded-lg bg-green-100 text-green-600 px-4 py-2 text-sm">
+            <div className="form-alert form-alert-success">
               {success}
             </div>
           )}
 
-          <input
-            name="username"
-            placeholder="Username"
-            value={form.username}
-            onChange={handleChange}
-            required
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none `}
-          />
+          <div className="form-group">
+            <label className="form-label">Username</label>
+            <input
+              name="username"
+              type="text"
+              placeholder="Choose a username"
+              value={form.username}
+              onChange={handleChange}
+              className="form-input"
+              required
+            />
+          </div>
 
-          <input
-            name="email"
-            placeholder="Email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none `}
-          />
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={form.email}
+              onChange={handleChange}
+              className="form-input"
+              required
+            />
+          </div>
 
-          <input
-            name="password"
-            placeholder="Password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none `}
-          />
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Create a password"
+              value={form.password}
+              onChange={handleChange}
+              className="form-input"
+              required
+            />
+          </div>
 
-          <label className={`flex items-center space-x-2 `}>
+          <div className="form-checkbox-wrapper">
             <input
               type="checkbox"
               name="isOrganizer"
               checked={form.isOrganizer}
               onChange={handleChange}
-              className="w-4 h-4 text-indigo-500 focus:ring-indigo-400 border-gray-300 rounded"
+              className="form-checkbox"
+              id="isOrganizer"
             />
-            <span>I'm an Organizer</span>
-          </label>
+            <label htmlFor="isOrganizer" className="form-checkbox-label">
+              I'm an Event Organizer
+            </label>
+          </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-medium py-2 rounded-lg transition"
+            className="form-btn"
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}
           >
-            {loading ? "Registering..." : "Register"}
+            {loading ? "Creating Account..." : (
+              <>
+                Create Account
+                <ArrowRight size={18} />
+              </>
+            )}
           </button>
         </form>
 
-        <p className={`text-center text-sm mt-6 `}>
+        <div className="form-footer">
           Already have an account?{" "}
-          <span
-            className="text-indigo-500 cursor-pointer hover:underline"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </span>
-        </p>
+          <Link to="/login" className="form-link">
+            Sign in
+          </Link>
+        </div>
       </div>
     </div>
   );

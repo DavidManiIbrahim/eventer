@@ -1,8 +1,10 @@
 import { useState, useContext } from "react";
 import API from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { login } from "../utils/auth";
 import { ThemeContext } from "../contexts/ThemeContexts";
+import { TicketCheck, ArrowRight } from "lucide-react";
+import "./CSS/forms.css";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -52,70 +54,80 @@ export default function Login() {
   };
 
   return (
-    <div
-      className={`min-h-screen flex items-center justify-center transition-all duration-300 `}
-    >
-      <div
-        className={`w-full max-w-md rounded-2xl shadow-xl p-8 transition-all duration-300 `}
-      >
-        <h2 className={`text-2xl font-bold text-center mb-6 `}>
-          Login to Your Account
-        </h2>
+    <div className={`form-page ${darkMode ? "dark-mode" : ""}`}>
+      <div className="form-grid-background"></div>
+      <div className="form-container">
+        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+          <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "inherit", marginBottom: "1rem" }}>
+            <TicketCheck size={32} style={{ color: "#ec4899" }} />
+          </Link>
+          <h1 className="form-title">Welcome Back</h1>
+          <p className="form-subtitle">Sign in to your account to continue</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit}>
           {errors.general && (
-            <div className="bg-red-100 text-red-700 px-4 py-2 rounded-md text-sm">
+            <div className="form-alert form-alert-error">
               {errors.general}
             </div>
           )}
           {success && (
-            <div className="bg-green-100 text-green-600 px-4 py-2 rounded-md text-sm">
+            <div className="form-alert form-alert-success">
               {success}
             </div>
           )}
 
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-400 `}
-          />
-          {errors.email && (
-            <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-          )}
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={form.email}
+              onChange={handleChange}
+              className="form-input"
+            />
+            {errors.email && (
+              <span className="form-error">{errors.email}</span>
+            )}
+          </div>
 
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-400 `}
-          />
-          {errors.password && (
-            <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-          )}
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              value={form.password}
+              onChange={handleChange}
+              className="form-input"
+            />
+            {errors.password && (
+              <span className="form-error">{errors.password}</span>
+            )}
+          </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 disabled:bg-indigo-400 transition"
+            className="form-btn"
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Signing in..." : (
+              <>
+                Sign In
+                <ArrowRight size={18} />
+              </>
+            )}
           </button>
         </form>
 
-        <p className={`text-center text-sm mt-6 `}>
-          Don’t have an account?{" "}
-          <span
-            className="text-indigo-500 hover:underline cursor-pointer"
-            onClick={() => navigate("/register")}
-          >
+        <div className="form-footer">
+          Don't have an account?{" "}
+          <Link to="/register" className="form-link">
             Sign up
-          </span>
-        </p>
+          </Link>
+        </div>
       </div>
     </div>
   );

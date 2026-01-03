@@ -5,12 +5,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(17, 24, 39, 0.8);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(8px);
   overflow-y: auto;
 }
 
@@ -57,10 +57,16 @@ body.modal-open {
 }
 
 .form-title {
-  font-size: 1.7rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   margin-bottom: 1.5rem;
   text-align: center;
+  color: #000000;
+  letter-spacing: -0.02em;
+}
+
+.dark-mode .form-title {
+  color: #ffffff;
 }
 
 /* Modernized Event Type Buttons */
@@ -75,11 +81,10 @@ body.modal-open {
   flex: 1;
   padding: 1.2rem;
   border-radius: 1rem;
-  border: 1.5px solid rgba(99, 102, 241, 0.25);
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   text-align: left;
   position: relative;
@@ -87,29 +92,28 @@ body.modal-open {
 }
 
 .event-type-btn:hover {
-  transform: translateY(-2px);
-  border-color: #6366f1;
-  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.15);
-  background: linear-gradient(145deg, #f5f6ff, #ffffff);
+  transform: translateY(-4px);
+  border-color: #ec4899;
+  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.15);
 }
 
 .event-type-btn.active {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  border-color: transparent;
+  background: #ec4899;
+  border-color: #ec4899;
   color: white;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 24px rgba(236, 72, 153, 0.3);
 }
 
 .event-type-btn.active .type-hint {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .event-type-btn .icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6366f1;
-  background: rgba(99, 102, 241, 0.1);
+  color: #ec4899;
+  background: rgba(236, 72, 153, 0.1);
   border-radius: 0.5rem;
   padding: 0.4rem;
   width: 40px;
@@ -119,7 +123,7 @@ body.modal-open {
 }
 
 .event-type-btn:hover .icon {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(236, 72, 153, 0.2);
   transform: scale(1.1);
 }
 
@@ -149,10 +153,9 @@ body.modal-open {
 
 /* Subtle glassmorphism on modal */
 .create-event-container {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 /* Optional glow when modal opens */
@@ -173,19 +176,23 @@ body.modal-open {
 .input-field {
   width: 100%;
   height: 2.8rem;
-  padding: 0.8rem 1rem;
-  border-radius: 0.75rem;
-  border: 1px solid #d1d5db;
-  background: #f9fafb;
+  padding: 0.875rem 1.25rem;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
   margin-bottom: 1rem;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  font-size: 1rem;
+  color: #000000;
 }
 
 .input-field:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  border-color: #ec4899;
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);
   background: #ffffff;
   outline: none;
+  transform: translateY(-1px);
 }
 
 .date-time-row {
@@ -252,20 +259,48 @@ textarea.input-field {
 
 form .submit-btn {
   width: 100%;
-  padding: 0.9rem;
+  padding: 1rem 2rem;
   margin-top: 2rem;
-  border: none;
-  border-radius: 0.75rem;
-  background: #4f46e5;
+  border: 2px solid #ec4899;
+  border-radius: 12px;
+  background: #ec4899;
   color: white;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+form .submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+form .submit-btn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 form .submit-btn:hover {
-  background: #4338ca;
+  background: #db2777;
+  border-color: #db2777;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+}
+
+form .submit-btn:active {
+  transform: translateY(0);
 }
 
 form .field-label {
@@ -356,20 +391,30 @@ form .field-label {
   color: #d1d5db;
 }
 
+.dark-mode .event-type-selection .event-type-btn {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e5e5e5;
+}
+
 .dark-mode .event-type-selection .event-type-btn.active {
-  background: #4f46e5;
-  border-color: #4f46e5;
+  background: #ec4899;
+  border-color: #ec4899;
+}
+
+.dark-mode .event-type-btn .icon {
+  color: #ec4899;
 }
 
 .dark-mode .input-field {
-  background: #2d2d2d;
-  border-color: #4b5563;
-  color: #f1f5f9;
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e5e5e5;
 }
 .dark-mode .input-field:focus {
-  background: #1f1f1f;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+  background: #1a1a1a;
+  border-color: #ec4899;
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.2);
 }
 
 .dark-mode .pricing-section {

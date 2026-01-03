@@ -31,8 +31,11 @@ import TermsOfService from "./pages/TermsOfService"
 function Layout() {
   const location = useLocation();
 
-  // hide navbar & sidebar on landing page
-  const hideNavAndSidebar = location.pathname === "/";
+  // hide navbar & sidebar on landing page and form pages
+  const hideNavAndSidebar = 
+    location.pathname === "/" || 
+    location.pathname === "/login" || 
+    location.pathname === "/register";
 
   return (
     <>
