@@ -28,6 +28,9 @@ import Documentation from "./pages/Documentation"
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService"
 
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
+
 function Layout() {
   const location = useLocation();
 
@@ -47,18 +50,95 @@ function Layout() {
         <Route path="/events" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/my-tickets" element={<MyTickets />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin/dashboard" element={<StatsDashboard />} />
+        <Route
+          path="/my-tickets"
+          element={
+            <ProtectedRoute>
+              <MyTickets />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminRoute>
+              <StatsDashboard />
+            </AdminRoute>
+          }
+        />
         <Route path="/Eventdetail/:eventId" element={<EventDetail />} />
-        <Route path="/success" element={<Success />} />
-        <Route path="/live/events" element={<LiveEvent />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/edit-profile" element={<EditProfile />} />
-        <Route path="/admin/users" element={<UserManagement />} />
-        <Route path="/checkout/:eventId" element={<Checkout />} />
-        <Route path="/scanner" element={<TicketScanner />} />
+        <Route
+          path="/success"
+          element={
+            <ProtectedRoute>
+              <Success />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/live/events"
+          element={
+            <ProtectedRoute>
+              <LiveEvent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:id"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <AdminRoute>
+              <UserManagement />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/checkout/:eventId"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/scanner"
+          element={
+            <ProtectedRoute>
+              <TicketScanner />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/validate/:ticketId" element={<TicketValidationPage />} />
 
         <Route path="/about" element={<AboutUs />} />

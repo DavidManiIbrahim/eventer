@@ -1,9 +1,10 @@
-import { useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import { TicketCheck, ArrowRight, UserPlus } from "lucide-react";
 import "./CSS/forms.css";
+import { isAuthenticated } from "../utils/auth";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -18,6 +19,12 @@ export default function Register() {
 
   const navigate = useNavigate();
   const { darkMode } = useContext(ThemeContext);
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

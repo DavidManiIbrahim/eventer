@@ -42,11 +42,6 @@ export default function NavBar() {
   return (
     <nav className="navbar fixed w-full z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-        {/* Logo */}
-        <Link to="/" className="logo text-2xl font-bold tracking-wide">
-          🎫 TickiSpot
-        </Link>
-
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-6">
           {user ? (

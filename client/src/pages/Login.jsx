@@ -1,7 +1,7 @@
-import { useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
-import { login } from "../utils/auth";
+import { isAuthenticated, login } from "../utils/auth";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import { TicketCheck, ArrowRight } from "lucide-react";
 import "./CSS/forms.css";
@@ -13,6 +13,12 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { darkMode } = useContext(ThemeContext);
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

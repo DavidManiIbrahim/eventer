@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import API from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./CSS/Dashboard.css"; 
 import EditEvent from "../components/EditEvent";
+import { getCurrentUser } from "../utils/auth";
+import { ArrowRight, PlusCircle } from "lucide-react";
 
 const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -13,6 +15,7 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const user = useMemo(() => getCurrentUser(), []);
 
   // 🟢 For Modal Control
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -99,165 +102,173 @@ export default function Dashboard() {
   };
 
   const StatCard = ({ title, value }) => (
-    <div className="stat-card bg-white shadow rounded-xl p-4 text-center border transition-all hover:scale-105">
-      <h3 className="text-sm text-gray-600">{title}</h3>
-      <p className="text-2xl font-bold text-indigo-600">{value}</p>
+    <div className="stat-tile">
+      <div className="stat-label">{title}</div>
+      <div className="stat-value">{value}</div>
     </div>
   );
 
   return (
-    <div className="dashboard-layout min-h-screen bg-gray-50 pt-16 px-22">
-      <h2 className="text-3xl font-bold mb-8">🎛 Organizer Dashboard</h2>
-
-      {/* 🔄 Loading */}
-      {loading && (
-        <div className="flex flex-col items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-500 mb-4"></div>
-          <p className="text-gray-600">Loading events...</p>
-        </div>
-      )}
-
-      {/* ❌ Error */}
-      {error && (
-        <div className="text-center py-10 text-red-600">
-          <p className="mb-2">❌ {error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-          >
-            Try Again
-          </button>
-        </div>
-      )}
-
-      {/* 📊 Stats */}
-      {!loading && !error && stats && (
-        <div className="stats-wrapper bg-white shadow rounded-xl p-6 mb-10 border transition-all">
-          <h4 className="text-lg font-semibold mb-4">📊 Stats Overview</h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <StatCard title="Total Events" value={stats.totalEvents} />
-            <StatCard title="Tickets Sold" value={stats.totalTicketsSold} />
-            <StatCard title="Revenue (₦)" value={stats.totalRevenue} />
-            <StatCard title="Live Events" value={stats.currentlyLive} />
+    <div className="dashboard-page">
+      <div className="dashboard-container">
+        <div className="dashboard-header">
+          <div>
+            <div className="dashboard-title">
+              Organizer Dashboard
+            </div>
+            <div className="dashboard-subtitle">
+              Welcome back{user?.username ? `, ${user.username}` : ""}. Manage your events, sales, and live sessions.
+            </div>
           </div>
 
-          <h3 className="text-md font-semibold mb-2">🏆 Top Events</h3>
-          {stats.topEvents?.length > 0 ? (
-            <ul className="list-disc list-inside text-gray-700">
-              {stats.topEvents.map((event, i) => (
-                <li key={i}>
-                  <span className="font-medium">{event.title}</span> —{" "}
-                  {event.quantitySold} tickets
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-500">No events yet.</p>
-          )}
+          <div className="dashboard-actions">
+            <Link to="/events" className="dash-btn">
+              Browse events <ArrowRight size={18} />
+            </Link>
+            <button className="dash-btn dash-btn-primary" onClick={() => navigate("/events")}>
+              Create event <PlusCircle size={18} />
+            </button>
+          </div>
         </div>
-      )}
 
-      {/* 🎫 Events */}
-      <h4 className="text-lg font-semibold mb-4">Your Events</h4>
-      {events.length === 0 ? (
-        <p className="text-gray-500">You haven’t created any events yet.</p>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {events.map((event) => (
-            <div
-              key={event._id}
-              className="event-card bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-xl transform hover:scale-101 transition-all duration-300"
-            >
-              {event.image && (
-                <img
-                  src={`${PORT_URL}/uploads/event_image/${event.image}`}
-                  alt={event.title}
-                  className="w-full h-48 object-cover"
-                />
-              )}
-
-              <div className="p-4 space-y-2">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {event.title}
-                  </h3>
-                  {event.liveStream?.isLive && (
-                    <span className="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full font-medium">
-                      LIVE
-                    </span>
-                  )}
-                </div>
-                <p className="text-gray-600 text-sm capitalize">
-                  {event.description || "No description provided."}
-                </p>
-                <p className="text-gray-700 text-sm">
-                  📅{" "}
-                  {new Date(event.startDate).toLocaleDateString("en-US", {
-                    weekday: "short",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}{" "}
-                  at {event.startTime || "TBA"} • 📍 {event.location}
-                </p>
-
-                {event.pricing?.length > 0 && (
-                  <div>
-                    <p>💰 Pricing:</p>
-                    {event.pricing.map((price, index) => (
-                      <p key={index} className="ml-3">
-                        • {price.type}: ₦{price.price}
-                      </p>
-                    ))}
-                  </div>
-                )}
-                <p>
-                  🎟 Tickets: {event.ticketsSold}/{event.totalTickets}
-                </p>
-                <p>🕹 Event Type: {event.eventType}</p>
-                {event.category && <p>🏷 Category: {event.category}</p>}
-              </div>
-
-              <div className="flex justify-between items-center gap-2 p-4 border-t">
-                <button
-                  onClick={() =>
-                    toggleLive(event._id, event.liveStream?.isLive)
-                  }
-                  className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                    event.liveStream?.isLive
-                      ? "bg-red-100 text-red-600 hover:bg-red-200"
-                      : "bg-green-100 text-green-600 hover:bg-green-200"
-                  }`}
-                >
-                  {event.liveStream?.isLive ? "🔴 Stop Live" : "🟢 Go Live"}
-                </button>
-
-                <button
-                  onClick={() => handleEditClick(event._id)} // ✅ corrected name
-                  className="px-3 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 text-sm font-medium"
-                >
-                  ✏️ Edit
-                </button>
-
-                <button
-                  onClick={() => handleDelete(event._id)}
-                  className="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 text-sm font-medium"
-                >
-                  🗑 Delete
-                </button>
-              </div>
+        {/* 🔄 Loading */}
+        {loading && (
+          <div className="dash-card">
+            <div className="dash-card-body">
+              <p>Loading dashboard...</p>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* ✅ Place the EditEvent modal here once */}
-      <EditEvent
-        isOpen={editModalOpen}
-        onClose={handleModalClose}
-        eventId={selectedEventId}
-        onEventUpdated={handleEventUpdated}
-      />
+        {/* ❌ Error */}
+        {error && (
+          <div className="dash-card">
+            <div className="dash-card-body">
+              <p style={{ color: "#dc2626", fontWeight: 800, marginBottom: "0.75rem" }}>
+                {error}
+              </p>
+              <button className="dash-btn" onClick={() => window.location.reload()}>
+                Try again
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* 📊 Stats */}
+        {!loading && !error && stats && (
+          <div className="dash-card" style={{ marginTop: "1rem" }}>
+            <div className="dash-card-header">
+              <div className="dash-card-title">Stats overview</div>
+            </div>
+            <div className="dash-card-body">
+              <div className="stats-grid" style={{ marginBottom: "1rem" }}>
+                <StatCard title="Total Events" value={stats.totalEvents} />
+                <StatCard title="Tickets Sold" value={stats.totalTicketsSold} />
+                <StatCard title="Revenue (₦)" value={stats.totalRevenue} />
+                <StatCard title="Live Events" value={stats.currentlyLive} />
+              </div>
+
+              <div className="section-title">Top events</div>
+              {stats.topEvents?.length > 0 ? (
+                <ul style={{ margin: 0, paddingLeft: "1.25rem" }}>
+                  {stats.topEvents.map((event, i) => (
+                    <li key={i} style={{ marginBottom: "0.35rem" }}>
+                      <span style={{ fontWeight: 800 }}>{event.title}</span> —{" "}
+                      {event.quantitySold} tickets
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ color: "rgba(0,0,0,0.55)" }}>No events yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* 🎫 Events */}
+        {!loading && !error && (
+          <>
+            <div className="section-title">Your events</div>
+            {events.length === 0 ? (
+              <div className="dash-card">
+                <div className="dash-card-body">
+                  <p style={{ color: "rgba(0,0,0,0.55)" }}>
+                    You haven’t created any events yet.
+                  </p>
+                  <div style={{ marginTop: "1rem" }}>
+                    <Link className="dash-btn dash-btn-primary" to="/events">
+                      Explore events <ArrowRight size={18} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="events-grid">
+                {events.map((event) => (
+                  <div key={event._id} className="event-card">
+                    {event.image && (
+                      <img
+                        src={`${PORT_URL}/uploads/event_image/${event.image}`}
+                        alt={event.title}
+                        className="event-cover"
+                      />
+                    )}
+
+                    <div className="event-body">
+                      <div className="event-title-row">
+                        <div className="event-title">{event.title}</div>
+                        {event.liveStream?.isLive && (
+                          <span className="event-badge-live">LIVE</span>
+                        )}
+                      </div>
+
+                      <div className="event-meta">
+                        {event.description || "No description provided."}
+                      </div>
+                      <div className="event-meta" style={{ marginTop: "0.5rem" }}>
+                        {new Date(event.startDate).toLocaleDateString("en-US", {
+                          weekday: "short",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}{" "}
+                        {event.startTime ? `at ${event.startTime}` : ""} • {event.location}
+                      </div>
+                      <div className="event-meta" style={{ marginTop: "0.5rem" }}>
+                        Tickets: {event.ticketsSold}/{event.totalTickets} • Type: {event.eventType}
+                        {event.category ? ` • Category: ${event.category}` : ""}
+                      </div>
+                    </div>
+
+                    <div className="event-actions">
+                      <button
+                        onClick={() => toggleLive(event._id, event.liveStream?.isLive)}
+                        className={`pill-btn ${event.liveStream?.isLive ? "pill-btn-danger" : "pill-btn-primary"}`}
+                      >
+                        {event.liveStream?.isLive ? "Stop live" : "Go live"}
+                      </button>
+                      <button onClick={() => handleEditClick(event._id)} className="pill-btn pill-btn-primary">
+                        Edit
+                      </button>
+                      <button onClick={() => handleDelete(event._id)} className="pill-btn">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ✅ Place the EditEvent modal here once */}
+        <EditEvent
+          isOpen={editModalOpen}
+          onClose={handleModalClose}
+          eventId={selectedEventId}
+          onEventUpdated={handleEventUpdated}
+        />
+      </div>
     </div>
   );
 }

@@ -17,6 +17,8 @@ import {
   Moon,
   ChevronLeft,
   ChevronRight,
+  User,
+  TicketCheck,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -40,26 +42,37 @@ export default function Sidebar() {
     localStorage.setItem("sidebarexpand", expand);
   }, [expand]);
 
+  // Keep shell padding in sync with sidebar width
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--sidebar-width",
+      expand ? "16rem" : "3.75rem"
+    );
+    return () => {
+      document.documentElement.style.removeProperty("--sidebar-width");
+    };
+  }, [expand]);
+
   if (!user) return null;
 
+  const isAdmin = user?.role === "admin" || user?.isAdmin === true;
+
   const menuItems = [
-    {
-      to: "/dashboard",
-      label: "Dashboard",
-      icon: <LayoutDashboard />,
-      highlight: true,
-    },
-    { to: "/events", label: "Home", icon: <Home /> },
-    { to: "/admin/dashboard", label: "Stats", icon: <BarChart3 /> },
-    { to: "/my-tickets", label: "My Tickets", icon: <Ticket /> },
-    { to: "/live/events", label: "Live", icon: <Radio /> },
+    { to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
+    { to: "/events", label: "Home", icon: <Home size={20} /> },
+    ...(isAdmin
+      ? [{ to: "/admin/dashboard", label: "Stats", icon: <BarChart3 size={20} /> }]
+      : []),
+    { to: "/my-tickets", label: "My Tickets", icon: <Ticket size={20} /> },
+    { to: "/live/events", label: "Live", icon: <Radio size={20} /> },
     {
       label: "Create",
-      icon: <PlusCircle />,
+      icon: <PlusCircle size={20} />,
       action: () => setShowCreateEvent(true),
-      highlight: true,
+      primary: true,
     },
-    { to: "/settings", label: "Settings", icon: <Settings /> },
+    { to: `/profile/${user?.id ?? user?._id ?? ""}`, label: "Profile", icon: <User size={20} /> },
+    { to: "/settings", label: "Settings", icon: <Settings size={20} /> },
   ];
 
   return (
@@ -69,19 +82,26 @@ export default function Sidebar() {
           expand ? "expand" : ""
         } ${darkMode ? "dark-mode" : ""}`}
       >
-        {/* Collapse Button */}
-        <div className="flex justify-end p-2 pt-4">
-          <button onClick={() => setexpand(!expand)} className="collapse-btn">
-            {expand ? (
-              <ChevronLeft className="w-5 h-5" />
-            ) : (
-              <ChevronRight className="w-5 h-5" />
-            )}
+        <div className="sidebar-top">
+          <Link to="/" className="sidebar-brand" aria-label="TickiSpot home">
+            <span className="sidebar-logo">
+              <TicketCheck size={18} />
+            </span>
+            {expand && <span className="sidebar-brand-text">TickiSpot</span>}
+          </Link>
+
+          <button
+            onClick={() => setexpand(!expand)}
+            className="sidebar-collapse"
+            aria-label={expand ? "Collapse sidebar" : "Expand sidebar"}
+            type="button"
+          >
+            {expand ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
           </button>
         </div>
 
         {/* Sidebar Links */}
-        <div className="px-2 py-4 space-y-2 flex-1">
+        <div className="sidebar-nav">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.to;
 
@@ -90,60 +110,39 @@ export default function Sidebar() {
               <button
                 key={item.label}
                 onClick={item.action}
-                className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg w-full text-left transition-all ${
-                  item.highlight ? "highlight" : ""
-                }`}
+                className={`sidebar-link ${item.primary ? "is-primary" : ""}`}
+                data-tooltip={item.label}
+                type="button"
               >
-                <span className="text-lg">{item.icon}</span>
-                {expand && (
-                  <span className="text-sm font-medium">{item.label}</span>
-                )}
-                {!expand && (
-                  <span className="tooltip absolute left-10 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
-                    {item.label}
-                  </span>
-                )}
+                <span className="sidebar-link-icon">{item.icon}</span>
+                {expand && <span className="sidebar-link-text">{item.label}</span>}
               </button>
             ) : (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`menu-item group relative flex items-center gap-3 p-2 rounded-lg transition-all ${
-                  isActive ? "active" : ""
-                } ${item.highlight ? "highlight" : ""}`}
+                className={`sidebar-link ${isActive ? "is-active" : ""}`}
+                data-tooltip={item.label}
               >
-                <span className="text-lg">{item.icon}</span>
-                {expand && (
-                  <span className="text-sm font-medium">{item.label}</span>
-                )}
-                {!expand && (
-                  <span className="tooltip absolute left-10 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
-                    {item.label}
-                  </span>
-                )}
+                <span className="sidebar-link-icon">{item.icon}</span>
+                {expand && <span className="sidebar-link-text">{item.label}</span>}
               </Link>
             );
           })}
         </div>
 
         {/* Theme Toggle */}
-        <div className="px-2 py-4 border-t dark:border-gray-700">
+        <div className="sidebar-bottom">
           <button
             onClick={toggleTheme}
-            className="theme-toggle w-full flex justify-around align-middle"
+            className="sidebar-theme"
+            data-tooltip={darkMode ? "Light mode" : "Dark mode"}
+            type="button"
           >
-            <span className="text-lg">
-              {darkMode ? (
-                <Sun className="w-5 h-5 text-yellow-400" />
-              ) : (
-                <Moon />
-              )}
+            <span className="sidebar-link-icon">
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </span>
-            {expand && (
-              <span className="font-medium">
-                {darkMode ? "Light Mode" : "Dark Mode"}
-              </span>
-            )}
+            {expand && <span className="sidebar-link-text">{darkMode ? "Light mode" : "Dark mode"}</span>}
           </button>
         </div>
       </aside>
