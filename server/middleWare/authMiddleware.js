@@ -9,7 +9,18 @@ exports.authMiddleware = async (req, res, next) => {
     return res.status(401).json({ message: "No token, authorization denied" });
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = authHeader.split(" ")[1]?.trim();
+
+  // Validate token format (JWT should have 3 parts separated by dots)
+  if (!token || token === "undefined" || token === "null" || token.split(".").length !== 3) {
+    console.error("Malformed token received:", token ? `${token.substring(0, 20)}...` : "empty");
+    return res.status(401).json({ message: "Invalid token format" });
+  }
+
+  if (!JWT_SECRET) {
+    console.error("JWT_SECRET is not configured");
+    return res.status(500).json({ message: "Server configuration error" });
+  }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -23,7 +34,7 @@ exports.authMiddleware = async (req, res, next) => {
     req.user = user; // 👈 now includes id, role, name, email, etc.
     next();
   } catch (err) {
-    console.error("Token verification failed:", err);
+    console.error("Token verification failed:", err.message);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
