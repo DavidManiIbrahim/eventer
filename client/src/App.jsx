@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/landingpage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyTickets from "./pages/MyTickets";
@@ -21,7 +21,7 @@ import UserManagement from "./pages/Admin";
 
 import AboutUs from "./pages/AboutUs"
 import Contact from "./pages/Contact"
-import Pricing from "./pages/Pricing"
+import Pricing from "./pages/pricing"
 import Donation from "./pages/Donation"
 import HelpCenter from "./pages/HelpCenter"
 import Documentation from "./pages/Documentation"
