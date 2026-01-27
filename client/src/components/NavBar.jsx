@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { logout, getCurrentUser } from "../utils/auth";
 import { ThemeContext } from "../contexts/ThemeContexts"; // still used for theme detection
-import "./css/NavBar.css";
+import "./css/Navbar.css";
 import NotificationBell from "./NotificationBell";
 import { ClosedCaption } from "lucide-react";
 
