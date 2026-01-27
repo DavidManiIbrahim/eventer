@@ -43,6 +43,7 @@ export default function NavBar() {
     <nav className="navbar fixed w-full z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
         {/* Left side - Desktop Nav */}
+        <div></div>
         <div className="hidden md:flex items-center space-x-6">
           {user ? (
             <>
@@ -65,10 +66,7 @@ export default function NavBar() {
               </Link>
             </>
           )}
-        </div>
-
-        {/* Right side - Profile & Mobile Menu */}
-        <div className="flex items-center space-x-4">
+        
           {/* User Profile Dropdown - Desktop */}
           {user && (
             <div className="hidden md:block relative group">
