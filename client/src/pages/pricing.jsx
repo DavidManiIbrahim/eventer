@@ -35,7 +35,7 @@ export default function Pricing() {
       <LandingNavbar />
 
       <div style={{ paddingTop: "120px", paddingBottom: "80px", maxWidth: "1200px", margin: "0 auto", paddingLeft: "20px", paddingRight: "20px", position: "relative", zIndex: 1 }}>
-        <div className="section-header">
+        <div className="section-header animate-in">
           <h1 className="section-title">
             <span className="title-box title-box-border">Simple</span>
             <span className="title-box title-box-filled">Pricing</span>
@@ -49,7 +49,7 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`feature-card ${plan.highlight ? 'highlight-plan' : ''}`}
+              className={`feature-card animate-in ${plan.highlight ? 'highlight-plan' : ''}`}
               style={{
                 display: "flex",
                 flexDirection: "column",

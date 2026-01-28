@@ -14,7 +14,7 @@ export default function LandingNavbar() {
     }, []);
 
     return (
-        <header className="landing-header">
+        <header className="landing-header ">
             <div className="header-content">
                 <Link to="/" className="logo">
                     <TicketCheck size={24} className="logo-icon" />

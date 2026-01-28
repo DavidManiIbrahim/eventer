@@ -22,11 +22,13 @@ export default function Contact() {
       <LandingNavbar />
 
       <div style={{ paddingTop: "120px", paddingBottom: "60px", maxWidth: "800px", margin: "0 auto", paddingLeft: "20px", paddingRight: "20px", position: "relative", zIndex: 1 }}>
-        <h1 className="section-title" style={{ marginBottom: "40px" }}>
-          <span className="title-box title-box-border">Contact</span>
-          <span className="title-box title-box-filled">Us</span>
-        </h1>
-        <div className="feature-card" style={{ maxWidth: "600px", margin: "0 auto" }}>
+        <div className="section-header animate-in" style={{ marginBottom: "40px" }}>
+          <h1 className="section-title" style={{ gap: "20px" }}>
+            <span className="title-box title-box-border">Contact</span>
+            <span className="title-box title-box-filled">Us</span>
+          </h1>
+        </div>
+        <div className="feature-card animate-in" style={{ maxWidth: "600px", margin: "0 auto" }}>
           <form onSubmit={handleSubmit} className="contact-form" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div>
               <label style={{ display: "block", marginBottom: "8px", fontWeight: "600" }}>Name</label>

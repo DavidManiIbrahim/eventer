@@ -22,6 +22,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -77,6 +78,7 @@
   display: flex;
   align-items: center;
   gap: 2rem;
+  background: transparent;
 }
 
 .nav-link {
@@ -160,14 +162,15 @@
 }
 
 @media (max-width: 640px) {
-    .nav-menu .log .btn-text {
-        display: none;
-    }
+  .nav-menu .log .btn-text {
+    display: none;
+  }
 }
 
 /* Dark Mode */
 .dark-mode .landing-header {
-  background: rgba(0, 0, 0, 0.9);
+  background: #000000;
+  /* Pure black to blend with page */
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -176,7 +179,11 @@
 }
 
 .dark-mode .logo-icon {
-    color: #ec4899;
+  color: #ec4899;
+}
+
+.dark-mode .nav-menu {
+  background: transparent;
 }
 
 .dark-mode .nav-link {
