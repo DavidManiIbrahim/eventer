@@ -1,17 +1,14 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./CSS/landing.css";
-import { useContext } from "react";
-import { ThemeContext } from "../contexts/ThemeContexts";
-import { 
-  TicketCheck, 
-  ToggleLeft, 
-  ToggleRight, 
-  Zap, 
-  Shield, 
-  BarChart3, 
-  Smartphone, 
-  Video, 
+
+import {
+  TicketCheck,
+  Zap,
+  Shield,
+  BarChart3,
+  Smartphone,
+  Video,
   MessageSquare,
   ArrowRight,
   CheckCircle2,
@@ -23,10 +20,12 @@ import {
   MapPin
 } from "lucide-react";
 
+import LandingNavbar from "../components/LandingNavbar";
+import Footer from "../components/Footer";
+
 export default function LandingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { darkMode, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -141,55 +140,9 @@ export default function LandingPage() {
     <div className="landing-page">
       {/* Grid Background */}
       <div className="grid-background"></div>
-      
+
       {/* Header */}
-      <header className="landing-header">
-        <div className="header-content">
-          <Link to="/" className="logo">
-            <TicketCheck size={24} className="logo-icon" />
-            <h1>TickiSpot</h1>
-          </Link>
-          <nav className="nav-menu">
-            <Link to="/events" className="nav-link">
-              Events
-            </Link>
-            <Link to="/pricing" className="nav-link">
-              Pricing
-            </Link>
-            <Link to="/about" className="nav-link">
-              About
-            </Link>
-            <Link to="/contact" className="nav-link">
-              Contact
-            </Link>
-            {isLoggedIn ? (
-              <Link to="/dashboard" className="btn btn-primary">
-                Dashboard
-              </Link>
-            ) : (
-              <div className="log">
-                <Link to="/login" className="btn btn-text">
-                  Sign In
-                </Link>
-                <Link to="/register" className="btn btn-primary">
-                  Get Started
-                </Link>
-              </div>
-            )}
-            <button
-              onClick={toggleTheme}
-              className="theme-toggle-btn"
-              aria-label="Toggle theme"
-            >
-              {darkMode ? (
-                <ToggleLeft size={18} className="toggle-icon" />
-              ) : (
-                <ToggleRight size={18} className="toggle-icon" />
-              )}
-            </button>
-          </nav>
-        </div>
-      </header>
+      <LandingNavbar />
 
       {/* Hero Section */}
       <section className="hero">
@@ -347,45 +300,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="landing-footer">
-        <div className="footer-wrapper">
-          <div className="footer-content">
-            <div className="footer-section footer-brand">
-              <div className="footer-logo">
-                <TicketCheck size={24} />
-                <h3>TickiSpot</h3>
-              </div>
-              <p>Your complete event management solution. Create, manage, and grow your events with confidence.</p>
-            </div>
-            <div className="footer-section">
-              <h4>Product</h4>
-              <Link to="/events">Browse Events</Link>
-              <Link to="/create">Create Event</Link>
-              <Link to="/pricing">Pricing</Link>
-              <Link to="/docs">Documentation</Link>
-            </div>
-            <div className="footer-section">
-              <h4>Support</h4>
-              <Link to="/help">Help Center</Link>
-              <Link to="/contact">Contact Us</Link>
-              <Link to="/about">About Us</Link>
-            </div>
-            <div className="footer-section">
-              <h4>Legal</h4>
-              <Link to="/privacy">Privacy Policy</Link>
-              <Link to="/terms">Terms of Service</Link>
-              <Link to="/donate">Donate</Link>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <p>© 2024 TickiSpot. All rights reserved.</p>
-            <div className="footer-links">
-              <Link to="/privacy">Privacy</Link>
-              <Link to="/terms">Terms</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
