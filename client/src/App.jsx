@@ -18,18 +18,18 @@ import TicketScanner from "./pages/TicketScanner";
 import TicketValidationPage from "./pages/ValidateTicket";
 import UserManagement from "./pages/Admin";
 
-import AboutUs from "./pages/AboutUs"
-import Contact from "./pages/Contact"
-import Pricing from "./pages/Pricing"
-import Donation from "./pages/Donation"
-import HelpCenter from "./pages/HelpCenter"
-import Documentation from "./pages/Documentation"
+import AboutUs from "./pages/AboutUs";
+import Contact from "./pages/Contact";
+import Donation from "./pages/Donation";
+import HelpCenter from "./pages/HelpCenter";
+import Documentation from "./pages/Documentation";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService"
+import TermsOfService from "./pages/TermsOfService";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import LandingPage from "./pages/landingpage";
+import Pricing from "./pages/Pricing";
 
 function Layout() {
   const location = useLocation();

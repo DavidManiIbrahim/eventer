@@ -1,99 +1,113 @@
 import { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
 import "./css/LiveChat.css";
 
-export default function LiveChat({ eventId, username, onClose }) {
-  const [message, setMessage] = useState("");
+export default function LiveChat({ socket, user }) {
+  const [isOpen, setIsOpen] = useState(true);
   const [messages, setMessages] = useState([]);
-  const socketRef = useRef(null);
+  const [text, setText] = useState("");
+  const [unread, setUnread] = useState(0);
   const messagesEndRef = useRef(null);
 
+  // Auto scroll
   useEffect(() => {
-    const socket = io(`http://localhost:5000`);
-    socketRef.current = socket;
+    if (isOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isOpen]);
 
-    socket.emit("joinRoom", eventId);
-
-    const joinMessage = {
-      eventId,
-      username,
-      text: `${username} joined the chat.`,
-      system: true,
-      timestamp: new Date(),
-    };
-    socket.emit("sendMessage", joinMessage);
+  // Socket listener
+  useEffect(() => {
+    if (!socket) return;
 
     socket.on("receiveMessage", (msg) => {
       setMessages((prev) => [...prev, msg]);
+
+      if (!isOpen && !msg.system) {
+        setUnread((prev) => prev + 1);
+      }
     });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, [eventId, username]);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    return () => socket.off("receiveMessage");
+  }, [socket, isOpen]);
 
   const sendMessage = () => {
-    if (message.trim()) {
-      const msgData = {
-        eventId,
-        username,
-        text: message,
-        timestamp: new Date(),
-      };
-      socketRef.current.emit("sendMessage", msgData);
-      setMessages((prev) => [...prev, msgData]);
-      setMessage("");
-    }
+    if (!text.trim()) return;
+
+    const msg = {
+      user: user?.name || "Guest",
+      text,
+      time: new Date().toLocaleTimeString(),
+    };
+
+    socket.emit("sendMessage", msg);
+    setMessages((prev) => [...prev, { ...msg, self: true }]);
+    setText("");
   };
 
+  /* ---------------- COLLAPSED TAB ---------------- */
+  if (!isOpen) {
+    return (
+      <button
+        className="livechat-collapsed-tab"
+        onClick={() => {
+          setIsOpen(true);
+          setUnread(0);
+        }}
+      >
+        💬 Live Chat
+        {unread > 0 && <span className="livechat-unread">{unread}</span>}
+      </button>
+    );
+  }
+
+  /* ---------------- FULL PANEL ---------------- */
   return (
     <div className="livechat-panel">
       <div className="livechat-header">
-        💬 Live Chat
-        <button className="livechat-close-btn" onClick={onClose}>
-          ✖
+        <span>💬 Live Event Chat</span>
+        <button
+          className="livechat-close-btn"
+          onClick={() => setIsOpen(false)}
+        >
+          –
         </button>
       </div>
 
       <div className="livechat-messages">
-        {messages.map((msg, i) => (
-          <div key={i}>
-            {msg.system ? (
-              <p className="livechat-system-message">{msg.text}</p>
-            ) : (
-              <div
-                className={`livechat-message-row ${
-                  msg.username === username ? "livechat-message-sent" : "livechat-message-received"
-                }`}
-              >
-                <div className="livechat-message-bubble">
-                  <span className="livechat-message-user">{msg.username}: </span>
-                  {msg.text}
-                  <div className="livechat-message-time">
-                    {new Date(msg.timestamp).toLocaleTimeString()}
-                  </div>
-                </div>
+        {messages.map((msg, i) =>
+          msg.system ? (
+            <div key={i} className="livechat-system-message">
+              {msg.text}
+            </div>
+          ) : (
+            <div
+              key={i}
+              className={`livechat-message-row ${
+                msg.self ? "livechat-message-sent" : "livechat-message-received"
+              }`}
+            >
+              <div className="livechat-message-bubble">
+                {!msg.self && (
+                  <div className="livechat-message-user">{msg.user}</div>
+                )}
+                {msg.text}
+                <div className="livechat-message-time">{msg.time}</div>
               </div>
-            )}
-          </div>
-        ))}
+            </div>
+          )
+        )}
         <div ref={messagesEndRef} />
       </div>
 
       <div className="livechat-input-area">
         <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          placeholder="Type a message..."
           className="livechat-input"
+          placeholder="Type a message…"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button onClick={sendMessage} className="livechat-send-btn">
+        <button className="livechat-send-btn" onClick={sendMessage}>
           Send
         </button>
       </div>
