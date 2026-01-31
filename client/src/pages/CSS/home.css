@@ -1,87 +1,173 @@
-/* Light Mode */
-.home-page {
-  background: #f9fafb;
-  color: #1f2937;
-  padding-left: var(--sidebar-width);
 
-  transition: background 0.3s ease, color 0.3s ease;
+
+/* Search */
+.dash-search {
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  min-width: 260px;
+  outline: none;
 }
 
-/* ✨ Premium Hover Animation */
-.home-page .event-card {
-  background: var(--card-bg, #ffffff);
-  border: 1px solid var(--border-color, #e5e7eb);
+/* Cards */
+.dash-card {
+  border: 1px solid #e5e7eb;
   border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s;
-}
-
-.home-page .event-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-
-.home-page .search-input {
   background: #fff;
-  border-color: #d1d5db;
-  color: #1f2937;
 }
 
-.home-page .search-input:focus {
-  border-color: #6366f1;
+.dash-card-body {
+  padding: 1.5rem;
 }
 
-.home-page .fallback-avatar {
+.center {
+  text-align: center;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+.error-text {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* Buttons */
+.dash-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: #ec4899;
+  color: white;
+  cursor: pointer;
+}
+
+/* Events grid */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+/* Event card */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.event-image {
+  height: 180px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.event-image.placeholder {
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+}
+
+.event-body {
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.event-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.event-desc {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  gap: 0.25rem;
+}
+
+/* Live */
+.live-pill {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  background: #dc2626;
+  border-radius: 999px;
+}
+
+/* Footer */
+.event-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.event-footer img,
+.avatar-fallback {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #e5e7eb;
-  color: #374151;
+  font-weight: 700;
 }
 
-.home-page .retry-btn {
-  background: #ef4444;
-  color: #fff;
+.organizer-name {
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
-.home-page .loader {
-  border-color: #6366f1;
+.organizer-role {
+  font-size: 0.7rem;
+  color: #6b7280;
 }
 
-.home-page .live-badge {
-  background: #ef4444;
-  color: #fff;
-}
-
-/* Dark Mode */
-.dark-mode .home-page {
-  background: #121212;
+/* Dark mode */
+.dark-mode {
+  background: #0f172a;
   color: #f8fafc;
 }
 
-.dark-mode .home-page .event-card:hover {
-  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.08);
+.dark-mode .dash-card,
+.dark-mode .event-card {
+  background: #020617;
+  border-color: #1e293b;
 }
 
-
-.dark-mode .search-input {
-  background: #1e293b;
-  border-color: #334155;
-  color: #f8fafc;
-}
-
-.dark-mode .home-page .fallback-avatar {
-  background: #334155;
-  color: #cbd5e1;
-}
-
-.dark-mode .home-page .retry-btn {
-  background: #dc2626;
-}
-
-.dark-mode .home-page .loader {
-  border-color: #818cf8;
-}
-
-.dark-mode .home-page .live-badge {
-  background: #dc2626;
-  color: #fff;
+.dark-mode .event-footer {
+  background: #020617;
+  border-color: #1e293b;
 }

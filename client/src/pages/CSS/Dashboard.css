@@ -8,9 +8,7 @@ body.dark-mode {
    Dashboard (matches landing theme)
 =============================== */
 
-:root {
-  --sidebar-width: 3.75rem;
-}
+
 
 .dashboard-page {
   min-height: 100vh;
@@ -18,7 +16,7 @@ body.dark-mode {
   padding-left: var(--sidebar-width);
   padding-right: 1.25rem;
   padding-bottom: 3rem;
-  background: #ffffff;
+  background: #8d8a8a;
   color: #000000;
   position: relative;
 }

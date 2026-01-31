@@ -8,10 +8,7 @@
   --accent-color: #ec4899; /* pink-500 */
   --accent-soft: rgba(236, 72, 153, 0.12);
 
-  /* Sidebar */
-  --sidebar-expanded: 260px;
-  --sidebar-collapsed: 80px;
-  --sidebar-width: var(--sidebar-expanded);
+ 
 }
 
 /* Dark Mode */

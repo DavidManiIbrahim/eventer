@@ -2,9 +2,11 @@ import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
-import { TicketCheck, ArrowRight, UserPlus } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import "./CSS/forms.css";
 import { isAuthenticated } from "../utils/auth";
+import icon from "../assets/icon.svg"
+
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -68,7 +70,7 @@ export default function Register() {
       <div className="form-container">
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
           <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "inherit", marginBottom: "1rem" }}>
-            <TicketCheck size={32} style={{ color: "#ec4899" }} />
+          <img src={icon}  className="tickispot-icon" />
           </Link>
           <h1 className="form-title">Create Account</h1>
           <p className="form-subtitle">Join TickiSpot and start creating amazing events</p>

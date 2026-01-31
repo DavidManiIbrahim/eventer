@@ -221,6 +221,7 @@ body.modal-open {
 }
 
 .image-upload {
+  display: flex;
   border: 2px dashed var(--input-border);
   border-radius: 0.75rem;
   padding: 1rem;

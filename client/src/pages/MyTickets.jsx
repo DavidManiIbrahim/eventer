@@ -1,17 +1,17 @@
 import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
 import LiveChat from "../components/LiveChats";
-import "./CSS/MyTickets.css";
 import { ThemeContext } from "../contexts/ThemeContexts";
+import "./CSS/MyTickets.css";
 
-const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function MyTickets() {
   const [tickets, setTickets] = useState([]);
   const [showChat, setShowChat] = useState(false);
   const [activeEventId, setActiveEventId] = useState(null);
+  const { darkMode } = useContext(ThemeContext);
   const user = JSON.parse(localStorage.getItem("user"));
-  const { darkMode } = useContext(ThemeContext); // 🌙 Access theme state
 
   useEffect(() => {
     API.get("/tickets/my-tickets")
@@ -25,28 +25,34 @@ export default function MyTickets() {
   };
 
   return (
-    <div className={`tickets-page ${darkMode ? "dark-mode" : ""}`}>
-      <div className="container">
-        <h2 className="page-title">🎟️ My Tickets</h2>
+    <div className={`dashboard-page ${darkMode ? "dark-mode" : ""}`}>
+      <div className="dashboard-container">
+        <h2 className="dashboard-title">🎟️ My Tickets</h2>
 
         {tickets.length === 0 ? (
-          <p className="no-tickets">You haven’t purchased any tickets yet.</p>
+          <div className="dash-card center muted">
+            You haven’t purchased any tickets yet.
+          </div>
         ) : (
           <div className="tickets-grid">
             {tickets.map((ticket) => {
               const event = ticket?.event;
-              if (!event) return null; // ✅ skip tickets missing event data
+              if (!event) return null;
 
               return (
                 <div key={ticket._id} className="ticket-card">
-                  {/* Event Creator */}
+                  {/* Event Header */}
                   <div className="event-header">
-                    {event.createdBy?.profilePic && (
+                    {event.createdBy?.profilePic ? (
                       <img
-                        src={`/uploads/${event.createdBy.profilePic}`}
-                        alt={event.createdBy?.username || "Creator"}
+                        src={`${PORT_URL}/uploads/profile_pic/${event.createdBy.profilePic}`}
+                        alt={event.createdBy.username || "Creator"}
                         className="creator-avatar"
                       />
+                    ) : (
+                      <div className="avatar-fallback">
+                        {event.createdBy?.username?.charAt(0) || "U"}
+                      </div>
                     )}
                     <h3 className="event-title">{event.title}</h3>
                   </div>
@@ -54,10 +60,7 @@ export default function MyTickets() {
                   {/* Event Image */}
                   {event.image && (
                     <img
-                      src={`${
-                        import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                        PORT_URL
-                      }/uploads/event_image/${event.image}`}
+                      src={`${PORT_URL}/uploads/event_image/${event.image}`}
                       alt={event.title}
                       className="event-image"
                     />
@@ -80,8 +83,8 @@ export default function MyTickets() {
                             minute: "numeric",
                             hour12: true,
                           })
-                        : "N/A"}
-                      <span className="location"> • {event.location}</span>
+                        : "N/A"}{" "}
+                      <span className="location">• {event.location}</span>
                     </p>
                     <p>
                       <span>Price Paid:</span> ₦
@@ -89,7 +92,7 @@ export default function MyTickets() {
                     </p>
                   </div>
 
-                  {/* Live Event */}
+                  {/* Live Chat */}
                   {event.liveStream?.isLive && (
                     <div className="live-section">
                       <span className="live-badge">🔴 LIVE NOW</span>
@@ -115,18 +118,12 @@ export default function MyTickets() {
                   {ticket.qrCode && (
                     <div className="qr-section">
                       <img
-                        src={`${
-                          import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                          PORT_URL
-                        }/uploads/${ticket.qrCode}`}
+                        src={`${PORT_URL}/uploads/${ticket.qrCode}`}
                         alt="Ticket QR Code"
                         className="qr-image"
                       />
                       <a
-                        href={`${
-                          import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                          PORT_URL
-                        }/uploads/${ticket.qrCode}`}
+                        href={`${PORT_URL}/uploads/${ticket.qrCode}`}
                         download={`ticket-${ticket._id}.png`}
                         className="download-btn"
                       >

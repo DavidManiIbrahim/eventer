@@ -300,22 +300,23 @@ export default function EditEvent({ isOpen, onClose, eventId, onEventUpdated }) 
             />
 
             {/* Image Upload */}
-            <label className="form-label">Event Image</label>
-            <div className="image-upload">
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="image-preview"
+            <div className="form-label">
+              <label className="image-upload">
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="image-preview"
+                  />
+                ) : (
+                  <span>📸 Upload an event image</span>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
                 />
-              ) : (
-                <span>📸 Upload an event image</span>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
+              </label>
             </div>
 
             {/* Save Button */}

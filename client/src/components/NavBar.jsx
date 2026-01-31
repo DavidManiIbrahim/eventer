@@ -43,8 +43,11 @@ export default function NavBar() {
     <nav className="navbar fixed w-full z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
         {/* Left side - Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div></div>
+        <div className="flex justify-center gap-10 item-center">
+          <div className="hidden md:flex items-center space-x-6">
           {user ? (
+            
             <>
               <span className="text-sm">
                 Welcome, <strong>{user.username}</strong>
@@ -75,7 +78,7 @@ export default function NavBar() {
               <img
                 src={`${PORT_URL}/uploads/profile_pic/${user.profilePic}`}
                 alt="Profile"
-                className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 cursor-pointer"
+                className="w-10 h-10 rounded-full object-cover border-2 cursor-pointer"
               />
 
               {/* Dropdown */}
@@ -99,6 +102,7 @@ export default function NavBar() {
             </div>
           )}
 
+        </div>
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}

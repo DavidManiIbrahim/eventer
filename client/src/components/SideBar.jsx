@@ -4,6 +4,7 @@ import { ThemeContext } from "../contexts/ThemeContexts";
 import { getCurrentUser } from "../utils/auth";
 import CreateEvent from "../pages/CreateEvent";
 import "./css/sidebar.css";
+import icon from "../assets/icon.svg"
 
 import {
   LayoutDashboard,
@@ -18,7 +19,6 @@ import {
   ChevronLeft,
   ChevronRight,
   User,
-  TicketCheck,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -78,14 +78,14 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`sidebar fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300 pt-12 z-40 ${
+        className={`sidebar fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300 pt-2 z-40 ${
           expand ? "expand" : ""
         } ${darkMode ? "dark-mode" : ""}`}
       >
         <div className="sidebar-top">
           <Link to="/" className="sidebar-brand" aria-label="TickiSpot home">
             <span className="sidebar-logo">
-              <TicketCheck size={18} />
+              <img src={icon} alt="" />
             </span>
             {expand && <span className="sidebar-brand-text">TickiSpot</span>}
           </Link>

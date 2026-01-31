@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import API from "../api/axios";
 import { Link, useNavigate } from "react-router-dom";
-import "./CSS/Dashboard.css"; 
+import "./CSS/Dashboard.css";
 import EditEvent from "../components/EditEvent";
 import { getCurrentUser } from "../utils/auth";
 import { ArrowRight, PlusCircle } from "lucide-react";
+import CreateEvent from "./CreateEvent";
 
 const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -20,6 +21,9 @@ export default function Dashboard() {
   // 🟢 For Modal Control
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(null);
+
+  const [showCreateEvent, setShowCreateEvent] = useState(false); // ✅ Modal state
+
 
   // 🟢 Functions
   const handleEditClick = (id) => {
@@ -73,8 +77,8 @@ export default function Dashboard() {
                 ...ev,
                 liveStream: { ...ev.liveStream, isLive: !currentStatus },
               }
-            : ev
-        )
+            : ev,
+        ),
       );
     } catch (err) {
       console.error(err);
@@ -86,7 +90,7 @@ export default function Dashboard() {
   const handleDelete = async (id) => {
     const eventToDelete = events.find((e) => e._id === id);
     const confirmed = window.confirm(
-      `Are you sure you want to delete "${eventToDelete?.title}"?\n\nThis action cannot be undone.`
+      `Are you sure you want to delete "${eventToDelete?.title}"?\n\nThis action cannot be undone.`,
     );
 
     if (!confirmed) return;
@@ -113,11 +117,10 @@ export default function Dashboard() {
       <div className="dashboard-container">
         <div className="dashboard-header">
           <div>
-            <div className="dashboard-title">
-              Organizer Dashboard
-            </div>
+            <div className="dashboard-title">Organizer Dashboard</div>
             <div className="dashboard-subtitle">
-              Welcome back{user?.username ? `, ${user.username}` : ""}. Manage your events, sales, and live sessions.
+              Welcome back{user?.username ? `, ${user.username}` : ""}. Manage
+              your events, sales, and live sessions.
             </div>
           </div>
 
@@ -125,8 +128,12 @@ export default function Dashboard() {
             <Link to="/events" className="dash-btn">
               Browse events <ArrowRight size={18} />
             </Link>
-            <button className="dash-btn dash-btn-primary" onClick={() => navigate("/events")}>
-              Create event <PlusCircle size={18} />
+            <button
+              className="dash-btn dash-btn-primary"
+              onClick={() => setShowCreateEvent(true)}
+            >
+              Create event <PlusCircle size={18}
+               />
             </button>
           </div>
         </div>
@@ -144,10 +151,19 @@ export default function Dashboard() {
         {error && (
           <div className="dash-card">
             <div className="dash-card-body">
-              <p style={{ color: "#dc2626", fontWeight: 800, marginBottom: "0.75rem" }}>
+              <p
+                style={{
+                  color: "#dc2626",
+                  fontWeight: 800,
+                  marginBottom: "0.75rem",
+                }}
+              >
                 {error}
               </p>
-              <button className="dash-btn" onClick={() => window.location.reload()}>
+              <button
+                className="dash-btn"
+                onClick={() => window.location.reload()}
+              >
                 Try again
               </button>
             </div>
@@ -225,32 +241,48 @@ export default function Dashboard() {
                       <div className="event-meta">
                         {event.description || "No description provided."}
                       </div>
-                      <div className="event-meta" style={{ marginTop: "0.5rem" }}>
+                      <div
+                        className="event-meta"
+                        style={{ marginTop: "0.5rem" }}
+                      >
                         {new Date(event.startDate).toLocaleDateString("en-US", {
                           weekday: "short",
                           year: "numeric",
                           month: "short",
                           day: "numeric",
                         })}{" "}
-                        {event.startTime ? `at ${event.startTime}` : ""} • {event.location}
+                        {event.startTime ? `at ${event.startTime}` : ""} •{" "}
+                        {event.location}
                       </div>
-                      <div className="event-meta" style={{ marginTop: "0.5rem" }}>
-                        Tickets: {event.ticketsSold}/{event.totalTickets} • Type: {event.eventType}
+                      <div
+                        className="event-meta"
+                        style={{ marginTop: "0.5rem" }}
+                      >
+                        Tickets: {event.ticketsSold}/{event.totalTickets} •
+                        Type: {event.eventType}
                         {event.category ? ` • Category: ${event.category}` : ""}
                       </div>
                     </div>
 
                     <div className="event-actions">
                       <button
-                        onClick={() => toggleLive(event._id, event.liveStream?.isLive)}
+                        onClick={() =>
+                          toggleLive(event._id, event.liveStream?.isLive)
+                        }
                         className={`pill-btn ${event.liveStream?.isLive ? "pill-btn-danger" : "pill-btn-primary"}`}
                       >
                         {event.liveStream?.isLive ? "Stop live" : "Go live"}
                       </button>
-                      <button onClick={() => handleEditClick(event._id)} className="pill-btn pill-btn-primary">
+                      <button
+                        onClick={() => handleEditClick(event._id)}
+                        className="pill-btn pill-btn-primary"
+                      >
                         Edit
                       </button>
-                      <button onClick={() => handleDelete(event._id)} className="pill-btn">
+                      <button
+                        onClick={() => handleDelete(event._id)}
+                        className="pill-btn"
+                      >
                         Delete
                       </button>
                     </div>
@@ -260,15 +292,22 @@ export default function Dashboard() {
             )}
           </>
         )}
-
-        {/* ✅ Place the EditEvent modal here once */}
-        <EditEvent
-          isOpen={editModalOpen}
-          onClose={handleModalClose}
-          eventId={selectedEventId}
-          onEventUpdated={handleEventUpdated}
-        />
+      
       </div>
+      
+        {/* ✅ Place the EditEvent modal here once */}
+
+      <EditEvent
+        isOpen={editModalOpen}
+        onClose={handleModalClose}
+        eventId={selectedEventId}
+        onEventUpdated={handleEventUpdated}
+      />
+      {/* ✅ Create Event Modal */}
+      <CreateEvent
+        isOpen={showCreateEvent}
+        onClose={() => setShowCreateEvent(false)}
+      />
     </div>
   );
 }

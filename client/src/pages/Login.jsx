@@ -3,7 +3,8 @@ import API from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { isAuthenticated, login } from "../utils/auth";
 import { ThemeContext } from "../contexts/ThemeContexts";
-import { TicketCheck, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import icon from "../assets/icon.svg"
 import "./CSS/forms.css";
 
 export default function Login() {
@@ -64,8 +65,18 @@ export default function Login() {
       <div className="form-grid-background"></div>
       <div className="form-container">
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "inherit", marginBottom: "1rem" }}>
-            <TicketCheck size={32} style={{ color: "#ec4899" }} />
+          <Link
+            to="/"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              textDecoration: "none",
+              color: "inherit",
+              marginBottom: "1rem",
+            }}
+          >
+            <img src={icon} className="tickispot-icon" />
           </Link>
           <h1 className="form-title">Welcome Back</h1>
           <p className="form-subtitle">Sign in to your account to continue</p>
@@ -73,14 +84,10 @@ export default function Login() {
 
         <form onSubmit={handleSubmit}>
           {errors.general && (
-            <div className="form-alert form-alert-error">
-              {errors.general}
-            </div>
+            <div className="form-alert form-alert-error">{errors.general}</div>
           )}
           {success && (
-            <div className="form-alert form-alert-success">
-              {success}
-            </div>
+            <div className="form-alert form-alert-success">{success}</div>
           )}
 
           <div className="form-group">
@@ -93,9 +100,7 @@ export default function Login() {
               onChange={handleChange}
               className="form-input"
             />
-            {errors.email && (
-              <span className="form-error">{errors.email}</span>
-            )}
+            {errors.email && <span className="form-error">{errors.email}</span>}
           </div>
 
           <div className="form-group">
@@ -117,9 +122,16 @@ export default function Login() {
             type="submit"
             disabled={loading}
             className="form-btn"
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.5rem",
+            }}
           >
-            {loading ? "Signing in..." : (
+            {loading ? (
+              "Signing in..."
+            ) : (
               <>
                 Sign In
                 <ArrowRight size={18} />
