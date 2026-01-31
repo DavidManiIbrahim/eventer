@@ -31,6 +31,7 @@ import AdminRoute from "./components/AdminRoute";
 import LandingPage from "./pages/landingpage";
 import Pricing from "./pages/Pricing";
 
+
 function Layout() {
   const location = useLocation();
 
