@@ -1,36 +1,67 @@
+/* 🌞 Light / 🌙 Dark theme variables */
+:root {
+  --bg-page: #fdf2f8;
+  --bg-card: #ffffff;
+  --text-color: #111827;
+  --accent-color: #ec4899;
+  --shadow-card: rgba(0, 0, 0, 0.1);
+  --link-hover: #db2777;
+}
+
+body.dark-mode {
+  --bg-page: #1f1f1f;
+  --bg-card: #2d2d2d;
+  --text-color: #f3f4f6;
+  --accent-color: #ec4899;
+  --shadow-card: rgba(0, 0, 0, 0.4);
+  --link-hover: #db2777;
+}
+
 .static-page {
   max-width: 800px;
-  padding:80px 30px;
+  margin: 3rem auto;
+  padding: 3rem 2rem;
   line-height: 1.8;
   color: var(--text-color);
-  background: var(--bg-color);
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background: var(--bg-card);
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px var(--shadow-card);
 }
 
 .static-page h1 {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   color: var(--accent-color);
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   text-align: center;
+  font-weight: 700;
 }
 
 .static-page h2 {
-  font-size: 1.5rem;
-  margin-top: 25px;
+  font-size: 1.75rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
   color: var(--accent-color);
+  font-weight: 600;
+}
+
+.static-page p {
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
 }
 
 .page-footer {
-  margin-top: 30px;
+  margin-top: 3rem;
   text-align: center;
 }
 
 .page-footer a {
   color: var(--accent-color);
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 .page-footer a:hover {
+  color: var(--link-hover);
   text-decoration: underline;
 }

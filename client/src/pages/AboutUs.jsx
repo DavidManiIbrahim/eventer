@@ -1,33 +1,30 @@
 import React from "react";
-import "./CSS/AboutUs.css"
+import "./CSS/AboutUs.css";
 import { Link } from "react-router-dom";
 
 export default function AboutUs() {
   return (
-    
     <div className="static-page">
       <h1>About Us</h1>
       <p>
-        Welcome to <strong>TickiSpot</strong> — your all-in-one event management platform that helps you
-        create, promote, and manage events effortlessly. We believe in making
-        every gathering — big or small — a success.
+        Welcome to <strong>TickiSpot</strong> — your all-in-one event management platform. 
+        We empower organizers and attendees alike to create, promote, and manage events effortlessly, 
+        ensuring every gathering — big or small — is a success.
       </p>
 
       <section>
         <h2>Our Mission</h2>
         <p>
-          Our goal is to empower event creators and attendees through
-          technology-driven solutions that make organizing and joining events
-          seamless and exciting.
+          Our mission is to simplify event management through intuitive, technology-driven solutions, 
+          making every event seamless, engaging, and unforgettable.
         </p>
       </section>
 
       <section>
         <h2>Our Story</h2>
         <p>
-          Founded with a passion for bringing people together, TickiSpot helps
-          organizers manage, promote, and sell tickets with ease — whether for
-          concerts, conferences, or online meetups.
+          Founded with a passion for connecting people, TickiSpot provides organizers the tools to manage, 
+          promote, and sell tickets with ease — from concerts and conferences to online meetups.
         </p>
       </section>
 
