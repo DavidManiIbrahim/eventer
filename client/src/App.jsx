@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyTickets from "./pages/MyTickets";
@@ -30,6 +29,7 @@ import TermsOfService from "./pages/TermsOfService"
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import LandingPage from "./pages/landingpage";
 
 function Layout() {
   const location = useLocation();
