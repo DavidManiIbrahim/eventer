@@ -5,6 +5,8 @@
   min-height: 100vh;
   transition: background 0.3s, color 0.3s;
   padding-top: 5rem;
+  padding-left: var(--sidebar-width);
+
 }
 
 .container {

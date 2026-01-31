@@ -1,0 +1,60 @@
+[33m7283b20[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix CORS configuration and path-to-regexp crash
+[33m2ae1ad4[m fix deployment bug
+[33m5c5b7a3[m navbar
+[33m17ecbca[m Update import paths for LandingPage and Pricing components to match new directory structure; replace image files in event and profile directories with updated versions.
+[33m537c4a0[m Refactor NavBar component layout; separate desktop navigation into left and right sections, and restore user profile dropdown functionality for better accessibility and organization.
+[33m6374130[m Enhance authMiddleware to validate JWT format and check for JWT_SECRET configuration; improve error handling for malformed tokens and verification failures.
+[33mb58fd5c[m Implement protected routes for user and admin access; enhance sidebar and dashboard UI with new styles and components; update login and registration flows to redirect authenticated users; improve event management features.
+[33mb8783f7[m Enhance landing page layout and functionality; update navigation visibility for login and registration pages, improve component structure, and refine styles for better user experience.
+[33mdf70ff1[m added few more component contact donation doc terms privacypolicy about
+[33mf6472d2[m update event details to displaqy valid details
+[33m3fa1510[m make profile editable integrate backend for it
+[33m620165b[m validate edit event model
+[33m1c09dd2[m Fix: correct LandingPage import path
+[33mce1b5be[m Fix case-sensitive import for LandingPage
+[33mc0d8589[m Fix case-sensitive import for LandingPage
+[33mb522d99[m Fix case-sensitive import for LandingPage
+[33m1a7de1a[m Fix case-sensitive import for LandingPage
+[33mf525f77[m Fix case-sensitive import for LandingPage
+[33m24c6c0f[m Fix case-sensitive import for LandingPage
+[33mcf13ed4[m resolve location of file on deploy
+[33mbc74d19[m  tryna fix deployment error
+[33mb047102[m update landging page you ui and btn color to match for darkmode
+[33md30bb0b[m gave creating event page a good UI
+[33mbc91f17[m add mordern icons with good style
+[33ma66e913[m make sidebar collapse default add profile edite change settings btn color to match app color reduce x-axis padding for all pages
+[33mbddfc6e[m adjust dasboard, home and create event layout
+[33m7c9b451[m update creating of event with more features
+[33mb7c9dc4[m notification socket fix
+[33mc22550c[m enable darkmode for the notification bar
+[33m965379b[m fix bug
+[33m7a41de9[m edit readme
+[33m063a655[m add collaborate readme guild
+[33m3eb13e0[m Remove .env from repository
+[33m71572fa[m style scroll
+[33m5acd043[m validate the settings section
+[33m9eccb6c[m fetch user details to frontend setting
+[33m5625cc4[m add project documentation as a readme file
+[33m0790275[m user updateable details
+[33m95b1698[m darkmode update
+[33mb6d047f[m dark mode effect added
+[33m2866268[m ..
+[33mc56b14b[m side bar ui updated for collapsing
+[33m20900f0[m added settings and profile page
+[33m57b5dea[m update the ui also add other features - controll access for admins and others - stat update - auth update both back and front
+[33m6273a9e[m add ticket scanne ui and backend validation
+[33m6fd55dd[m added checkout and fix ticket add a checkout for users to confirm what they are payin fix the ticket display live chat ui update add note on new features update to make
+[33mbccb44c[m eventdetails style update
+[33m0e4b8d8[m fix little issue from the ticket route
+[33me6bf159[m work on the payment - gate way verification failure - qrcode genaration and store to database - bugs on ticket at the server
+[33me9433f2[m Add event detail view from Home
+[33mbfd9f43[m nothing just comfirmation
+[33ma5694f0[m WIP: local changes before pull
+[33m6f8f32b[m Refactor App structure and enhance user experience
+[33m71371d5[m note update
+[33m2a7c596[m test update
+[33m37d9ae6[m lot
+[33m546c2b8[m profile pics and event hero pics upload
+[33mbd5e516[m live chat
+[33mab608f7[m next
+[33m943e725[m first commit

@@ -1,19 +1,17 @@
-/* Smooth global transitions */
-.settings-container,
-.sidebar,
-.content-area,
-.card {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Light Mode Defaults */
 :root {
   --bg-color: #f9fafb;
   --text-color: #111827;
   --card-bg: #ffffff;
   --border-color: #e5e7eb;
-  --accent-color: #4f46e5;
-  --active-bg: #9bb6ec25;
+
+  /* 🔥 TickiSpot Pink */
+  --accent-color: #ec4899; /* pink-500 */
+  --accent-soft: rgba(236, 72, 153, 0.12);
+
+  /* Sidebar */
+  --sidebar-expanded: 260px;
+  --sidebar-collapsed: 80px;
+  --sidebar-width: var(--sidebar-expanded);
 }
 
 /* Dark Mode */
@@ -22,16 +20,33 @@
   --text-color: #f0f6fc;
   --card-bg: #161b22;
   --border-color: #30363d;
-  --accent-color: #8b5cf6;
+
+  --accent-color: #ec4899;
+  --accent-soft: rgba(236, 72, 153, 0.2);
 }
 
-/* Components */
+
+.settings-container {
+  min-height: 100vh;
+  padding-left: var(--sidebar-width);
+  padding-top: 4rem;
+  transition: padding-left 0.3s ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 .settings-container .card {
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 1.5rem;
+  transition: all 0.25s ease;
 }
+
+.settings-container .card:hover {
+  transform: translateY(-2px);
+}
+
 
 .settings-container .theme-toggle-btn {
   padding: 0.6rem 1.2rem;

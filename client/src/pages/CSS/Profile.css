@@ -1,93 +1,154 @@
-/* Light mode defaults */
+/* ===== TickiSpot Theme ===== */
 :root {
-  --bg-color: #f9fafb;
+  --bg-color: #fff5f8;
   --text-color: #111827;
   --card-bg: #ffffff;
-  --border-color: #e5e7eb;
-  --accent-color: #4f46e5;
-  --tab-bg: #e5e7eb;
-  --active-tab-bg: #4f46e5;
+  --border-color: #f3c6d9;
+  --accent-color: #ec4899;
+  --accent-soft: #fde7f1;
+  --tab-bg: #fde7f1;
+  --active-tab-bg: #ec4899;
   --active-tab-text: #ffffff;
 }
 
-/* Dark mode overrides */
 [data-theme="dark"] {
-  --bg-color: #0d1117;
-  --text-color: #f0f6fc;
-  --card-bg: #161b22;
-  --border-color: #30363d;
-  --accent-color: #8b5cf6;
-  --tab-bg: #1c2128;
-  --active-tab-bg: #8b5cf6;
-  --active-tab-text: #ffffff;
+  --bg-color: #0f0a0d;
+  --text-color: #f9fafb;
+  --card-bg: #181015;
+  --border-color: #3a1c2b;
+  --accent-color: #ec4899;
+  --tab-bg: #24131c;
 }
 
-/* Profile layout */
+/* ===== Layout ===== */
 .profile-container {
-  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  padding-left: var(--sidebar-width);
+
 }
 
-/* Divider line */
-.profile-container .divider {
+.profile-cover img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.profile-avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: -70px;
+}
+
+.profile-avatar-wrapper img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 5px solid var(--card-bg);
+  object-fit: cover;
+}
+
+/* ===== Content ===== */
+.profile-content {
+  max-width: 1100px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.username {
+  color: var(--accent-color);
+}
+
+.bio {
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+.divider {
+  margin: 2rem 0;
   border-color: var(--border-color);
 }
 
-/* Tabs */
-.profile-container .tab-container {
-  background-color: var(--tab-bg);
+/* ===== Buttons ===== */
+.btn-primary {
+  background: var(--accent-color);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: none;
 }
 
-.profile-container .tab-btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  color: var(--text-color);
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
+.btn-outline {
+  background: transparent;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
 }
 
-.profile-container .tab-btn.active {
-  background-color: var(--active-tab-bg);
+/* ===== Tabs ===== */
+.tab-container {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--tab-bg);
+  padding: 0.4rem;
+  border-radius: 12px;
+}
+
+.tab-btn {
+  padding: 0.5rem 1.1rem;
+  border-radius: 10px;
+}
+
+.tab-btn.active {
+  background: var(--active-tab-bg);
   color: var(--active-tab-text);
 }
 
-/* Event cards */
-.profile-container .event-card {
-  background-color: var(--card-bg);
+/* ===== Events ===== */
+.event-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.event-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
   border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
 }
 
-.profile-container .event-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.event-card img {
+  height: 160px;
+  width: 100%;
+  object-fit: cover;
 }
 
-/* Buttons */
-.profile-container .btn-primary {
-  background-color: var(--accent-color);
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  transition: background-color 0.3s ease;
+.event-body {
+  padding: 1rem;
 }
 
-.profile-container .btn-primary:hover {
-  filter: brightness(1.1);
+.empty-state {
+  opacity: 0.6;
+  text-align: center;
+  padding: 2rem;
 }
 
-.profile-container .btn-warning {
-  background-color: #facc15;
-  color: #000;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  transition: background-color 0.3s ease;
-}
-
-.profile-container .btn-warning:hover {
-  background-color: #fbbf24;
+/* ===== Loading ===== */
+.profile-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
 }

@@ -25,7 +25,7 @@ export default function MyTickets() {
   };
 
   return (
-    <div className={`tickets-page pl-22 ${darkMode ? "dark-mode" : ""}`}>
+    <div className={`tickets-page ${darkMode ? "dark-mode" : ""}`}>
       <div className="container">
         <h2 className="page-title">🎟️ My Tickets</h2>
 

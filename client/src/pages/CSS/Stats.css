@@ -30,8 +30,10 @@ body {
 
 /* Utility Classes */
 .dashboard-container {
-  background-color: var(--bg-color);
+  background-color: transparent;
   color: var(--text-color);
+  padding-left: var(--sidebar-width);
+
 }
 
 .dashboard-container h2,

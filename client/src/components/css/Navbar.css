@@ -1,6 +1,8 @@
 .navbar {
   background-color: #ffffff;
   color: #333333;
+  padding-left: var(--sidebar-width);
+
 }
 
 /* Global dark mode styles */
