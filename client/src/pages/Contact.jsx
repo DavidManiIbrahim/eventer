@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./CSS/Contact.css";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -9,7 +10,7 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Your message has been sent!");
+    alert("✅ Your message has been sent!");
     setForm({ name: "", email: "", message: "" });
   };
 
@@ -38,10 +39,8 @@ export default function Contact() {
           value={form.message}
           onChange={handleChange}
           required
-        ></textarea>
-        <button type="submit" className="btn btn-primary">
-          Send Message
-        </button>
+        />
+        <button type="submit">Send Message</button>
       </form>
     </div>
   );
