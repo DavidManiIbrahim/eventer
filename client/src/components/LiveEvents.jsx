@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
-import LiveChat from "../components/LiveChats"; // Adjust path if needed
-import "../pages/CSS/home.css";
+import LiveChat from "../components/LiveChats";
 import { Link } from "react-router-dom";
+import "./css/LiveEvents.css";
 
+
+const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
 
 
 export default function LiveEvent() {
   const [events, setEvents] = useState([]);
-  const [buying, setBuying] = useState({}); // track quantities
+  const [buying, setBuying] = useState({});
+  const [showChat, setShowChat] = useState(false);
+  const [activeEventId, setActiveEventId] = useState(null);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const isLoggedIn = !!localStorage.getItem("token");
@@ -25,29 +29,17 @@ export default function LiveEvent() {
 
   const handleBuy = async (eventId) => {
     const quantity = parseInt(buying[eventId]) || 1;
-
-    if (!user || !user.email) {
-      alert("Login required.");
-      return;
-    }
+    if (!user || !user.email) return alert("Login required.");
 
     const selectedEvent = events.find((e) => e._id === eventId);
-    if (!selectedEvent) {
-      alert("Event not found.");
-      return;
-    }
+    if (!selectedEvent) return alert("Event not found.");
 
     try {
       const res = await API.post("/payment/initiate", {
         email: user.email,
         amount: selectedEvent.ticketPrice * quantity,
-        metadata: {
-          eventId: selectedEvent._id,
-          quantity,
-        },
+        metadata: { eventId: selectedEvent._id, quantity },
       });
-
-      // Redirect to Paystack
       window.location.href = res.data.url;
     } catch (err) {
       console.error(err);
@@ -55,65 +47,54 @@ export default function LiveEvent() {
     }
   };
 
-  const [showChat, setShowChat] = useState(false);
-  const [activeEventId, setActiveEventId] = useState(null);
-
   const handleJoinChat = (eventId) => {
     setActiveEventId(eventId);
     setShowChat(true);
   };
 
   return (
-    <>
-      <div className="home">
-        <h1>TickiSpot</h1>
-        {events.length === 0 && <p>No events yet.</p>}
+    <div className="live-events-page">
+      {events.length === 0 && (
+        <p className="live-no-events">No events available right now.</p>
+      )}
+
+      <div className="live-events-grid">
         {events
-          .filter((event) => event.liveStream?.isLive) // ✅ Only live events
+          .filter((e) => e.liveStream?.isLive)
           .map((event) => (
-            <div
-              key={event._id}
-              style={{
-                border: "1px solid #ccc",
-                margin: "10px",
-                padding: "10px",
-              }}
-            >
-              <Link to="/" className="link">
-                <div className="topp">
-                  <img
-                    src={`http://localhost:5000/uploads/${event.createdBy?.profilePic}`}
-                    alt={event.createdBy?.username || "Creator"}
-                  />
-                  <h2>{event.title}</h2>
+            <div key={event._id} className="live-event-card">
+              <div className="live-event-header">
+                <img
+                  src={`${PORT_URL}/uploads/profile_pic/${event.createdBy?.profilePic}`}
+                  alt={event.createdBy?.username || "Creator"}
+                  className="live-creator-pic"
+                />
+                <div className="live-event-info">
+                  <h2 className="live-event-title">{event.title}</h2>
+                  <p className="live-event-meta">
+                    {event.location} • {event.date}
+                  </p>
                 </div>
-                {event.image && (
-                  <img
-                    src={`http://localhost:5000/uploads/event_image/${event.image}`}
-                    alt={`${event.title} poster`}
-                    style={{
-                      width: "100%",
-                      maxHeight: "300px",
-                      objectFit: "cover",
-                      marginBottom: "10px",
-                    }}
-                  />
-                )}
+              </div>
 
-                <p>
-                  {event.location} • {event.date}
+              {event.image && (
+                <img
+                  src={`${PORT_URL}/uploads/event_image/${event.image}`}
+                  alt={`${event.title} poster`}
+                  className="live-event-image"
+                />
+              )}
+
+              <div className="live-event-details">
+                <p className="live-ticket-price">Price: ₦{event.ticketPrice}</p>
+                <p className="live-tickets-left">
+                  Tickets Left: {event.totalTickets}
                 </p>
-                <p>Price: ₦{event.ticketPrice}</p>
-                <p>Tickets Left: {event.totalTickets}</p>
-              </Link>
-
-              <div style={{ marginTop: "10px" }}>
-                <strong style={{ color: "red" }}>🔴 LIVE NOW</strong>
+                <strong className="live-indicator">🔴 LIVE NOW</strong>
 
                 {event.liveStream.streamType === "YouTube" && (
                   <iframe
-                    width="100%"
-                    height="315"
+                    className="live-video"
                     src={event.liveStream.streamURL.replace(
                       "watch?v=",
                       "embed/"
@@ -125,7 +106,19 @@ export default function LiveEvent() {
                   ></iframe>
                 )}
 
-                <button onClick={() => handleJoinChat(event._id)}>
+                {event.liveStream.streamType === "Facebook" && (
+                  <div
+                    className="live-fb-video"
+                    data-href={event.liveStream.streamURL}
+                    data-width="100%"
+                    data-allowfullscreen="true"
+                  ></div>
+                )}
+
+                <button
+                  className="live-join-chat-btn"
+                  onClick={() => handleJoinChat(event._id)}
+                >
                   Join Live Chat
                 </button>
 
@@ -136,33 +129,28 @@ export default function LiveEvent() {
                   />
                 )}
 
-                {event.liveStream.streamType === "Facebook" && (
-                  <div
-                    className="fb-video"
-                    data-href={event.liveStream.streamURL}
-                    data-width="500"
-                    data-allowfullscreen="true"
-                  ></div>
+                {isLoggedIn && (
+                  <div className="live-buy-ticket">
+                    <input
+                      type="number"
+                      min="1"
+                      placeholder="Qty"
+                      value={buying[event._id] || ""}
+                      onChange={(e) => handleQuantityChange(e, event._id)}
+                      className="live-buy-input"
+                    />
+                    <button
+                      className="live-buy-btn"
+                      onClick={() => handleBuy(event._id)}
+                    >
+                      Buy Ticket
+                    </button>
+                  </div>
                 )}
               </div>
-
-              {isLoggedIn && (
-                <div style={{ marginTop: "10px" }}>
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Qty"
-                    value={buying[event._id] || ""}
-                    onChange={(e) => handleQuantityChange(e, event._id)}
-                  />
-                  <button onClick={() => handleBuy(event._id)} target="_blank">
-                    Buy Ticket
-                  </button>
-                </div>
-              )}
             </div>
           ))}
       </div>
-    </>
+    </div>
   );
 }

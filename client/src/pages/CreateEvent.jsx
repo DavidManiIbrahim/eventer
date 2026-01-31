@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./CSS/CreateEvent.css";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import { Building2, Globe2, MonitorPlay } from "lucide-react";
+import icon from "../assets/icon.svg"
 
 const eventTypes = [
   {
@@ -288,7 +289,7 @@ export default function CreateEvent({ isOpen, onClose }) {
 
         {/* Info Sidebar */}
         <div className="info-sidebar">
-          <img src="/event-illustration.svg" alt="Create event" />
+          <img src={icon} alt="Create event" />
           <h2>Create your event</h2>
           <p>
             Start creating your event by providing the basic details now and
