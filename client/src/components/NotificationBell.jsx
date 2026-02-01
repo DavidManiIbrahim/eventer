@@ -35,11 +35,10 @@ const NotificationBell = ({ userId }) => {
     <div className="relative" ref={dropdownRef}>
       {/* ===== Notification Button ===== */}
       <button
-        className={`relative flex items-center p-2 rounded-full transition-colors ${
-          darkMode
-            ? "hover:bg-gray-700 text-gray-200"
-            : "hover:bg-gray-100 text-gray-700"
-        }`}
+        className={`relative flex items-center p-2 rounded-full transition-colors ${darkMode
+          ? "hover:bg-gray-700 text-gray-200"
+          : "hover:bg-gray-100 text-gray-700"
+          }`}
         onClick={() => setOpen((prev) => !prev)}
       >
         <Bell className="w-6 h-6" />
@@ -51,16 +50,14 @@ const NotificationBell = ({ userId }) => {
       {/* ===== Dropdown Panel ===== */}
       {open && (
         <div
-          className={`absolute right-0 mt-2 w-72 shadow-lg rounded-xl border transition-colors z-50 ${
-            darkMode
+          className={`absolute left-0 bottom-full mb-2 w-72 shadow-lg rounded-xl border transition-colors z-[10000] ${darkMode
               ? "bg-gray-800 border-gray-700"
               : "bg-white border-gray-100"
-          }`}
+            }`}
         >
           <div
-            className={`p-3 border-b text-sm font-semibold ${
-              darkMode ? "border-gray-700 text-gray-200" : "border-gray-100 text-gray-700"
-            }`}
+            className={`p-3 border-b text-sm font-semibold ${darkMode ? "border-gray-700 text-gray-200" : "border-gray-100 text-gray-700"
+              }`}
           >
             Notifications
           </div>
@@ -69,17 +66,15 @@ const NotificationBell = ({ userId }) => {
           <div className="max-h-60 overflow-y-auto">
             {loading ? (
               <p
-                className={`text-sm p-3 ${
-                  darkMode ? "text-gray-400" : "text-gray-500"
-                }`}
+                className={`text-sm p-3 ${darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
               >
                 Loading...
               </p>
             ) : notifications.length === 0 ? (
               <p
-                className={`text-sm p-3 ${
-                  darkMode ? "text-gray-400" : "text-gray-500"
-                }`}
+                className={`text-sm p-3 ${darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
               >
                 No notifications yet.
               </p>
@@ -88,21 +83,19 @@ const NotificationBell = ({ userId }) => {
                 <div
                   key={n._id}
                   onClick={() => markAsRead(n._id)}
-                  className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
-                    n.read
-                      ? darkMode
-                        ? "text-gray-400 hover:bg-gray-700"
-                        : "text-gray-500 hover:bg-gray-100"
-                      : darkMode
+                  className={`px-3 py-2 text-sm cursor-pointer transition-colors ${n.read
+                    ? darkMode
+                      ? "text-gray-400 hover:bg-gray-700"
+                      : "text-gray-500 hover:bg-gray-100"
+                    : darkMode
                       ? "bg-gray-700 text-gray-100 hover:bg-gray-600"
                       : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
                   <p>{n.message}</p>
                   <span
-                    className={`block text-xs mt-1 ${
-                      darkMode ? "text-gray-400" : "text-gray-500"
-                    }`}
+                    className={`block text-xs mt-1 ${darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
                   >
                     {new Date(n.createdAt).toLocaleString()}
                   </span>

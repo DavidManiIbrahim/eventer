@@ -17,6 +17,7 @@ import Checkout from "./pages/CheckOut";
 import TicketScanner from "./pages/TicketScanner";
 import TicketValidationPage from "./pages/ValidateTicket";
 import UserManagement from "./pages/Admin";
+import LiveStream from "./pages/LiveStream";
 
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
@@ -36,14 +37,13 @@ function Layout() {
   const location = useLocation();
 
   // hide navbar & sidebar on landing page and form pages
-  const hideNavAndSidebar = 
-    location.pathname === "/" || 
-    location.pathname === "/login" || 
+  const hideNavAndSidebar =
+    location.pathname === "/" ||
+    location.pathname === "/login" ||
     location.pathname === "/register";
 
   return (
     <>
-      {!hideNavAndSidebar && <NavBar />}
       {!hideNavAndSidebar && <Sidebar />}
 
       <Routes>
@@ -89,6 +89,14 @@ function Layout() {
           element={
             <ProtectedRoute>
               <LiveEvent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/live/:eventId"
+          element={
+            <ProtectedRoute>
+              <LiveStream />
             </ProtectedRoute>
           }
         />

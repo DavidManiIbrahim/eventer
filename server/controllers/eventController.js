@@ -163,6 +163,17 @@ exports.updateEvent = async (req, res) => {
       updates.image = req.file.filename;
     }
 
+    // ✅ Handle liveStream nested fields
+    if (updates.streamType || updates.streamURL) {
+      event.liveStream = {
+        ...event.liveStream,
+        streamType: updates.streamType || event.liveStream.streamType,
+        streamURL: updates.streamURL || event.liveStream.streamURL,
+      };
+      delete updates.streamType;
+      delete updates.streamURL;
+    }
+
     // ✅ Apply updates
     Object.assign(event, updates);
     await event.save();

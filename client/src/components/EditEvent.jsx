@@ -22,30 +22,32 @@ export default function EditEvent({ isOpen, onClose, eventId, onEventUpdated }) 
       { type: "VIP", price: "" },
       { type: "VVIP", price: "" },
     ],
+    streamType: "Camera",
+    streamURL: "",
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
 
- const eventTypes = [
-  {
-    id: 1,
-    icon: <Building2 className="w-5 h-5" />,
-    name: "In-person",
-    hint: "Attendees will join the event at a physical location.",
-  },
-  {
-    id: 2,
-    icon: <MonitorPlay className="w-5 h-5" />,
-    name: "Virtual",
-    hint: "Attendees will join the event online via a streaming platform.",
-  },
-  {
-    id: 3,
-    icon: <Globe2 className="w-5 h-5" />,
-    name: "Hybrid",
-    hint: "Attendees can choose to join either in-person or online.",
-  },
-];
+  const eventTypes = [
+    {
+      id: 1,
+      icon: <Building2 className="w-5 h-5" />,
+      name: "In-person",
+      hint: "Attendees will join the event at a physical location.",
+    },
+    {
+      id: 2,
+      icon: <MonitorPlay className="w-5 h-5" />,
+      name: "Virtual",
+      hint: "Attendees will join the event online via a streaming platform.",
+    },
+    {
+      id: 3,
+      icon: <Globe2 className="w-5 h-5" />,
+      name: "Hybrid",
+      hint: "Attendees can choose to join either in-person or online.",
+    },
+  ];
 
 
   // 🧭 Fetch Event Data
@@ -70,10 +72,12 @@ export default function EditEvent({ isOpen, onClose, eventId, onEventUpdated }) 
           pricing: data.pricing?.length
             ? data.pricing
             : [
-                { type: "Regular", price: "" },
-                { type: "VIP", price: "" },
-                { type: "VVIP", price: "" },
-              ],
+              { type: "Regular", price: "" },
+              { type: "VIP", price: "" },
+              { type: "VVIP", price: "" },
+            ],
+          streamType: data.liveStream?.streamType || "Camera",
+          streamURL: data.liveStream?.streamURL || "",
         });
 
         if (data.image) {
@@ -154,9 +158,8 @@ export default function EditEvent({ isOpen, onClose, eventId, onEventUpdated }) 
                   onClick={() =>
                     setForm((prev) => ({ ...prev, eventType: type.name }))
                   }
-                  className={`event-type-btn ${
-                    form.eventType === type.name ? "active" : ""
-                  }`}
+                  className={`event-type-btn ${form.eventType === type.name ? "active" : ""
+                    }`}
                 >
                   <div className="flex justify-between align-center">
                     <div className="icon">{type.icon}</div>
@@ -283,21 +286,24 @@ export default function EditEvent({ isOpen, onClose, eventId, onEventUpdated }) 
             <label className="field-label">Stream Type</label>
             <select
               name="streamType"
-              value={form.streamType || ""}
+              value={form.streamType}
               className="input-field"
               onChange={handleChange}
             >
+              <option value="Camera">Camera (Native Live Stream)</option>
               <option value="YouTube">YouTube</option>
               <option value="Facebook">Facebook</option>
             </select>
 
-            <input
-              name="streamURL"
-              placeholder="Stream URL (optional)"
-              className="input-field"
-              onChange={handleChange}
-              value={form.streamURL || ""}
-            />
+            {form.streamType !== "Camera" && (
+              <input
+                name="streamURL"
+                placeholder={`${form.streamType} Stream URL`}
+                className="input-field"
+                onChange={handleChange}
+                value={form.streamURL}
+              />
+            )}
 
             {/* Image Upload */}
             <div className="form-label">

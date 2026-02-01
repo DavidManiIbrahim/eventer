@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import axios from "../api/axios";
 import { ThemeContext } from "../contexts/ThemeContexts";
+import PasswordInput from "./PasswordInput";
 import "./css/EditProfileModel.css";
 
 export default function EditProfileModal({
@@ -54,9 +55,8 @@ export default function EditProfileModal({
 
   return (
     <div
-      className={`settings-modal-backdrop ${
-        darkMode === "dark" ? "dark-mode" : ""
-      }`}
+      className={`settings-modal-backdrop ${darkMode === "dark" ? "dark-mode" : ""
+        }`}
     >
       <div className="settings-modal">
         <h2>Account Settings</h2>
@@ -68,73 +68,71 @@ export default function EditProfileModal({
         <form onSubmit={handleSubmit}>
           <div className="form-content">
             <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </label>
+              Name
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </label>
 
-          <label>
-            Username
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-          </label>
+            <label>
+              Username
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+              />
+            </label>
 
-          <label>
-            Email
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </label>
+            <label>
+              Email
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </label>
 
-          <label>
-            Phone
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-            />
-          </label>
+            <label>
+              Phone
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+            </label>
 
-          <label>
-            Bio
-            <textarea
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
-            ></textarea>
-          </label>
+            <label>
+              Bio
+              <textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+              ></textarea>
+            </label>
 
-          <label>
-            Current Password
-            <input
-              type="password"
-              name="currentPassword"
-              value={formData.currentPassword}
-              onChange={handleChange}
-            />
-          </label>
+            <label>
+              Current Password
+              <PasswordInput
+                name="currentPassword"
+                value={formData.currentPassword}
+                onChange={handleChange}
+              />
+            </label>
 
-          <label>
-            New Password
-            <input
-              type="password"
-              name="newPassword"
-              value={formData.newPassword}
-              onChange={handleChange}
-            />
-          </label>
+            <label>
+              New Password
+              <PasswordInput
+                name="newPassword"
+                value={formData.newPassword}
+                onChange={handleChange}
+              />
+            </label>
           </div>
 
           <div className="settings-actions">

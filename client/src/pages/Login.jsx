@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { isAuthenticated, login } from "../utils/auth";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import { ArrowRight } from "lucide-react";
+import PasswordInput from "../components/PasswordInput";
 import icon from "../assets/icon.svg"
 import "./CSS/forms.css";
 
@@ -105,13 +106,11 @@ export default function Login() {
 
           <div className="form-group">
             <label className="form-label">Password</label>
-            <input
+            <PasswordInput
               name="password"
-              type="password"
               placeholder="Enter your password"
               value={form.password}
               onChange={handleChange}
-              className="form-input"
             />
             {errors.password && (
               <span className="form-error">{errors.password}</span>
