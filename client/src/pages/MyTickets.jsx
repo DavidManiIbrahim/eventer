@@ -31,13 +31,17 @@ export default function MyTickets() {
 
         {tickets.length === 0 ? (
           <div className="dash-card center muted">
-            You haven’t purchased any tickets yet.
+            You haven't purchased any tickets yet.
           </div>
         ) : (
           <div className="tickets-grid">
             {tickets.map((ticket) => {
               const event = ticket?.event;
               if (!event) return null;
+
+              // Calculate total price: either use ticket.amount (total paid) or ticket.price * quantity
+              const totalPrice = ticket.amount || (ticket.price || 0) * (ticket.quantity || 1);
+              const pricePerTicket = ticket.price || 0;
 
               return (
                 <div key={ticket._id} className="ticket-card">
@@ -69,10 +73,29 @@ export default function MyTickets() {
                   {/* Ticket Info */}
                   <div className="ticket-info">
                     <p>
-                      <span>Quantity:</span> {ticket.quantity}
+                      <span>Quantity:</span> {ticket.quantity || 1}
                     </p>
                     <p>
-                      <span>Date:</span>{" "}
+                      <span>Price per ticket:</span> ₦{pricePerTicket.toLocaleString()}
+                    </p>
+                    <p>
+                      <span>Total Paid:</span> ₦{totalPrice.toLocaleString()}
+                    </p>
+                    <p>
+                      <span>Ticket Type:</span> {ticket.pricingType || "Standard"}
+                    </p>
+                    <p>
+                      <span>Purchase Date:</span>{" "}
+                      {ticket.purchasedAt 
+                        ? new Date(ticket.purchasedAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })
+                        : "N/A"}
+                    </p>
+                    <p>
+                      <span>Event Date:</span>{" "}
                       {event.startDate
                         ? new Date(event.startDate).toLocaleString("en-US", {
                             weekday: "short",
@@ -87,8 +110,13 @@ export default function MyTickets() {
                       <span className="location">• {event.location}</span>
                     </p>
                     <p>
-                      <span>Price Paid:</span> ₦
-                      {(event.ticketPrice || 0) * (ticket.quantity || 1)}
+                      <span>Reference:</span> {ticket.reference || "N/A"}
+                    </p>
+                    <p>
+                      <span>Status:</span>{" "}
+                      <span className={`status-badge ${ticket.used ? "used" : "valid"}`}>
+                        {ticket.used ? "✅ Used" : "✅ Valid"}
+                      </span>
                     </p>
                   </div>
 
@@ -117,18 +145,32 @@ export default function MyTickets() {
                   {/* QR Code */}
                   {ticket.qrCode && (
                     <div className="qr-section">
+                      <h4>Your Ticket QR Code:</h4>
                       <img
                         src={`${PORT_URL}/uploads/${ticket.qrCode}`}
                         alt="Ticket QR Code"
                         className="qr-image"
                       />
-                      <a
-                        href={`${PORT_URL}/uploads/${ticket.qrCode}`}
-                        download={`ticket-${ticket._id}.png`}
-                        className="download-btn"
-                      >
-                        ⬇️ Download QR
-                      </a>
+                      <div className="qr-actions">
+                        <a
+                          href={`${PORT_URL}/uploads/${ticket.qrCode}`}
+                          download={`ticket-${ticket._id}.png`}
+                          className="download-btn"
+                        >
+                          ⬇️ Download QR
+                        </a>
+                        <button
+                          className="validate-btn"
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              `${PORT_URL}/tickets/validate/${ticket._id}`
+                            );
+                            alert("Validation link copied to clipboard!");
+                          }}
+                        >
+                          📋 Copy Validate Link
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
