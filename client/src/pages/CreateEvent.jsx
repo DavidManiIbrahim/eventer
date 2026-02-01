@@ -33,7 +33,7 @@ export default function CreateEvent({ isOpen, onClose }) {
     description: "",
     category: "",
     location: "",
-    streamType: "YouTube",
+    streamType: "Camera",
     streamURL: "",
     eventType: "In-person",
     startDate: "",
@@ -127,9 +127,8 @@ export default function CreateEvent({ isOpen, onClose }) {
                 onClick={() =>
                   setForm((prev) => ({ ...prev, eventType: type.name }))
                 }
-                className={`event-type-btn ${
-                  form.eventType === type.name ? "active" : ""
-                }`}
+                className={`event-type-btn ${form.eventType === type.name ? "active" : ""
+                  }`}
               >
                 <div className="flex justify-between align-center">
                   <div className="icon">{type.icon}</div>
@@ -251,16 +250,20 @@ export default function CreateEvent({ isOpen, onClose }) {
               className="input-field"
               onChange={handleChange}
             >
+              <option value="Camera">Camera (Native Live Stream)</option>
               <option value="YouTube">YouTube</option>
               <option value="Facebook">Facebook</option>
             </select>
 
-            <input
-              name="streamURL"
-              placeholder="Stream URL (optional)"
-              className="input-field"
-              onChange={handleChange}
-            />
+            {form.streamType !== "Camera" && (
+              <input
+                name="streamURL"
+                placeholder={`${form.streamType} Stream URL`}
+                className="input-field"
+                value={form.streamURL}
+                onChange={handleChange}
+              />
+            )}
 
             <div className="form-label">
               <label className="image-upload">

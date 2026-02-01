@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   Star,
 } from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function LandingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -194,17 +195,7 @@ export default function LandingPage() {
                 </Link>
               </div>
             )}
-            <button
-              onClick={toggleTheme}
-              className="theme-toggle-btn"
-              aria-label="Toggle theme"
-            >
-              {darkMode ? (
-                <ToggleLeft size={18} className="toggle-icon" />
-              ) : (
-                <ToggleRight size={18} className="toggle-icon" />
-              )}
-            </button>
+            <ThemeToggle />
           </nav>
         </div>
       </header>

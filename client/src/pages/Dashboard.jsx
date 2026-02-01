@@ -4,7 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import "./CSS/Dashboard.css";
 import EditEvent from "../components/EditEvent";
 import { getCurrentUser } from "../utils/auth";
-import { ArrowRight, PlusCircle } from "lucide-react";
+import {
+  ArrowRight,
+  PlusCircle,
+  LayoutDashboard,
+  Ticket,
+  BarChart3,
+  Radio,
+  Calendar,
+  MapPin,
+  Users
+} from "lucide-react";
 import CreateEvent from "./CreateEvent";
 
 const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
@@ -74,12 +84,16 @@ export default function Dashboard() {
         events.map((ev) =>
           ev._id === id
             ? {
-                ...ev,
-                liveStream: { ...ev.liveStream, isLive: !currentStatus },
-              }
+              ...ev,
+              liveStream: { ...ev.liveStream, isLive: !currentStatus },
+            }
             : ev,
         ),
       );
+
+      if (!currentStatus) {
+        navigate(`/live/${id}`);
+      }
     } catch (err) {
       console.error(err);
       alert("Failed to toggle live status");
@@ -105,12 +119,22 @@ export default function Dashboard() {
     }
   };
 
-  const StatCard = ({ title, value }) => (
-    <div className="stat-tile">
-      <div className="stat-label">{title}</div>
-      <div className="stat-value">{value}</div>
+  const StatCard = ({ title, value, icon: Icon, color }) => (
+    <div className={`stat-tile ${color}`}>
+      <div className="stat-tile-content">
+        <div className="stat-label">{title}</div>
+        <div className="stat-value">{value}</div>
+      </div>
+      <div className="stat-tile-icon-wrapper">
+        <Icon size={24} className="stat-tile-icon" />
+      </div>
     </div>
   );
+
+  const formatNumber = (num) => {
+    if (num === null || num === undefined || isNaN(num)) return "0";
+    return new Intl.NumberFormat('en-NG').format(num);
+  };
 
   return (
     <div className="dashboard-page">
@@ -133,7 +157,7 @@ export default function Dashboard() {
               onClick={() => setShowCreateEvent(true)}
             >
               Create event <PlusCircle size={18}
-               />
+              />
             </button>
           </div>
         </div>
@@ -172,31 +196,57 @@ export default function Dashboard() {
 
         {/* 📊 Stats */}
         {!loading && !error && stats && (
-          <div className="dash-card" style={{ marginTop: "1rem" }}>
+          <div className="stats-container-grid">
+            <StatCard
+              title="Total Events"
+              value={stats.totalEvents}
+              icon={LayoutDashboard}
+              color="blue"
+            />
+            <StatCard
+              title="Tickets Sold"
+              value={formatNumber(stats.totalTicketsSold)}
+              icon={Ticket}
+              color="pink"
+            />
+            <StatCard
+              title="Revenue"
+              value={`₦${formatNumber(stats.totalRevenue)}`}
+              icon={BarChart3}
+              color="green"
+            />
+            <StatCard
+              title="Live Sessions"
+              value={stats.currentlyLive}
+              icon={Radio}
+              color="red"
+            />
+          </div>
+        )}
+
+        {!loading && !error && stats && stats.topEvents?.length > 0 && (
+          <div className="dash-card top-events-card">
             <div className="dash-card-header">
-              <div className="dash-card-title">Stats overview</div>
+              <div className="dash-card-title">Top Performing Events</div>
             </div>
             <div className="dash-card-body">
-              <div className="stats-grid" style={{ marginBottom: "1rem" }}>
-                <StatCard title="Total Events" value={stats.totalEvents} />
-                <StatCard title="Tickets Sold" value={stats.totalTicketsSold} />
-                <StatCard title="Revenue (₦)" value={stats.totalRevenue} />
-                <StatCard title="Live Events" value={stats.currentlyLive} />
+              <div className="top-events-list">
+                {stats.topEvents.map((event, i) => (
+                  <div key={i} className="top-event-item">
+                    <div className="top-event-rank">#{i + 1}</div>
+                    <div className="top-event-info">
+                      <div className="top-event-name">{event.title}</div>
+                      <div className="top-event-sales">{formatNumber(event.quantitySold || event.ticketsSold || 0)} tickets sold</div>
+                    </div>
+                    <div className="top-event-progress">
+                      <div
+                        className="top-event-progress-bar"
+                        style={{ width: `${Math.min(100, ((event.quantitySold || event.ticketsSold || 0) / (stats.totalTicketsSold || 1)) * 100)}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
               </div>
-
-              <div className="section-title">Top events</div>
-              {stats.topEvents?.length > 0 ? (
-                <ul style={{ margin: 0, paddingLeft: "1.25rem" }}>
-                  {stats.topEvents.map((event, i) => (
-                    <li key={i} style={{ marginBottom: "0.35rem" }}>
-                      <span style={{ fontWeight: 800 }}>{event.title}</span> —{" "}
-                      {event.quantitySold} tickets
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p style={{ color: "rgba(0,0,0,0.55)" }}>No events yet.</p>
-              )}
             </div>
           </div>
         )}
@@ -206,15 +256,15 @@ export default function Dashboard() {
           <>
             <div className="section-title">Your events</div>
             {events.length === 0 ? (
-              <div className="dash-card">
+              <div className="dash-card empty-state-card">
                 <div className="dash-card-body">
-                  <p style={{ color: "rgba(0,0,0,0.55)" }}>
-                    You haven’t created any events yet.
+                  <p className="empty-state-p">
+                    You haven’t created any events yet. Ready to host your first one?
                   </p>
                   <div style={{ marginTop: "1rem" }}>
-                    <Link className="dash-btn dash-btn-primary" to="/events">
-                      Explore events <ArrowRight size={18} />
-                    </Link>
+                    <button onClick={() => setShowCreateEvent(true)} className="dash-btn dash-btn-primary">
+                      Create Your First Event <PlusCircle size={18} />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -241,26 +291,25 @@ export default function Dashboard() {
                       <div className="event-meta">
                         {event.description || "No description provided."}
                       </div>
-                      <div
-                        className="event-meta"
-                        style={{ marginTop: "0.5rem" }}
-                      >
-                        {new Date(event.startDate).toLocaleDateString("en-US", {
-                          weekday: "short",
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}{" "}
-                        {event.startTime ? `at ${event.startTime}` : ""} •{" "}
-                        {event.location}
-                      </div>
-                      <div
-                        className="event-meta"
-                        style={{ marginTop: "0.5rem" }}
-                      >
-                        Tickets: {event.ticketsSold}/{event.totalTickets} •
-                        Type: {event.eventType}
-                        {event.category ? ` • Category: ${event.category}` : ""}
+                      <div className="event-meta-grid">
+                        <div className="event-meta-item">
+                          <Calendar size={14} className="meta-icon" />
+                          <span>
+                            {new Date(event.startDate).toLocaleDateString("en-US", {
+                              weekday: "short",
+                              month: "short",
+                              day: "numeric",
+                            })} • {event.startTime}
+                          </span>
+                        </div>
+                        <div className="event-meta-item">
+                          <MapPin size={14} className="meta-icon" />
+                          <span>{event.location}</span>
+                        </div>
+                        <div className="event-meta-item">
+                          <Users size={14} className="meta-icon" />
+                          <span>{event.ticketsSold}/{event.totalTickets} tickets sold</span>
+                        </div>
                       </div>
                     </div>
 
@@ -292,10 +341,10 @@ export default function Dashboard() {
             )}
           </>
         )}
-      
+
       </div>
-      
-        {/* ✅ Place the EditEvent modal here once */}
+
+      {/* ✅ Place the EditEvent modal here once */}
 
       <EditEvent
         isOpen={editModalOpen}

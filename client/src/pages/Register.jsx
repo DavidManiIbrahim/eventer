@@ -3,6 +3,7 @@ import API from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import { ArrowRight } from "lucide-react";
+import PasswordInput from "../components/PasswordInput";
 import "./CSS/forms.css";
 import { isAuthenticated } from "../utils/auth";
 import icon from "../assets/icon.svg"
@@ -70,7 +71,7 @@ export default function Register() {
       <div className="form-container">
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
           <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "inherit", marginBottom: "1rem" }}>
-          <img src={icon}  className="tickispot-icon" />
+            <img src={icon} className="tickispot-icon" />
           </Link>
           <h1 className="form-title">Create Account</h1>
           <p className="form-subtitle">Join TickiSpot and start creating amazing events</p>
@@ -116,13 +117,11 @@ export default function Register() {
 
           <div className="form-group">
             <label className="form-label">Password</label>
-            <input
+            <PasswordInput
               name="password"
-              type="password"
               placeholder="Create a password"
               value={form.password}
               onChange={handleChange}
-              className="form-input"
               required
             />
           </div>

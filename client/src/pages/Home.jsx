@@ -2,7 +2,13 @@ import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import API from "../api/axios";
 import { ThemeContext } from "../contexts/ThemeContexts";
+import { Search, MapPin, Calendar, Users, ArrowRight } from "lucide-react";
 import "./CSS/home.css";
+
+const formatNumber = (num) => {
+  if (num === null || num === undefined || isNaN(num)) return "0";
+  return new Intl.NumberFormat('en-NG').format(num);
+};
 
 const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -56,13 +62,16 @@ export default function Home() {
           </div>
 
           <div className="dashboard-actions">
-            <input
-              type="text"
-              placeholder="Search events…"
-              value={searchTerm}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="dash-search"
-            />
+            <div className="search-wrapper">
+              <Search size={18} className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search by title, location or category..."
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="dash-search"
+              />
+            </div>
           </div>
         </div>
 
@@ -109,55 +118,79 @@ export default function Home() {
                     key={event._id}
                     className="event-card"
                   >
-                    {/* Image */}
-                    {event.image ? (
-                      <img
-                        src={`${
-                          import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                          PORT_URL
-                        }/uploads/event_image/${event.image}`}
-                        alt={event.title}
-                        className="event-image"
-                      />
-                    ) : (
-                      <div className="event-image placeholder">
-                        No Image
-                      </div>
-                    )}
+                    {/* Modern Image Container */}
+                    <div className="event-image-container">
+                      {event.image ? (
+                        <img
+                          src={`${import.meta.env.VITE_API_URL?.replace("/api", "") ||
+                            PORT_URL
+                            }/uploads/event_image/${event.image}`}
+                          alt={event.title}
+                          className="event-image"
+                        />
+                      ) : (
+                        <div className="event-image placeholder">
+                          No Image
+                        </div>
+                      )}
 
-                    {/* Content */}
+                      {/* Floating Badges */}
+                      <div className="event-floating-badges">
+                        {event.category && (
+                          <span className="event-category-badge">{event.category}</span>
+                        )}
+                        {event.liveStream?.isLive && (
+                          <span className="live-pill-floating">
+                            <span className="live-dot pulse"></span>
+                            LIVE
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Hover Overlay */}
+                      <div className="event-hover-overlay">
+                        <span className="view-details-btn">View Details <ArrowRight size={16} /></span>
+                      </div>
+                    </div>
+
+                    {/* Content Section */}
                     <div className="event-body">
-                      <h3 className="event-title">{event.title}</h3>
+                      <div className="event-title-row">
+                        <h3 className="event-title">{event.title}</h3>
+                      </div>
+
                       <p className="event-desc">
-                        {event.description || "No description provided."}
+                        {event.description || "Join us for this amazing event and experience something unique."}
                       </p>
 
-                      <div className="event-meta">
-                        <span>📍 {event.location || "TBA"}</span>
-                        <span>
-                          📅{" "}
-                          {new Date(event.startDate).toLocaleDateString()}
-                        </span>
-                        <span>
-                          🎟 {event.ticketsSold}/{event.totalTickets}
-                        </span>
+                      <div className="event-info-grid">
+                        <div className="info-item">
+                          <MapPin size={16} className="info-icon" />
+                          <span>{event.location || "Online / TBA"}</span>
+                        </div>
+                        <div className="info-item">
+                          <Calendar size={16} className="info-icon" />
+                          <span>
+                            {new Date(event.startDate).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                            })}
+                          </span>
+                        </div>
+                        <div className="info-item tickets-info">
+                          <Users size={16} className="info-icon" />
+                          <span>{formatNumber(event.ticketsSold)}/{formatNumber(event.totalTickets)} Attendee</span>
+                        </div>
                       </div>
-
-                      {event.liveStream?.isLive && (
-                        <span className="live-pill">
-                          🔴 LIVE — {event.liveStream.streamType}
-                        </span>
-                      )}
                     </div>
 
                     {/* Organizer */}
                     <div className="event-footer">
                       {event.createdBy?.profilePic ? (
                         <img
-                          src={`${
-                            import.meta.env.VITE_API_URL?.replace("/api", "") ||
+                          src={`${import.meta.env.VITE_API_URL?.replace("/api", "") ||
                             PORT_URL
-                          }/uploads/profile_pic/${event.createdBy.profilePic}`}
+                            }/uploads/profile_pic/${event.createdBy.profilePic}`}
                           alt="Organizer"
                         />
                       ) : (

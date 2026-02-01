@@ -34,7 +34,7 @@ const eventSchema = new mongoose.Schema({
 
   liveStream: {
     isLive: { type: Boolean, default: false },
-    streamType: { type: String, enum: ["YouTube", "Facebook", "Custom"] },
+    streamType: { type: String, enum: ["YouTube", "Facebook", "Custom", "Camera"] },
     streamURL: String,
   },
 
