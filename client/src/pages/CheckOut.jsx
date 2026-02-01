@@ -11,9 +11,7 @@ export default function Checkout() {
   if (!state || !state.event || !state.quantity || !state.user) {
     console.error("Invalid checkout state:", state);
     return (
-      <p className="checkout-error">
-        ❌ Error: Invalid checkout details.
-      </p>
+      <p className="checkout-error">❌ Error: Invalid checkout details.</p>
     );
   }
 
@@ -24,14 +22,22 @@ export default function Checkout() {
   const handleConfirmPayment = async () => {
     setLoading(true);
     try {
-      const res = await API.post("/payment/initiate", {
-        email: user.email,
-        amount: totalAmount,
-        metadata: {
-          eventId: event._id,
-          userId: user._id,
-          quantity,
-        },
+    console.log("📤 Sending payment request with:", {
+      email: user.email,
+      amount: totalAmount,
+      userId: user._id, // Log this to check
+      eventId: event._id,
+      quantity
+    });
+
+    const res = await API.post("/payment/initiate", {
+      email: user.email,
+      amount: totalAmount,
+      metadata: {
+        eventId: event._id,
+        userId: user.id || user._id, // Try both
+        quantity,
+      },
       });
 
       if (res.data?.url) {
@@ -50,7 +56,6 @@ export default function Checkout() {
   return (
     <div className="checkout-page">
       <div className="checkout-card">
-
         {/* Header */}
         <div className="checkout-header">
           <h1>Checkout</h1>
@@ -98,14 +103,10 @@ export default function Checkout() {
             {loading ? "Processing..." : "Confirm & Pay"}
           </button>
 
-          <button
-            onClick={() => navigate(-1)}
-            className="checkout-back-btn"
-          >
+          <button onClick={() => navigate(-1)} className="checkout-back-btn">
             Go Back
           </button>
         </div>
-
       </div>
     </div>
   );

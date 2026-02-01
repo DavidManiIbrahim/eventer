@@ -2,12 +2,13 @@
 .event-detail {
   min-height: 100vh;
   padding: 6rem 1.5rem 2rem 16rem; /* space for navbar + sidebar */
-  background-color: var(--bg-color);
+  background-color: var(--bg-page);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
 }
 
 .event-container {
+  background-color: var(--card-bg);
   max-width: 900px;
   margin: 0 auto;
 }

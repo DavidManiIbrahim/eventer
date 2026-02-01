@@ -14,7 +14,6 @@ export default function EventDetail() {
   const [buying, setBuying] = useState({});
   const [showChat, setShowChat] = useState(false);
   const [activeEventId, setActiveEventId] = useState(null);
-  const [zeroTicket, setZeroTicket] = useState();
 
   const { darkMode } = useContext(ThemeContext); // ✅ Access current theme
   const user = JSON.parse(localStorage.getItem("user"));
@@ -68,8 +67,8 @@ export default function EventDetail() {
       }`}
     >
       <div
-        className={`max-w-5xl mx-auto rounded-2xl shadow-lg overflow-hidden relative transition-all duration-300 ${
-          darkMode === "dark" ? "bg-gray-800" : "bg-white"
+        className={`event-container max-w-5xl mx-auto rounded-2xl shadow-lg overflow-hidden relative transition-all duration-300 ${
+          darkMode ? "dark-mode" : ""
         }`}
       >
         {/* ✅ Event Banner */}
@@ -86,7 +85,7 @@ export default function EventDetail() {
         {/* ✅ Event Info */}
         <div className="p-8">
           <div className="flex justify-between items-start flex-wrap gap-3">
-            <h1 className="text-3xl font-bold">{event.title}</h1>
+            <h1 className="text-3xl font-bold font-sans">{event.title}</h1>
 
             {event.liveStream?.isLive && (
               <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
@@ -98,7 +97,7 @@ export default function EventDetail() {
           {event.category && (
             <p
               className={`mt-2 text-sm italic ${
-                darkMode === "dark" ? "text-gray-300" : "text-gray-600"
+                darkMode === "dark" ? "" : "text-white-800"
               }`}
             >
               🏷 Category: {event.category}
@@ -107,7 +106,7 @@ export default function EventDetail() {
 
           <p
             className={`mt-4 leading-relaxed text-lg ${
-              darkMode === "dark" ? "text-gray-200" : "text-gray-700"
+              darkMode === "dark" ? "" : "text-white-800"
             }`}
           >
             {event.description}
@@ -116,7 +115,7 @@ export default function EventDetail() {
           {/* ✅ Event Meta Info (Updated) */}
           <div
             className={`mt-6 grid grid-cols-1 sm:grid-cols-2 gap-y-3 ${
-              darkMode === "dark" ? "text-gray-300" : "text-gray-700"
+              darkMode === "dark" ? "" : "text-white-800"
             }`}
           >
             <p>
