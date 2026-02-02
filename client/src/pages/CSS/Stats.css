@@ -28,11 +28,6 @@ body {
   transition: background 0.3s, color 0.3s ease;
 }
 
-/* Utility Classes */
-.dashboard-container {
-  background-color: transparent;
-  color: var(--text-color);
-}
 
 .dashboard-container h2,
 .dashboard-container h3{

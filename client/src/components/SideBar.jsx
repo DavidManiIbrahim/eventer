@@ -1,9 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContexts";
-import { getCurrentUser } from "../utils/auth";
+import { logout, getCurrentUser } from "../utils/auth";
 import CreateEvent from "../pages/CreateEvent";
+import ThemeToggle from "./ThemeToggle";
+import NotificationBell from "./NotificationBell";
 import "./css/sidebar.css";
+import icon from "../assets/icon.svg"
 
 import {
   LayoutDashboard,
@@ -18,7 +21,8 @@ import {
   ChevronLeft,
   ChevronRight,
   User,
-  TicketCheck,
+  LogOut,
+  Bell,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -75,17 +79,22 @@ export default function Sidebar() {
     { to: "/settings", label: "Settings", icon: <Settings size={20} /> },
   ];
 
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      logout();
+    }
+  };
+
   return (
     <>
       <aside
-        className={`sidebar fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300 pt-12 z-40 ${
-          expand ? "expand" : ""
-        } ${darkMode ? "dark-mode" : ""}`}
+        className={`sidebar fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300 pt-2 z-40 ${expand ? "expand" : ""
+          } ${darkMode ? "dark-mode" : ""}`}
       >
         <div className="sidebar-top">
           <Link to="/" className="sidebar-brand" aria-label="TickiSpot home">
             <span className="sidebar-logo">
-              <TicketCheck size={18} />
+              <img src={icon} alt="" />
             </span>
             {expand && <span className="sidebar-brand-text">TickiSpot</span>}
           </Link>
@@ -131,18 +140,27 @@ export default function Sidebar() {
           })}
         </div>
 
-        {/* Theme Toggle */}
+        {/* Bottom Actions */}
         <div className="sidebar-bottom">
+          <div className="sidebar-bottom-item" data-tooltip="Notifications">
+            <NotificationBell userId={user.id} />
+            {expand && <span className="sidebar-link-text ml-3">Notifications</span>}
+          </div>
+
+          <div className="sidebar-bottom-item" data-tooltip={darkMode ? "Light mode" : "Dark mode"}>
+            <ThemeToggle showText={expand} className="sidebar-theme-toggle" />
+          </div>
+
           <button
-            onClick={toggleTheme}
-            className="sidebar-theme"
-            data-tooltip={darkMode ? "Light mode" : "Dark mode"}
+            onClick={handleLogout}
+            className="sidebar-link is-logout"
+            data-tooltip="Logout"
             type="button"
           >
             <span className="sidebar-link-icon">
-              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+              <LogOut size={20} />
             </span>
-            {expand && <span className="sidebar-link-text">{darkMode ? "Light mode" : "Dark mode"}</span>}
+            {expand && <span className="sidebar-link-text">Logout</span>}
           </button>
         </div>
       </aside>

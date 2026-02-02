@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./CSS/CreateEvent.css";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import { Building2, Globe2, MonitorPlay } from "lucide-react";
+import icon from "../assets/icon.svg"
 
 const eventTypes = [
   {
@@ -32,7 +33,7 @@ export default function CreateEvent({ isOpen, onClose }) {
     description: "",
     category: "",
     location: "",
-    streamType: "YouTube",
+    streamType: "Camera",
     streamURL: "",
     eventType: "In-person",
     startDate: "",
@@ -126,9 +127,8 @@ export default function CreateEvent({ isOpen, onClose }) {
                 onClick={() =>
                   setForm((prev) => ({ ...prev, eventType: type.name }))
                 }
-                className={`event-type-btn ${
-                  form.eventType === type.name ? "active" : ""
-                }`}
+                className={`event-type-btn ${form.eventType === type.name ? "active" : ""
+                  }`}
               >
                 <div className="flex justify-between align-center">
                   <div className="icon">{type.icon}</div>
@@ -250,34 +250,38 @@ export default function CreateEvent({ isOpen, onClose }) {
               className="input-field"
               onChange={handleChange}
             >
+              <option value="Camera">Camera (Native Live Stream)</option>
               <option value="YouTube">YouTube</option>
               <option value="Facebook">Facebook</option>
             </select>
 
-            <input
-              name="streamURL"
-              placeholder="Stream URL (optional)"
-              className="input-field"
-              onChange={handleChange}
-            />
-
-            
-            <label className="form-label">Event Image</label>
-            <div className="image-upload">
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="image-preview"
-                />
-              ) : (
-                <span>📸 Upload an event image</span>
-              )}
+            {form.streamType !== "Camera" && (
               <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
+                name="streamURL"
+                placeholder={`${form.streamType} Stream URL`}
+                className="input-field"
+                value={form.streamURL}
+                onChange={handleChange}
               />
+            )}
+
+            <div className="form-label">
+              <label className="image-upload">
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="image-preview"
+                  />
+                ) : (
+                  <span>📸 Upload an event image</span>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </label>
             </div>
 
             <button type="submit" className="submit-btn">
@@ -288,7 +292,7 @@ export default function CreateEvent({ isOpen, onClose }) {
 
         {/* Info Sidebar */}
         <div className="info-sidebar">
-          <img src="/event-illustration.svg" alt="Create event" />
+          <img src={icon} alt="Create event" />
           <h2>Create your event</h2>
           <p>
             Start creating your event by providing the basic details now and

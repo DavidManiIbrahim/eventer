@@ -4,7 +4,8 @@ import API from "../api/axios";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import "./css/Settings.css";
 import SettingsModal from "./EditProfileModal";
-import { ToggleLeft, ToggleRight } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
+import ToggleSwitch from "./ToggleSwitch";
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -145,9 +146,8 @@ export default function Settings() {
 
   return (
     <div
-      className={`min-h-screen flex pl-14 pt-16 settings-container ${
-        darkMode ? "dark-mode" : ""
-      }`}
+      className={`min-h-screen flex pl-14 pt-16 settings-container ${darkMode ? "dark-mode" : ""
+        }`}
       style={{
         backgroundColor: "var(--bg-color)",
         color: "var(--text-color)",
@@ -227,20 +227,7 @@ export default function Settings() {
 
             <div style={{ marginTop: "1.5rem" }}>
               <h4 className="font-medium mb-2">Theme</h4>
-              <button
-                onClick={toggleTheme}
-                className="theme-toggle-btn"
-                style={{
-                  display: "flex",
-                  backgroundColor: "var(--card-bg)",
-                  color: "var(--text-color)",
-                  border: "1px solid var(--border-color)",
-                }}
-              >
-                <span>{darkMode ? <ToggleLeft className="text-amber-300" /> : <ToggleRight className="text-cyan-900" />}</span>
-                
-                {/* <span>{darkMode ? "Enable Light Mode" : " Enable Dark Mode"}</span> */}
-              </button>
+              <ThemeToggle />
             </div>
           </div>
         )}
@@ -251,18 +238,18 @@ export default function Settings() {
             <h3 className="text-lg font-semibold mb-4">🔒 Privacy Settings</h3>
             <div className="privacy-options">
               {Object.keys(privacy).map((key) => (
-                <label key={key} className="privacy-toggle">
-                  <input
-                    type="checkbox"
-                    checked={privacy[key]}
-                    onChange={() => handlePrivacyChange(key)}
-                  />
-                  {key === "showProfile"
-                    ? "Show my profile publicly"
-                    : key === "showActivity"
-                    ? "Allow others to see my activity"
-                    : "Allow my account to be found in search"}
-                </label>
+                <ToggleSwitch
+                  key={key}
+                  checked={privacy[key]}
+                  onChange={() => handlePrivacyChange(key)}
+                  label={
+                    key === "showProfile"
+                      ? "Show my profile publicly"
+                      : key === "showActivity"
+                        ? "Allow others to see my activity"
+                        : "Allow my account to be found in search"
+                  }
+                />
               ))}
             </div>
             <button className="save-btn" onClick={savePrivacySettings}>
@@ -279,20 +266,20 @@ export default function Settings() {
             </h3>
             <div className="privacy-options">
               {Object.keys(notifications).map((key) => (
-                <label key={key} className="privacy-toggle">
-                  <input
-                    type="checkbox"
-                    checked={notifications[key]}
-                    onChange={() => handleNotificationChange(key)}
-                  />
-                  {key === "emailAlerts"
-                    ? "Email alerts"
-                    : key === "smsAlerts"
-                    ? "SMS notifications"
-                    : key === "appPush"
-                    ? "In-app push notifications"
-                    : "Subscribe to newsletter"}
-                </label>
+                <ToggleSwitch
+                  key={key}
+                  checked={notifications[key]}
+                  onChange={() => handleNotificationChange(key)}
+                  label={
+                    key === "emailAlerts"
+                      ? "Email alerts"
+                      : key === "smsAlerts"
+                        ? "SMS notifications"
+                        : key === "appPush"
+                          ? "In-app push notifications"
+                          : "Subscribe to newsletter"
+                  }
+                />
               ))}
             </div>
             <button className="save-btn" onClick={saveNotificationSettings}>

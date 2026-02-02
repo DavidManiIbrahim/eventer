@@ -66,11 +66,35 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", (eventId) => {
     socket.join(eventId);
     console.log(`User joined room: ${eventId}`);
+
+    // Get viewer count for the room
+    const room = io.sockets.adapter.rooms.get(eventId);
+    const viewerCount = room ? room.size : 0;
+    io.to(eventId).emit("viewerCount", viewerCount);
+
+    // Notify broadcaster that a new viewer has joined
+    socket.to(eventId).emit("userJoined", socket.id);
+  });
+
+  socket.on("signal", (data) => {
+    io.to(data.to).emit("signal", {
+      signal: data.signal,
+      from: socket.id,
+    });
   });
 
   socket.on("sendMessage", (msg) => {
-    console.log("📨 Message received:", msg);
     io.to(msg.eventId).emit("receiveMessage", msg);
+  });
+
+  socket.on("disconnecting", () => {
+    // Before actual disconnect, update room counts
+    socket.rooms.forEach(room => {
+      const occupancy = io.sockets.adapter.rooms.get(room);
+      if (occupancy) {
+        io.to(room).emit("viewerCount", occupancy.size - 1);
+      }
+    });
   });
 
   socket.on("disconnect", () => {

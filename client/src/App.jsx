@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import LandingPage from "./pages/landingpage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyTickets from "./pages/MyTickets";
@@ -18,31 +17,33 @@ import Checkout from "./pages/CheckOut";
 import TicketScanner from "./pages/TicketScanner";
 import TicketValidationPage from "./pages/ValidateTicket";
 import UserManagement from "./pages/Admin";
+import LiveStream from "./pages/LiveStream";
 
-import AboutUs from "./pages/AboutUs"
-import Contact from "./pages/Contact"
-import Pricing from "./pages/pricing"
-import Donation from "./pages/Donation"
-import HelpCenter from "./pages/HelpCenter"
-import Documentation from "./pages/Documentation"
+import AboutUs from "./pages/AboutUs";
+import Contact from "./pages/Contact";
+import Donation from "./pages/Donation";
+import HelpCenter from "./pages/HelpCenter";
+import Documentation from "./pages/Documentation";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService"
+import TermsOfService from "./pages/TermsOfService";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import LandingPage from "./pages/landingpage";
+import Pricing from "./pages/Pricing";
+
 
 function Layout() {
   const location = useLocation();
 
   // hide navbar & sidebar on landing page and form pages
-  const hideNavAndSidebar = 
-    location.pathname === "/" || 
-    location.pathname === "/login" || 
+  const hideNavAndSidebar =
+    location.pathname === "/" ||
+    location.pathname === "/login" ||
     location.pathname === "/register";
 
   return (
     <>
-      {!hideNavAndSidebar && <NavBar />}
       {!hideNavAndSidebar && <Sidebar />}
 
       <Routes>
@@ -88,6 +89,14 @@ function Layout() {
           element={
             <ProtectedRoute>
               <LiveEvent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/live/:eventId"
+          element={
+            <ProtectedRoute>
+              <LiveStream />
             </ProtectedRoute>
           }
         />

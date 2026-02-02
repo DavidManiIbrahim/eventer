@@ -23,9 +23,7 @@ export default function Pricing() {
     {
       name: "Enterprise",
       price: "Custom",
-      period: "",
       features: ["Dedicated Manager", "Custom Branding", "Full Integrations"],
-      highlight: false,
     },
   ];
 

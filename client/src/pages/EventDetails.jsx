@@ -1,30 +1,34 @@
 import { useEffect, useState, useContext } from "react";
 import API from "../api/axios";
-import LiveChat from "../components/LiveChats";
-import { useNavigate, useParams } from "react-router-dom";
-import { ThemeContext } from "../contexts/ThemeContexts"; // ✅ Added
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { ThemeContext } from "../contexts/ThemeContexts";
+import {
+  MapPin,
+  Calendar,
+  Clock,
+  Users,
+  ArrowLeft,
+  Share2,
+  Heart,
+  Ticket,
+  ChevronRight,
+  ExternalLink,
+  ShieldCheck,
+  Info
+} from "lucide-react";
 import "./CSS/eventdetail.css";
-
-const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function EventDetail() {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [buying, setBuying] = useState({});
-  const [showChat, setShowChat] = useState(false);
-  const [activeEventId, setActiveEventId] = useState(null);
-  const [zeroTicket, setZeroTicket] = useState();
-
-  const { darkMode } = useContext(ThemeContext); // ✅ Access current theme
+  const { darkMode } = useContext(ThemeContext);
   const user = JSON.parse(localStorage.getItem("user"));
   const isLoggedIn = !!localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // ✅ Apply dark/light mode dynamically
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", darkMode);
-  }, [darkMode]);
+  const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   useEffect(() => {
     API.get(`/events/${eventId}`)
@@ -35,14 +39,11 @@ export default function EventDetail() {
       .catch(() => setLoading(false));
   }, [eventId]);
 
-  const handleQuantityChange = (e, eventId) => {
-    setBuying((prev) => ({ ...prev, [eventId]: e.target.value }));
-  };
-
   const handleBuy = () => {
     const quantity = parseInt(buying[event._id]) || 1;
-    if (!user || !user.email) {
+    if (!isLoggedIn) {
       alert("Please login to purchase tickets.");
+      navigate("/login");
       return;
     }
     navigate(`/checkout/${event._id}`, {
@@ -50,277 +51,215 @@ export default function EventDetail() {
     });
   };
 
-  const handleJoinChat = (eventId) => {
-    setActiveEventId(eventId);
-    setShowChat(true);
+  const formatPrice = (price) => {
+    if (!price || isNaN(price)) return "Free";
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      maximumFractionDigits: 0
+    }).format(price);
   };
 
-  if (loading)
-    return <p className="event-loading text-center mt-16">Loading event...</p>;
-  if (!event)
-    return <p className="event-loading text-center mt-16">Event not found.</p>;
+  if (loading) return (
+    <div className="event-loader-container">
+      <div className="loader-spinner"></div>
+      <p>Fetching event details...</p>
+    </div>
+  );
+
+  if (!event) return (
+    <div className="event-not-found">
+      <Info size={48} />
+      <h2>Event not found</h2>
+      <Link to="/events" className="dash-btn">Return to Browse</Link>
+    </div>
+  );
 
   return (
-    <div
-      className={`event-detail min-h-screen py-12 px-4 transition-colors duration-300 ${
-        darkMode ? "dark-mode" : ""
-      }
-      }`}
-    >
-      <div
-        className={`max-w-5xl mx-auto rounded-2xl shadow-lg overflow-hidden relative transition-all duration-300 ${
-          darkMode === "dark" ? "bg-gray-800" : "bg-white"
-        }`}
-      >
-        {/* ✅ Event Banner */}
+    <div className={`event-hub ${darkMode ? "dark-mode" : ""}`}>
+      {/* 🧊 Glassy Background Blur */}
+      <div className="hub-bg-blur">
         {event.image && (
           <img
-            src={`${
-              import.meta.env.VITE_API_URL?.replace("/api", "") || `${PORT_URL}`
-            }/uploads/event_image/${event.image}`}
-            alt={event.title}
-            className="w-full h-80 object-cover"
+            src={`${import.meta.env.VITE_API_URL?.replace("/api", "") || PORT_URL}/uploads/event_image/${event.image}`}
+            alt=""
           />
         )}
+      </div>
 
-        {/* ✅ Event Info */}
-        <div className="p-8">
-          <div className="flex justify-between items-start flex-wrap gap-3">
-            <h1 className="text-3xl font-bold">{event.title}</h1>
-
-            {event.liveStream?.isLive && (
-              <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
-                🔴 LIVE NOW
-              </span>
-            )}
+      <div className="hub-container">
+        {/* 🧭 Top Navigation Bar */}
+        <header className="hub-header">
+          <button onClick={() => navigate("/events")} className="hub-back-btn">
+            <ArrowLeft size={18} />
+            <span>Back to Browse</span>
+          </button>
+          <div className="hub-header-actions">
+            <button className="hub-circle-btn" title="Share"><Share2 size={18} /></button>
+            <button className="hub-circle-btn" title="Save"><Heart size={18} /></button>
           </div>
+        </header>
 
-          {event.category && (
-            <p
-              className={`mt-2 text-sm italic ${
-                darkMode === "dark" ? "text-gray-300" : "text-gray-600"
-              }`}
-            >
-              🏷 Category: {event.category}
-            </p>
-          )}
-
-          <p
-            className={`mt-4 leading-relaxed text-lg ${
-              darkMode === "dark" ? "text-gray-200" : "text-gray-700"
-            }`}
-          >
-            {event.description}
-          </p>
-
-          {/* ✅ Event Meta Info (Updated) */}
-          <div
-            className={`mt-6 grid grid-cols-1 sm:grid-cols-2 gap-y-3 ${
-              darkMode === "dark" ? "text-gray-300" : "text-gray-700"
-            }`}
-          >
-            <p>
-              📍 <strong>Location:</strong> {event.location || "Not specified"}
-            </p>
-
-            {/* Dates */}
-            <p>
-              📅 <strong>Start Date:</strong>{" "}
-              {event.startDate
-                ? new Date(event.startDate).toLocaleDateString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })
-                : "N/A"}
-            </p>
-            <p>
-              🕒 <strong>Start Time:</strong> {event.startTime || "N/A"}
-            </p>
-
-            <p>
-              📅 <strong>End Date:</strong>{" "}
-              {event.endDate
-                ? new Date(event.endDate).toLocaleDateString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })
-                : "N/A"}
-            </p>
-            <p>
-              🕒 <strong>End Time:</strong> {event.endTime || "N/A"}
-            </p>
-
-            <p>
-              🏷 <strong>Event Type:</strong> {event.eventType || "In-person"}
-            </p>
-
-            {/* Pricing */}
-            {event.pricing?.length > 0 && (
-              <div className="col-span-2 mt-2">
-                <p className="font-semibold mb-1">💰 Ticket Options:</p>
-                <ul className="ml-5 list-disc">
-                  {event.pricing.map((price, index) => (
-                    <li key={index}>
-                      {price.type}: ₦{price.price.toLocaleString()}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Tickets */}
-            <p>
-              🎟 <strong>Tickets Available:</strong>{" "}
-              {event.totalTickets - (event.ticketsSold || 0)} /{" "}
-              {event.totalTickets}
-            </p>
-          </div>
-
-          {/* ✅ Live Stream Section */}
-          {event.liveStream?.isLive && event.liveStream.streamURL && (
-            <div className="mt-8">
-              <h3 className="text-xl font-semibold mb-4">🎥 Live Stream</h3>
-
-              {event.liveStream.streamType === "YouTube" && (
-                <iframe
-                  className="w-full h-80 rounded-xl"
-                  src={event.liveStream.streamURL.replace("watch?v=", "embed/")}
-                  title="YouTube Live Stream"
-                  allow="autoplay; encrypted-media"
-                  allowFullScreen
-                ></iframe>
-              )}
-
-              {event.liveStream.streamType === "Facebook" && (
-                <div
-                  className="fb-video"
-                  data-href={event.liveStream.streamURL}
-                  data-width="100%"
-                  data-allowfullscreen="true"
-                ></div>
-              )}
-
-              {event.liveStream.streamType === "Custom" && (
-                <a
-                  href={event.liveStream.streamURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 underline"
-                >
-                  Watch Stream
-                </a>
-              )}
-
-              <button
-                onClick={() => handleJoinChat(event._id)}
-                className="mt-4 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
-              >
-                💬 Join Live Chat
-              </button>
-            </div>
-          )}
-
-          {/* ✅ Ticket Purchase Section */}
-          {isLoggedIn && (
-            <div
-              className={`ticket-purchase mt-10 border-t pt-6 ${
-                darkMode === "dark" ? "border-gray-700" : "border-gray-200"
-              }`}
-            >
-              <h3 className="text-lg font-semibold mb-3">
-                🎫 Purchase Tickets
-              </h3>
-              <div className="flex items-center gap-3">
-                <input
-                  type="number"
-                  min="1"
-                  className={`w-20 border rounded-lg px-2 py-2 text-center ${
-                    darkMode === "dark"
-                      ? "bg-gray-700 border-gray-600 text-gray-100"
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}
-                  value={buying[event._id] || "1"}
-                  onChange={(e) => handleQuantityChange(e, event._id)}
-                />
-                <button
-                  onClick={handleBuy}
-                  className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
-                >
-                  Buy Ticket
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* ✅ Organizer Info */}
-          {event.createdBy && (
-            <div
-              className={`organizer-info mt-10 border-t pt-6 flex items-center gap-4 ${
-                darkMode === "dark" ? "border-gray-700" : "border-gray-200"
-              }`}
-            >
-              {event.createdBy.profilePic ? (
+        {/* 🎭 Main Hub Layout */}
+        <div className="hub-main">
+          {/* Left Column: Content */}
+          <section className="hub-content">
+            <div className="hub-image-wrapper">
+              {event.image ? (
                 <img
-                  src={`${
-                    import.meta.env.VITE_API_URL?.replace("/api", "") ||
-                    `${PORT_URL}`
-                  }/uploads/profile_pic/${event.createdBy.profilePic}`}
-                  alt="Organizer"
-                  className="w-14 h-14 rounded-full object-cover"
+                  src={`${import.meta.env.VITE_API_URL?.replace("/api", "") || PORT_URL}/uploads/event_image/${event.image}`}
+                  alt={event.title}
+                  className="hub-main-img"
                 />
               ) : (
-                <div className="w-14 h-14 rounded-full bg-gray-500 flex items-center justify-center text-white font-semibold">
-                  {event.createdBy.username?.charAt(0).toUpperCase() || "U"}
+                <div className="hub-img-placeholder">
+                  <Calendar size={80} />
                 </div>
               )}
-              <div>
-                <p className="font-semibold">{event.createdBy.username}</p>
-                <p
-                  className={`text-sm ${
-                    darkMode === "dark" ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
-                  Event Organizer
-                </p>
+              {event.liveStream?.isLive && (
+                <Link to={`/live/${event._id}`} className="hub-live-overlay">
+                  <span className="live-pulse-dot"></span>
+                  JOIN LIVE STREAM
+                </Link>
+              )}
+            </div>
+
+            <div className="hub-title-section">
+              <div className="hub-category-row">
+                {event.category && <span className="hub-badge">{event.category}</span>}
+                <span className="hub-badge outline">{event.eventType || "In-Person"}</span>
+              </div>
+              <h1 className="hub-title">{event.title}</h1>
+            </div>
+
+            <div className="hub-about">
+              <h3 className="hub-section-label">About the Event</h3>
+              <p className="hub-description">{event.description}</p>
+            </div>
+
+            <div className="hub-details-grid">
+              <div className="hub-detail-item">
+                <div className="hub-detail-icon"><Calendar /></div>
+                <div className="hub-detail-info">
+                  <label>Date</label>
+                  <span>{new Date(event.startDate).toLocaleDateString("en-US", { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+              </div>
+              <div className="hub-detail-item">
+                <div className="hub-detail-icon"><Clock /></div>
+                <div className="hub-detail-info">
+                  <label>Time</label>
+                  <span>{event.startTime || "Check description"}</span>
+                </div>
+              </div>
+              <div className="hub-detail-item">
+                <div className="hub-detail-icon"><MapPin /></div>
+                <div className="hub-detail-info">
+                  <label>Location</label>
+                  <span>{event.location || "Online Event"}</span>
+                </div>
+              </div>
+              <div className="hub-detail-item">
+                <div className="hub-detail-icon"><Users /></div>
+                <div className="hub-detail-info">
+                  <label>Attendees</label>
+                  <span>{event.ticketsSold || 0} People attending</span>
+                </div>
               </div>
             </div>
-          )}
-        </div>
 
-        {/* ✅ Live Chat Sidebar */}
-        {showChat && activeEventId === event._id && (
-          <div
-            className={`chat-sidebar fixed top-0 right-0 w-full md:w-1/3 h-full z-50 shadow-2xl transition-all duration-300 ${
-              darkMode === "dark" ? "bg-gray-800 text-gray-100" : "bg-white"
-            }`}
-          >
-            <div
-              className={`chat-header flex justify-between items-center p-4 border-b ${
-                darkMode === "dark"
-                  ? "bg-indigo-700 border-gray-700"
-                  : "bg-indigo-600 text-white"
-              }`}
-            >
-              <h2 className="font-semibold">💬 Live Chat</h2>
-              <button
-                onClick={() => setShowChat(false)}
-                className="text-xl font-bold"
-              >
-                ✖
-              </button>
+            {/* Organizer Section */}
+            <div className="hub-organizer">
+              <h3 className="hub-section-label">Organized By</h3>
+              <div className="hub-organizer-card">
+                {event.createdBy?.profilePic ? (
+                  <img
+                    src={`${import.meta.env.VITE_API_URL?.replace("/api", "") || PORT_URL}/uploads/profile_pic/${event.createdBy.profilePic}`}
+                    alt={event.createdBy.username}
+                    className="hub-org-avatar"
+                  />
+                ) : (
+                  <div className="hub-org-avatar-fallback">
+                    {event.createdBy?.username?.charAt(0)}
+                  </div>
+                )}
+                <div className="hub-org-text">
+                  <span className="hub-org-name">{event.createdBy?.username || "TickiSpot Organizer"}</span>
+                  <span className="hub-org-meta">Verified Host • 5 ★ Rating</span>
+                </div>
+                <button className="hub-contact-btn">Message</button>
+              </div>
             </div>
-            <div className="chat-body p-4 overflow-y-auto h-[calc(100%-60px)]">
-              <LiveChat
-                eventId={event._id}
-                username={user?.username || "Guest"}
-              />
+          </section>
+
+          {/* Right Column: Checkout Card */}
+          <aside className="hub-sidebar">
+            <div className="hub-checkout-card">
+              <div className="hub-price-header">
+                <label>Tickets starting from</label>
+                <span className="hub-main-price">
+                  {event.pricing && event.pricing.length > 0
+                    ? formatPrice(event.pricing[0].price)
+                    : "Free"}
+                </span>
+              </div>
+
+              {event.pricing && event.pricing.length > 1 && (
+                <div className="hub-price-tiers">
+                  {event.pricing.map((p, idx) => (
+                    <div key={idx} className="hub-price-tier">
+                      <span>{p.type}</span>
+                      <b>{formatPrice(p.price)}</b>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="hub-availability">
+                <div className="avail-bar">
+                  <div
+                    className="avail-fill"
+                    style={{ width: `${(event.ticketsSold / event.totalTickets) * 100}%` }}
+                  ></div>
+                </div>
+                <span>Only {event.totalTickets - (event.ticketsSold || 0)} tickets left!</span>
+              </div>
+
+              <div className="hub-purchase-actions">
+                <div className="hub-qty-select">
+                  <label>Quantity</label>
+                  <select
+                    value={buying[event._id] || "1"}
+                    onChange={(e) => setBuying({ ...buying, [event._id]: e.target.value })}
+                  >
+                    {[1, 2, 3, 4, 5].map(v => <option key={v} value={v}>{v}</option>)}
+                  </select>
+                </div>
+                <button onClick={handleBuy} className="hub-buy-btn">
+                  <Ticket size={20} />
+                  <span>Get Tickets Now</span>
+                </button>
+              </div>
+
+              <div className="hub-trust-tags">
+                <div className="trust-tag">
+                  <ShieldCheck size={14} />
+                  <span>Secure Checkout</span>
+                </div>
+                <div className="trust-tag">
+                  <ExternalLink size={14} />
+                  <span>Instant Delivery</span>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+
+            {/* Info Card */}
+            <div className="hub-info-card">
+              <Info size={18} />
+              <p>Tickets are refundable up to 24 hours before the event start time.</p>
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-/* Base light mode colors */
 :root {
   --chat-bg: #ffffff;
   --chat-header-bg: linear-gradient(to right, #3b82f6, #9333ea);
@@ -15,66 +14,150 @@
   --input-text: #111827;
 }
 
-/* 🌙 Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --chat-bg: #1e1e2f;
-    --chat-header-bg: linear-gradient(to right, #2563eb, #7e22ce);
-    --chat-header-text: #ffffff;
-    --chat-border: #2c2c3a;
-    --message-sent-bg: #2563eb;
-    --message-sent-text: #ffffff;
-    --message-received-bg: #2d2d3a;
-    --message-received-text: #e5e7eb;
-    --system-message: #a1a1aa;
-    --send-btn-bg: #2563eb;
-    --send-btn-hover: #1d4ed8;
-    --input-bg: #2d2d3a;
-    --input-text: #e5e7eb;
-  }
+body.dark-mode {
+  --chat-bg: #1e1e2f;
+  --chat-header-bg: linear-gradient(to right, #2563eb, #7e22ce);
+  --chat-header-text: #ffffff;
+  --chat-border: #2c2c3a;
+  --message-sent-bg: #2563eb;
+  --message-sent-text: #ffffff;
+  --message-received-bg: #2d2d3a;
+  --message-received-text: #e5e7eb;
+  --system-message: #a1a1aa;
+  --send-btn-bg: #2563eb;
+  --send-btn-hover: #1d4ed8;
+  --input-bg: #2d2d3a;
+  --input-text: #e5e7eb;
 }
 
-/* 🎨 Component styling */
-.livechat-container {
+/* Panel styling */
+.livechat-panel {
+  position: fixed;
+  top: 4rem;
+  right: 0;
+  width: 320px;
+  max-width: 90%;
+  height: calc(100vh - 5rem);
   background: var(--chat-bg);
-  border-color: var(--chat-border);
-  color: var(--input-text);
+  border-left: 1px solid var(--chat-border);
+  display: flex;
+  flex-direction: column;
+  border-radius: 0 0 0 0.75rem;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+  z-index: 100;
+  animation: slide-in 0.3s ease forwards;
+}
+
+/* Slide-in animation */
+@keyframes slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
 .livechat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
   background: var(--chat-header-bg);
   color: var(--chat-header-text);
+  font-weight: 600;
+  border-radius: 0 0 0 0.75rem;
 }
 
-.system-message {
+.livechat-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--chat-header-text);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* Messages area */
+.livechat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.livechat-system-message {
+  text-align: center;
+  font-style: italic;
   color: var(--system-message);
+  font-size: 0.85rem;
 }
 
-.message-bubble {
-  color: var(--message-received-text);
+.livechat-message-row {
+  display: flex;
 }
 
-.sent-message {
+.livechat-message-sent {
+  justify-content: flex-end;
+}
+
+.livechat-message-received {
+  justify-content: flex-start;
+}
+
+.livechat-message-bubble {
+  max-width: 80%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  font-size: 0.875rem;
+  word-wrap: break-word;
+}
+
+.livechat-message-sent .livechat-message-bubble {
   background: var(--message-sent-bg);
   color: var(--message-sent-text);
 }
 
-.received-message {
+.livechat-message-received .livechat-message-bubble {
   background: var(--message-received-bg);
   color: var(--message-received-text);
 }
 
-.chat-input {
+.livechat-message-user {
+  font-weight: 600;
+}
+
+.livechat-message-time {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  text-align: right;
+}
+
+/* Input area */
+.livechat-input-area {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--chat-border);
+}
+
+.livechat-input {
+  flex: 1;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--chat-border);
   background: var(--input-bg);
   color: var(--input-text);
-  border-color: var(--chat-border);
 }
 
-.send-btn {
+.livechat-send-btn {
   background: var(--send-btn-bg);
   color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.send-btn:hover {
+.livechat-send-btn:hover {
   background: var(--send-btn-hover);
 }

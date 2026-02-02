@@ -1,28 +1,22 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { logout, getCurrentUser } from "../utils/auth";
-import { ThemeContext } from "../contexts/ThemeContexts"; // still used for theme detection
-import "./css/Navbar.css";
+import { ThemeContext } from "../contexts/ThemeContexts";
 import NotificationBell from "./NotificationBell";
-import { ClosedCaption } from "lucide-react";
-
+import "./css/Navbar.css";
 
 const PORT_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
-
 
 export default function NavBar() {
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { darkMode } = useContext(ThemeContext); // only read mode, no toggle
+  const { darkMode } = useContext(ThemeContext);
 
   useEffect(() => {
     const currentUser = getCurrentUser();
     if (currentUser) setUser(currentUser);
 
-    const handleStorageChange = () => {
-      const updatedUser = getCurrentUser();
-      setUser(updatedUser);
-    };
+    const handleStorageChange = () => setUser(getCurrentUser());
 
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("userLogout", handleStorageChange);
@@ -39,124 +33,39 @@ export default function NavBar() {
     if (window.confirm("Are you sure you want to logout?")) logout();
   };
 
+  if (!user) return null;
+
   return (
-    <nav className="navbar fixed w-full z-50 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-        {/* Left side - Desktop Nav */}
-        <div></div>
-        <div className="hidden md:flex items-center space-x-6">
-          {user ? (
-            <>
-              <span className="text-sm">
-                Welcome, <strong>{user.username}</strong>
-              </span>
-
-              {/* Notification */}
-              <div className="relative">
-                <NotificationBell />
-              </div>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="btn-primary">
-                🔐 Login
-              </Link>
-              <Link to="/register" className="btn-outline">
-                📝 Register
-              </Link>
-            </>
-          )}
+    <nav className="navbar">
+      <div className="navbar-container">
         
-          {/* User Profile Dropdown - Desktop */}
-          {user && (
-            <div className="hidden md:block relative group">
-              <img
-                src={`${PORT_URL}/uploads/profile_pic/${user.profilePic}`}
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 cursor-pointer"
-              />
+        <div className="navbar-right">
+          <span className="welcome-text">
+            Welcome, <strong>{user.username}</strong>
+          </span>
 
-              {/* Dropdown */}
-              <div className="dropdown absolute right-0 mt-2 w-48 shadow-lg rounded-lg opacity-0 group-hover:opacity-100 transition duration-200">
-                <Link to={`/profile/${user.id}`} className="dropdown-item">
-                  👤 Profile
-                </Link>
-                <Link to="/dashboard" className="dropdown-item">
-                  📋 Dashboard
-                </Link>
-                <Link to="/admin/dashboard" className="dropdown-item">
-                  📊 Stats
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="dropdown-item logout"
-                >
-                  🚪 Logout
-                </button>
-              </div>
+          <div className="notification-bell">
+            <NotificationBell />
+          </div>
+
+          <div className="profile-dropdown group">
+            <img
+              src={`${PORT_URL}/uploads/profile_pic/${user.profilePic}`}
+              alt="Profile"
+              className="nav-profile-pic"
+            />
+            <div className="dropdown-menu">
+              <Link to={`/profile/${user.id}`}>👤 Profile</Link>
+              <Link to="/dashboard">📋 Dashboard</Link>
+              <Link to="/admin/dashboard">📊 Stats</Link>
+              <button onClick={handleLogout} className="logout-btn">
+                🚪 Logout
+              </button>
             </div>
-          )}
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden focus:outline-none"
-          >
-            {isMenuOpen ? "✖" : "☰"}
-          </button>
+          </div>
+          
         </div>
       </div>
-
-     {/* Mobile Menu Overlay */}
-{isMenuOpen && (
-  <div
-    className="mobile-nav-overlay show"
-    onClick={() => setIsMenuOpen(false)}
-  ></div>
-)}
-
-{/* Mobile Nav Modal */}
-<div className={`mobile-nav md:hidden ${isMenuOpen ? "show" : ""}`}>
-  
-  {user ? (
-    <>
-      <p className=" flex justify-between text-sm">
-        <span>Welcome, <strong>{user.username}</strong></span>
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden focus:outline-none  hover:text-red-500"
-        >
-          {isMenuOpen ? <ClosedCaption/> : "☰"}
-        </button>
-      </p>
-      <Link to="/events" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-        🎫 Events
-      </Link>
-      <Link to={`/profile/${user.id}`} className="nav-link" onClick={() => setIsMenuOpen(false)}>
-        👤 Profile
-      </Link>
-      <Link to="/dashboard" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-        📋 Dashboard
-      </Link>
-      <Link to="/admin/dashboard" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-        📊 Stats
-      </Link>
-      <button onClick={handleLogout} className="logout">
-        🚪 Logout
-      </button>
-    </>
-  ) : (
-    <>
-      <Link to="/login" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-        🔐 Login
-      </Link>
-      <Link to="/register" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-        📝 Register
-      </Link>
-    </>
-  )}
-</div>
-
     </nav>
   );
 }

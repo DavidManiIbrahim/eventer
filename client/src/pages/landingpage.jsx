@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./CSS/landing.css";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContexts";
+import icon from "../assets/icon.svg";
+import useInstallPrompt from "../hooks/useInstallPrompt";
+
 
 import {
   TicketCheck,
-  Zap,
+  ToggleLeft,
+  ToggleRight,
   Shield,
   BarChart3,
   Smartphone,
@@ -13,18 +19,16 @@ import {
   ArrowRight,
   CheckCircle2,
   Star,
-  Users,
-  TrendingUp,
-  Globe,
-  Calendar,
-  MapPin
 } from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 
 import LandingNavbar from "../components/LandingNavbar";
 import Footer from "../components/Footer";
 
 export default function LandingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { canInstall, install } = useInstallPrompt();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -40,7 +44,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      "(prefers-color-scheme: dark)",
     ).matches;
     document.body.classList.toggle("dark-mode", prefersDark);
   }, []);
@@ -62,7 +66,7 @@ export default function LandingPage() {
 
     // Observe all animatable elements
     const elements = document.querySelectorAll(
-      ".stat-item, .feature-card, .testimonial-card, .section-header"
+      ".stat-item, .feature-card, .testimonial-card, .section-header",
     );
 
     elements.forEach((el) => observer.observe(el));
@@ -76,32 +80,38 @@ export default function LandingPage() {
     {
       icon: TicketCheck,
       title: "Smart Ticketing",
-      description: "Create multiple ticket types, set pricing, and track sales in real-time",
+      description:
+        "Create multiple ticket types, set pricing, and track sales in real-time",
     },
     {
       icon: Video,
       title: "Live Streaming",
-      description: "Integrate YouTube, Vimeo, or custom RTMP streams for virtual events",
+      description:
+        "Integrate YouTube, Vimeo, or custom RTMP streams for virtual events",
     },
     {
       icon: MessageSquare,
       title: "Live Chat",
-      description: "Real-time audience engagement with moderated chat during events",
+      description:
+        "Real-time audience engagement with moderated chat during events",
     },
     {
       icon: BarChart3,
       title: "Analytics Dashboard",
-      description: "Comprehensive insights into ticket sales, audience engagement, and revenue",
+      description:
+        "Comprehensive insights into ticket sales, audience engagement, and revenue",
     },
     {
       icon: Shield,
       title: "Secure Payments",
-      description: "Multiple payment gateways with instant confirmation and refund handling",
+      description:
+        "Multiple payment gateways with instant confirmation and refund handling",
     },
     {
       icon: Smartphone,
       title: "Mobile Ready",
-      description: "Fully responsive design that works perfectly on all devices",
+      description:
+        "Fully responsive design that works perfectly on all devices",
     },
   ];
 
@@ -110,21 +120,24 @@ export default function LandingPage() {
       name: "Sarah Johnson",
       role: "Event Organizer",
       company: "Tech Summit 2024",
-      content: "TickiSpot transformed how we manage events. The analytics alone saved us hours of work!",
+      content:
+        "TickiSpot transformed how we manage events. The analytics alone saved us hours of work!",
       rating: 5,
     },
     {
       name: "Michael Chen",
       role: "Marketing Director",
       company: "Music Festivals Inc",
-      content: "The live streaming integration is seamless. Our virtual events have never been smoother.",
+      content:
+        "The live streaming integration is seamless. Our virtual events have never been smoother.",
       rating: 5,
     },
     {
       name: "Emily Rodriguez",
       role: "Conference Manager",
       company: "Business Connect",
-      content: "The ticketing system is intuitive and our attendees love the QR code check-in process.",
+      content:
+        "The ticketing system is intuitive and our attendees love the QR code check-in process.",
       rating: 5,
     },
   ];
@@ -142,7 +155,52 @@ export default function LandingPage() {
       <div className="grid-background"></div>
 
       {/* Header */}
-      <LandingNavbar />
+      <header className="landing-header">
+        <div className="header-content">
+          <Link to="/" className="logo">
+            <img src={icon} className="tickispot-icon" />
+
+            <h1>TickiSpot</h1>
+          </Link>
+          <nav className="nav-menu">
+            <Link to="/events" className="nav-link">
+              Events
+            </Link>
+            <Link to="/pricing" className="nav-link">
+              Pricing
+            </Link>
+            <Link to="/about" className="nav-link">
+              About
+            </Link>
+            <Link to="/contact" className="nav-link">
+              Contact
+            </Link>
+            {canInstall && (
+                    <button
+                      onClick={install}
+                      className="px-3 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer hover:bg-indigo-700 transition"
+                    >
+                      Install App
+                    </button>
+                  )}
+            {isLoggedIn ? (
+              <Link to="/dashboard" className="btn btn-primary">
+                Dashboard
+              </Link>
+            ) : (
+              <div className="log">
+                <Link to="/login" className="btn btn-text">
+                  Sign In
+                </Link>
+                <Link to="/register" className="btn btn-primary">
+                  Get Started
+                </Link>
+              </div>
+            )}
+            <ThemeToggle />
+          </nav>
+        </div>
+      </header>
 
       {/* Hero Section */}
       <section className="hero">
@@ -157,7 +215,8 @@ export default function LandingPage() {
               <span className="hero-text-box hero-text-filled">you</span>
             </div>
             <p className="hero-description">
-              Explore popular events near you, browse by category, or check out some of the great community calendars.
+              Explore popular events near you, browse by category, or check out
+              some of the great community calendars.
             </p>
             <div className="hero-cta">
               {isLoggedIn ? (
@@ -179,6 +238,7 @@ export default function LandingPage() {
                   <Link to="/events" className="btn btn-secondary btn-large">
                     Browse Events
                   </Link>
+                  
                 </>
               )}
             </div>
@@ -190,7 +250,11 @@ export default function LandingPage() {
       <section className="stats-section">
         <div className="stats-container">
           {stats.map((stat, index) => (
-            <div key={index} className="stat-item" style={{ animationDelay: `${index * 0.1}s` }}>
+            <div
+              key={index}
+              className="stat-item"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               <div className="stat-number">{stat.number}</div>
               <div className="stat-label">{stat.label}</div>
             </div>
@@ -207,14 +271,19 @@ export default function LandingPage() {
               <span className="title-box title-box-filled">you need</span>
             </h2>
             <p className="section-subtitle">
-              Powerful tools designed to make event management effortless and enjoyable
+              Powerful tools designed to make event management effortless and
+              enjoyable
             </p>
           </div>
           <div className="features-grid">
             {features.map((feature, index) => {
               const IconComponent = feature.icon;
               return (
-                <div key={index} className="feature-card" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div
+                  key={index}
+                  className="feature-card"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <div className="feature-icon-wrapper">
                     <IconComponent className="feature-icon" size={24} />
                   </div>
@@ -236,22 +305,35 @@ export default function LandingPage() {
               <span className="title-box title-box-filled">organizers</span>
             </h2>
             <p className="section-subtitle">
-              See what our customers have to say about their experience with TickiSpot
+              See what our customers have to say about their experience with
+              TickiSpot
             </p>
           </div>
           <div className="testimonials-grid">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="testimonial-card" style={{ animationDelay: `${index * 0.15}s` }}>
+              <div
+                key={index}
+                className="testimonial-card"
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
                 <div className="testimonial-rating">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="star-icon" size={16} fill="currentColor" style={{ animationDelay: `${i * 0.1}s` }} />
+                    <Star
+                      key={i}
+                      className="star-icon"
+                      size={16}
+                      fill="currentColor"
+                      style={{ animationDelay: `${i * 0.1}s` }}
+                    />
                   ))}
                 </div>
                 <p className="testimonial-content">"{testimonial.content}"</p>
                 <div className="testimonial-author">
                   <div className="author-info">
                     <div className="author-name">{testimonial.name}</div>
-                    <div className="author-role">{testimonial.role} · {testimonial.company}</div>
+                    <div className="author-role">
+                      {testimonial.role} · {testimonial.company}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -268,7 +350,10 @@ export default function LandingPage() {
               <span className="title-box title-box-border">Ready to</span>
               <span className="title-box title-box-filled">get started?</span>
             </h2>
-            <p>Join thousands of event organizers who trust TickiSpot to deliver exceptional experiences</p>
+            <p>
+              Join thousands of event organizers who trust TickiSpot to deliver
+              exceptional experiences
+            </p>
             <div className="cta-buttons">
               {isLoggedIn ? (
                 <Link to="/create" className="btn btn-primary btn-large">
@@ -300,7 +385,49 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <Footer />
+      <footer className="landing-footer">
+        <div className="footer-wrapper">
+          <div className="footer-content">
+            <div className="footer-section footer-brand">
+              <div className="footer-logo">
+                <img src={icon} className="tickispot-icon" />
+
+                <h3>TickiSpot</h3>
+              </div>
+              <p>
+                Your complete event management solution. Create, manage, and
+                grow your events with confidence.
+              </p>
+            </div>
+            <div className="footer-section">
+              <h4>Product</h4>
+              <Link to="/events">Browse Events</Link>
+              <Link to="/create">Create Event</Link>
+              <Link to="/pricing">Pricing</Link>
+              <Link to="/docs">Documentation</Link>
+            </div>
+            <div className="footer-section">
+              <h4>Support</h4>
+              <Link to="/help">Help Center</Link>
+              <Link to="/contact">Contact Us</Link>
+              <Link to="/about">About Us</Link>
+            </div>
+            <div className="footer-section">
+              <h4>Legal</h4>
+              <Link to="/privacy">Privacy Policy</Link>
+              <Link to="/terms">Terms of Service</Link>
+              <Link to="/donate">Donate</Link>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>© 2024 TickiSpot. All rights reserved.</p>
+            <div className="footer-links">
+              <Link to="/privacy">Privacy</Link>
+              <Link to="/terms">Terms</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

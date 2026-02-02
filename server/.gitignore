@@ -4,8 +4,13 @@
 .env.development
 .env.production
 
+<<<<<<< HEAD
 #libraries
 node_modules
+=======
+node_modules/
+
+>>>>>>> b4212fe8856ccfc2678aef174986290abae40292
 
 
 # Logs
