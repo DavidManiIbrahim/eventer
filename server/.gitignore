@@ -4,6 +4,8 @@
 .env.development
 .env.production
 
+#libraries
+node_modules
 
 
 # Logs
