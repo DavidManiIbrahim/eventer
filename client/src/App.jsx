@@ -30,7 +30,7 @@ import TermsOfService from "./pages/TermsOfService";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import LandingPage from "./pages/landingpage";
-import Pricing from "./pages/Pricing";
+import Pricing from "./pages/pricing";
 
 
 function Layout() {
@@ -40,7 +40,16 @@ function Layout() {
   const hideNavAndSidebar =
     location.pathname === "/" ||
     location.pathname === "/login" ||
-    location.pathname === "/register";
+    location.pathname === "/register" ||
+    location.pathname === "/events" ||
+    location.pathname === "/pricing" ||
+    location.pathname === "/about" ||
+    location.pathname === "/contact" ||
+    location.pathname === "/donate" ||
+    location.pathname === "/help" ||
+    location.pathname === "/docs" ||
+    location.pathname === "/privacy" ||
+    location.pathname === "/terms";
 
   return (
     <>

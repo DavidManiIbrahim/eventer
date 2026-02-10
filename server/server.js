@@ -1,6 +1,25 @@
 require("dotenv").config();
 const dotenv = require("dotenv");
 
+// Fallback logic: check if critical env vars are loaded. If not, try parent directory.
+const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+
+if (!mongoUri) {
+  console.log("⚠️  .env not found in server directory or MONGO_URI/MONGODB_URI missing. Attempting to load from parent directory...");
+  require("dotenv").config({ path: "../.env" });
+}
+
+// Re-check after potential reload
+const finalMongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+
+if (!finalMongoUri) {
+  console.error("❌ FATAL ERROR: MONGO_URI or MONGODB_URI is not defined. Please check your .env file.");
+  console.log("Current directory:", process.cwd());
+  console.log("Loaded env keys:", Object.keys(process.env).filter(k => !k.startsWith("npm_")));
+} else {
+  console.log("✅ Environment variables loaded successfully.");
+}
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -25,7 +44,7 @@ app.use(express.json());
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(finalMongoUri)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
