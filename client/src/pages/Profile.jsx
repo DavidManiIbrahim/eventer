@@ -4,7 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import "./CSS/profile.css";
 
-const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// ✅ Server URL for serving uploads (removes /api suffix if present)
+const PORT_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
 
 export default function Profile() {
   const { id } = useParams();

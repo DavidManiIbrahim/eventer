@@ -4,7 +4,8 @@ import { ThemeContext } from "../contexts/ThemeContexts";
 import { useNavigate } from "react-router-dom";
 import "./CSS/EditProfile.css";
 
-const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// ✅ Server URL without /api suffix for static assets
+const SERVER_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
 
 export default function EditProfile() {
   const { darkMode } = useContext(ThemeContext);
@@ -46,7 +47,7 @@ export default function EditProfile() {
   };
 
   // ✅ Normalize file path so images always render correctly
-const buildImageUrl = (path, type = "profile") => {
+  const buildImageUrl = (path, type = "profile") => {
     if (!path) return "";
     // If already a full URL, return as-is
     if (/^https?:\/\//i.test(path)) return path;
@@ -56,21 +57,21 @@ const buildImageUrl = (path, type = "profile") => {
 
     // If path already references uploads/profile_pic or uploads/cover_pic or includes "uploads"
     if (
-        normalized.startsWith("uploads") ||
-        /profile_pic|cover_pic/.test(normalized)
+      normalized.startsWith("uploads") ||
+      /profile_pic|cover_pic/.test(normalized)
     ) {
-        return `${PORT_URL}/${normalized}`;
+      return `${SERVER_URL}/${normalized}`;
     }
 
     // If backend returned just a filename (no slash), pick folder based on type
     if (!normalized.includes("/")) {
-        if (type === "cover") return `${PORT_URL}/uploads/cover_pic/${normalized}`;
-        return `${PORT_URL}/uploads/profile_pic/${normalized}`;
+      if (type === "cover") return `${SERVER_URL}/uploads/cover_pic/${normalized}`;
+      return `${SERVER_URL}/uploads/profile_pic/${normalized}`;
     }
 
     // Fallback: join with base URL
-    return `${PORT_URL}/${normalized}`;
-};
+    return `${SERVER_URL}/${normalized}`;
+  };
 
 
   const handleImageUpload = async (e, type) => {

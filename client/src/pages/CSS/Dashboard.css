@@ -5,7 +5,6 @@
 .dashboard-page {
   min-height: 100vh;
   padding-top: 2rem;
-  padding-left: var(--sidebar-width);
   padding-right: 2rem;
   padding-bottom: 4rem;
   background-color: #f8fafc;

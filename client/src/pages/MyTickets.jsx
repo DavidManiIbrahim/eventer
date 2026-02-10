@@ -18,7 +18,7 @@ import API from "../api/axios";
 import { ThemeContext } from "../contexts/ThemeContexts";
 import "./CSS/MyTickets.css";
 
-const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const PORT_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
 
 export default function MyTickets() {
   const [tickets, setTickets] = useState([]);
@@ -129,6 +129,10 @@ export default function MyTickets() {
                         src={`${PORT_URL}/uploads/event_image/${event.image}`}
                         alt={event.title}
                         className="event-image"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.style.display = 'none';
+                        }}
                       />
                     ) : (
                       <div className="event-image-placeholder" style={{ background: 'var(--primary-gradient)', width: '100%', height: '100%' }}></div>
@@ -211,7 +215,7 @@ export default function MyTickets() {
                       {ticket.qrCode && (
                         <div className="qr-preview" title="Click to view/download QR">
                           <img
-                            src={`${PORT_URL}/uploads/${ticket.qrCode}`}
+                            src={`${PORT_URL}/uploads/qrcodes/${ticket.qrCode}`}
                             alt="Ticket QR Code"
                             className="qr-image-small"
                           />
@@ -220,7 +224,7 @@ export default function MyTickets() {
 
                       <div className="ticket-actions">
                         <a
-                          href={`${PORT_URL}/uploads/${ticket.qrCode}`}
+                          href={`${PORT_URL}/uploads/qrcodes/${ticket.qrCode}`}
                           download={`ticket-${ticket._id}.png`}
                           className="btn-premium btn-primary"
                         >

@@ -16,8 +16,9 @@ import {
   Users
 } from "lucide-react";
 import CreateEvent from "./CreateEvent";
-
 const PORT_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+import ConfirmationModal from "../components/ConfirmationModal";
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
@@ -33,6 +34,10 @@ export default function Dashboard() {
   const [selectedEventId, setSelectedEventId] = useState(null);
 
   const [showCreateEvent, setShowCreateEvent] = useState(false); // ✅ Modal state
+
+  // 🔴 Delete Modal
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
 
 
   // 🟢 Functions
@@ -100,22 +105,25 @@ export default function Dashboard() {
     }
   };
 
-  // 🗑 Delete Event
-  const handleDelete = async (id) => {
-    const eventToDelete = events.find((e) => e._id === id);
-    const confirmed = window.confirm(
-      `Are you sure you want to delete "${eventToDelete?.title}"?\n\nThis action cannot be undone.`,
-    );
+  // 🗑 Request Delete
+  const handleDeleteRequest = (id) => {
+    const event = events.find((e) => e._id === id);
+    setEventToDelete(event);
+    setDeleteModalOpen(true);
+  };
 
-    if (!confirmed) return;
-
+  // 🗑 Confirm Delete
+  const confirmDelete = async () => {
+    if (!eventToDelete) return;
     try {
-      await API.delete(`/events/delete/${id}`);
-      setEvents(events.filter((e) => e._id !== id));
-      alert("Event deleted successfully!");
+      await API.delete(`/events/delete/${eventToDelete._id}`);
+      setEvents(events.filter((e) => e._id !== eventToDelete._id));
     } catch (err) {
       console.error(err);
       alert("Failed to delete event. Please try again.");
+    } finally {
+      setDeleteModalOpen(false);
+      setEventToDelete(null);
     }
   };
 
@@ -329,7 +337,7 @@ export default function Dashboard() {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(event._id)}
+                        onClick={() => handleDeleteRequest(event._id)}
                         className="pill-btn"
                       >
                         Delete
@@ -356,6 +364,17 @@ export default function Dashboard() {
       <CreateEvent
         isOpen={showCreateEvent}
         onClose={() => setShowCreateEvent(false)}
+      />
+
+      <ConfirmationModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete Event?"
+        message={`Are you sure you want to delete "${eventToDelete?.title}"? This action cannot be undone.`}
+        confirmText="Delete Event"
+        confirmColor="danger"
+        icon="warning"
       />
     </div>
   );
