@@ -29,6 +29,10 @@ import {
 export default function Sidebar() {
   const [user, setUser] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [expand, setexpand] = useState(false);
+  const { darkMode } = useContext(ThemeContext);
+  const location = useLocation();
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
 
   useEffect(() => {
     const currentUser = getCurrentUser();

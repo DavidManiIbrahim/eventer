@@ -1,211 +1,301 @@
-:root {
-  --bg-color: #f9fafb;
-  --text-color: #111827;
-  --card-bg: #ffffff;
-  --border-color: #e5e7eb;
+/* Settings Page Styling */
 
-  /* 🔥 TickiSpot Pink */
-  --accent-color: #ec4899; /* pink-500 */
-  --accent-soft: rgba(236, 72, 153, 0.12);
-
- 
+.settings-layout {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem 0;
+  min-height: calc(100vh - 120px);
 }
 
-/* Dark Mode */
-[data-theme="dark"] {
-  --bg-color: #0d1117;
-  --text-color: #f0f6fc;
-  --card-bg: #161b22;
-  --border-color: #30363d;
-
-  --accent-color: #ec4899;
-  --accent-soft: rgba(236, 72, 153, 0.2);
-}
-
-
-.settings-container {
-  min-height: 100vh;
-  padding-left: var(--sidebar-width);
-  padding-top: 4rem;
-  transition: padding-left 0.3s ease;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-.settings-container .card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
+/* Sidebar */
+.settings-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
   padding: 1.5rem;
-  transition: all 0.25s ease;
+  height: fit-content;
+  position: sticky;
+  top: 1rem;
 }
 
-.settings-container .card:hover {
-  transform: translateY(-2px);
-}
-
-
-.settings-container .theme-toggle-btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.settings-container .theme-toggle-btn:hover {
-  transform: scale(1.03);
-  background-color: var(--active-bg);
-}
-
-.settings-container .delete-btn {
-  background-color: #dc2626;
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  border: none;
-}
-
-.settings-container .delete-btn:hover {
-  background-color: #b91c1c;
-}
-
-
-
-/* Light Mode */
-.settings-page {
-  background-color: #f9fafb;
-  color: #111827;
-  min-height: 100vh;
-  padding: 80px 20px 20px 280px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.settings-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.settings-card {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.edit-btn {
-  background-color: #4f46e5;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  margin-top: 15px;
-  cursor: pointer;
-}
-
-.edit-btn:hover {
-  background-color: #4f46e5;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+.settings-sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
   display: flex;
-  justify-content: center;
   align-items: center;
+  gap: 0.5rem;
 }
 
-.modal-content {
-  background: #fff;
-  color: #111827;
-  padding: 25px;
-  border-radius: 10px;
-  width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.modal-content input,
-.modal-content textarea {
-  width: 100%;
-  padding: 8px;
-  margin: 6px 0 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: #fff;
-}
-
-.modal-actions {
+.settings-nav {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-
-.cancel-btn {
-  background-color: #9ca3af;
-  color: white;
+.settings-nav-item {
+  text-align: left;
+  background: transparent;
   border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-color);
+  border-radius: 10px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.8;
 }
 
+.settings-nav-item:hover {
+  background: rgba(0,0,0,0.03);
+  opacity: 1;
+}
 
-/* Privacy Section */
-.privacy-options {
+.settings-nav-item.active {
+  background: rgba(236, 72, 153, 0.08); /* Pink tint */
+  color: #ec4899;
+  font-weight: 600;
+  opacity: 1;
+}
+
+/* Main Content */
+.settings-content {
+  flex: 1;
+  max-width: 800px;
+}
+
+.settings-panel {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.panel-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Info Grid */
+.settings-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.info-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-color);
+  background: rgba(0,0,0,0.02);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Toggles & Lists */
+.toggles-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 1.5rem;
 }
 
-.privacy-toggle {
+.theme-toggle-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(0,0,0,0.02);
+  border-radius: 12px;
+}
+
+/* Billing */
+.billing-card {
+  background: linear-gradient(135deg, #111827 0%, #374151 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.plan-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ec4899;
+}
+
+.billing-date {
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn-primary {
+  background: #ec4899;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: #db2777;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover {
+  border-color: #ec4899;
+  color: #ec4899;
+}
+
+.btn-danger {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  color: white;
+}
+
+.text-danger {
+  color: #dc2626;
+}
+
+.text-muted {
+  color: #666;
   font-size: 0.95rem;
 }
 
-.save-btn {
-  background: #4f46e5;
-  color: #fff;
-  font-weight: 600;
-  padding: 0.7rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
+.settings-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
 }
 
-.save-btn:hover {
-  background: #4f46e5;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.save-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* Dark Mode Overrides */
+.dark-mode .settings-sidebar,
+.dark-mode .settings-panel {
+  background: #18181b; /* Zinc-900 */
+  border-color: rgba(255,255,255,0.08);
 }
 
-
-/* 🌙 Dark Mode */
-.dark-mode .settings-page{
-  background-color: #1f2937;
-  color: #f9fafb;
+.dark-mode .settings-sidebar-title,
+.dark-mode .panel-title, 
+.dark-mode .settings-section {
+  border-color: rgba(255,255,255,0.08);
 }
 
-.dark-mode .settings-container h2,
-.dark-mode .settings-container h3 {
-  color: #f9fafb;
+.dark-mode .settings-nav-item:hover {
+  background: rgba(255,255,255,0.05);
 }
 
-.dark-mode .settings-card {
-  background-color: #1f2937a9;
+.dark-mode .settings-nav-item.active {
+  background: rgba(236, 72, 153, 0.15);
 }
 
+.dark-mode .info-value, 
+.dark-mode .theme-toggle-wrapper {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.05);
+}
 
+.dark-mode .info-group label,
+.dark-mode .text-muted {
+  color: #a1a1aa;
+}
+
+.dark-mode .btn-outline {
+  border-color: rgba(255,255,255,0.1);
+  color: #e4e4e7;
+}
+
+.dark-mode .billing-card {
+  background: linear-gradient(135deg, #000000 0%, #1f2937 100%);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+@media (max-width: 768px) {
+  .settings-layout {
+    flex-direction: column;
+  }
+  .settings-sidebar {
+    width: 100%;
+    position: static;
+  }
+  .settings-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .settings-nav-item {
+    white-space: nowrap;
+  }
+}

@@ -145,187 +145,174 @@ export default function Settings() {
   ];
 
   return (
-    <div
-      className={`min-h-screen flex pl-14 pt-16 settings-container ${darkMode ? "dark-mode" : ""
-        }`}
-      style={{
-        backgroundColor: "var(--bg-color)",
-        color: "var(--text-color)",
-        transition: "all 0.3s ease",
-      }}
-    >
-      {/* Sidebar */}
-      <aside
-        className="w-64 border-r hidden md:block "
-        style={{
-          backgroundColor: "var(--card-bg)",
-          borderColor: "var(--border-color)",
-        }}
-      >
-        <h2
-          className="text-xl font-semibold px-6 py-4 border-b"
-          style={{ borderColor: "var(--border-color)" }}
-        >
-          ⚙️ Settings
-        </h2>
-        <nav className="mt-4">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className="w-full text-left px-6 py-3 text-sm font-medium transition"
-              style={{
-                backgroundColor:
-                  activeTab === tab.id ? "var(--active-bg)" : "transparent",
-                color: "var(--text-color)",
-                borderRight:
-                  activeTab === tab.id
-                    ? "4px solid var(--accent-color)"
-                    : "4px solid transparent",
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-      </aside>
+    <div className={`dashboard-page ${darkMode ? "dark-mode" : ""}`}>
+      <div className="dashboard-container">
+        <div className="settings-layout">
+          {/* Settings Sidebar */}
+          <aside className="settings-sidebar">
+            <h2 className="settings-sidebar-title">
+              ⚙️ Settings
+            </h2>
+            <nav className="settings-nav">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`settings-nav-item ${activeTab === tab.id ? "active" : ""}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 p-6 content-area">
-        {/* 👤 PROFILE TAB */}
-        {activeTab === "profile" && (
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4">👤 Profile Settings</h3>
-            <div className="settings-card">
-              <div className="settings-info">
-                <p>
-                  <strong>Name:</strong> {user?.name || "Loading..."}
-                </p>
-                <p>
-                  <strong>Username:</strong> {user?.username || "Loading..."}
-                </p>
-                <p>
-                  <strong>Email:</strong> {user?.email || "Loading..."}
-                </p>
-                <p>
-                  <strong>Bio:</strong> {user?.bio || "No bio added yet"}
-                </p>
+          {/* Settings Content */}
+          <main className="settings-content">
+            {/* 👤 PROFILE TAB */}
+            {activeTab === "profile" && (
+              <div className="settings-panel">
+                <h3 className="panel-title">👤 Profile Settings</h3>
+                <div className="settings-card-profile">
+                  <div className="settings-info-grid">
+                    <div className="info-group">
+                      <label>Name</label>
+                      <div className="info-value">{user?.name || "Loading..."}</div>
+                    </div>
+                    <div className="info-group">
+                      <label>Username</label>
+                      <div className="info-value">@{user?.username || "Loading..."}</div>
+                    </div>
+                    <div className="info-group">
+                      <label>Email</label>
+                      <div className="info-value">{user?.email || "Loading..."}</div>
+                    </div>
+                    <div className="info-group full-width">
+                      <label>Bio</label>
+                      <div className="info-value">{user?.bio || "No bio added yet"}</div>
+                    </div>
+                  </div>
+                  <button className="btn-primary mt-4" onClick={() => setIsModalOpen(true)}>
+                    Edit Profile
+                  </button>
+                </div>
+
+                {isModalOpen && (
+                  <SettingsModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    currentUser={user}
+                    onProfileUpdated={setUser}
+                  />
+                )}
+
+                <div className="settings-section mt-8">
+                  <h4 className="section-subtitle">Appearance</h4>
+                  <div className="theme-toggle-wrapper">
+                    <span>Dark Mode</span>
+                    <ThemeToggle />
+                  </div>
+                </div>
               </div>
-              <button className="edit-btn" onClick={() => setIsModalOpen(true)}>
-                Edit Profile
-              </button>
-            </div>
-
-            {isModalOpen && (
-              <SettingsModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                currentUser={user}
-                onProfileUpdated={setUser}
-              />
             )}
 
-            <div style={{ marginTop: "1.5rem" }}>
-              <h4 className="font-medium mb-2">Theme</h4>
-              <ThemeToggle />
-            </div>
-          </div>
-        )}
+            {/* 🔒 PRIVACY TAB */}
+            {activeTab === "privacy" && (
+              <div className="settings-panel">
+                <h3 className="panel-title">🔒 Privacy Settings</h3>
+                <div className="toggles-list">
+                  {Object.keys(privacy).map((key) => (
+                    <ToggleSwitch
+                      key={key}
+                      checked={privacy[key]}
+                      onChange={() => handlePrivacyChange(key)}
+                      label={
+                        key === "showProfile"
+                          ? "Show my profile publicly"
+                          : key === "showActivity"
+                            ? "Allow others to see my activity"
+                            : "Allow my account to be found in search"
+                      }
+                    />
+                  ))}
+                </div>
+                <button className="btn-primary mt-6" onClick={savePrivacySettings} disabled={saving}>
+                  {saving ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            )}
 
-        {/* 🔒 PRIVACY TAB */}
-        {activeTab === "privacy" && (
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4">🔒 Privacy Settings</h3>
-            <div className="privacy-options">
-              {Object.keys(privacy).map((key) => (
-                <ToggleSwitch
-                  key={key}
-                  checked={privacy[key]}
-                  onChange={() => handlePrivacyChange(key)}
-                  label={
-                    key === "showProfile"
-                      ? "Show my profile publicly"
-                      : key === "showActivity"
-                        ? "Allow others to see my activity"
-                        : "Allow my account to be found in search"
-                  }
-                />
-              ))}
-            </div>
-            <button className="save-btn" onClick={savePrivacySettings}>
-              {saving ? "Saving..." : "💾 Save Privacy Settings"}
-            </button>
-          </div>
-        )}
+            {/* 🔔 NOTIFICATION TAB */}
+            {activeTab === "notifications" && (
+              <div className="settings-panel">
+                <h3 className="panel-title">🔔 Notification Settings</h3>
+                <div className="toggles-list">
+                  {Object.keys(notifications).map((key) => (
+                    <ToggleSwitch
+                      key={key}
+                      checked={notifications[key]}
+                      onChange={() => handleNotificationChange(key)}
+                      label={
+                        key === "emailAlerts"
+                          ? "Email alerts"
+                          : key === "smsAlerts"
+                            ? "SMS notifications"
+                            : key === "appPush"
+                              ? "In-app push notifications"
+                              : "Subscribe to newsletter"
+                      }
+                    />
+                  ))}
+                </div>
+                <button className="btn-primary mt-6" onClick={saveNotificationSettings} disabled={saving}>
+                  {saving ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            )}
 
-        {/* 🔔 NOTIFICATION TAB */}
-        {activeTab === "notifications" && (
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4">
-              🔔 Notification Settings
-            </h3>
-            <div className="privacy-options">
-              {Object.keys(notifications).map((key) => (
-                <ToggleSwitch
-                  key={key}
-                  checked={notifications[key]}
-                  onChange={() => handleNotificationChange(key)}
-                  label={
-                    key === "emailAlerts"
-                      ? "Email alerts"
-                      : key === "smsAlerts"
-                        ? "SMS notifications"
-                        : key === "appPush"
-                          ? "In-app push notifications"
-                          : "Subscribe to newsletter"
-                  }
-                />
-              ))}
-            </div>
-            <button className="save-btn" onClick={saveNotificationSettings}>
-              {saving ? "Saving..." : "💾 Save Notification Settings"}
-            </button>
-          </div>
-        )}
+            {/* 💳 BILLING TAB */}
+            {activeTab === "billing" && (
+              <div className="settings-panel">
+                <h3 className="panel-title">💳 Billing</h3>
+                <div className="billing-card">
+                  <div className="billing-info">
+                    <p>Current Plan</p>
+                    <div className="plan-name">{billing.plan}</div>
+                  </div>
+                  <div className="billing-info">
+                    <p>Next Billing Date</p>
+                    <div className="billing-date">{billing.nextBillingDate}</div>
+                  </div>
+                </div>
+                <button className="btn-primary mt-6" onClick={handleUpgradePlan}>
+                  Upgrade Plan
+                </button>
+              </div>
+            )}
 
-        {/* 💳 BILLING TAB */}
-        {activeTab === "billing" && (
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4">💳 Billing</h3>
-            <p>
-              Current Plan: <strong>{billing.plan}</strong>
-            </p>
-            <p>Next Billing Date: {billing.nextBillingDate}</p>
-            <button className="save-btn" onClick={handleUpgradePlan}>
-              Upgrade Plan
-            </button>
-          </div>
-        )}
+            {/* 🔗 CONNECTED APPS TAB */}
+            {activeTab === "apps" && (
+              <div className="settings-panel">
+                <h3 className="panel-title">🔗 Connected Apps</h3>
+                <p className="text-muted">
+                  Manage integrations with third-party apps (Google, Facebook, etc).
+                </p>
+                <button className="btn-outline mt-4">Connect New App</button>
+              </div>
+            )}
 
-        {/* 🔗 CONNECTED APPS TAB */}
-        {activeTab === "apps" && (
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4">🔗 Connected Apps</h3>
-            <p>
-              Manage integrations with third-party apps (Google, Facebook, etc).
-            </p>
-            <button className="save-btn">Connect New App</button>
-          </div>
-        )}
-
-        {/* ⚠️ DANGER ZONE TAB */}
-        {activeTab === "danger" && (
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4 text-red-600">
-              ⚠️ Danger Zone
-            </h3>
-            <p>This action cannot be undone. Proceed with caution!</p>
-            <button className="delete-btn" onClick={deleteAccount}>
-              Delete Account
-            </button>
-          </div>
-        )}
-      </main>
+            {/* ⚠️ DANGER ZONE TAB */}
+            {activeTab === "danger" && (
+              <div className="settings-panel danger-zone">
+                <h3 className="panel-title text-danger">⚠️ Danger Zone</h3>
+                <p className="text-muted mb-4">This action cannot be undone. Proceed with caution!</p>
+                <button className="btn-danger" onClick={deleteAccount}>
+                  Delete Account
+                </button>
+              </div>
+            )}
+          </main>
+        </div>
+      </div>
     </div>
   );
 }

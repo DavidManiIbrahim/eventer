@@ -138,82 +138,99 @@ const buildImageUrl = (path, type = "profile") => {
     );
 
   return (
-    <div className={`editprofile-page pl-20 ${darkMode ? "dark-mode" : ""}`}>
-      {/* ===== Cover Section ===== */}
-      <div className="cover-section">
-        <img
-          src={previewCover || buildImageUrl(user.coverPic, "cover") || "/cover.jpg"}
-          alt="Cover"
-          className="cover-image"
-        />
-        <label htmlFor="coverPic" className="cover-upload">
-          {loading ? "Uploading..." : "Change Cover"}
-          <input
-            type="file"
-            id="coverPic"
-            accept="image/*"
-            onChange={(e) => handleImageUpload(e, "coverPic")}
-          />
-        </label>
+    <div className={`dashboard-page ${darkMode ? "dark-mode" : ""}`}>
+      <div className="dashboard-container">
+        <div className="edit-profile-card">
+          <div className="card-header">
+            <h1 className="page-title">Edit Profile</h1>
+            <button className="btn-secondary" onClick={() => navigate(-1)}>
+              Cancel
+            </button>
+          </div>
 
-        {/* ===== Profile Pic ===== */}
-        <div className="profile-pic-wrapper">
-          <img
-            src={
-              previewPic ||
-              buildImageUrl(user.profilePic, "profile") ||
-              "/default-avatar.png"
-            }
-            alt="Profile"
-            className="profile-pic"
-          />
-          <label htmlFor="profilePic" className="profile-upload">
-            {loading ? "Uploading..." : "Change Photo"}
-            <input
-              type="file"
-              id="profilePic"
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, "profilePic")}
+          <div className="cover-section">
+            <img
+              src={previewCover || buildImageUrl(user.coverPic, "cover") || "/cover.jpg"}
+              alt="Cover"
+              className="cover-image"
             />
-          </label>
+            <label htmlFor="coverPic" className="cover-upload-btn">
+              {loading ? "Uploading..." : "Change Cover"}
+              <input
+                type="file"
+                id="coverPic"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, "coverPic")}
+              />
+            </label>
+
+            <div className="profile-pic-wrapper">
+              <img
+                src={
+                  previewPic ||
+                  buildImageUrl(user.profilePic, "profile") ||
+                  "/default-avatar.png"
+                }
+                alt="Profile"
+                className="profile-pic"
+              />
+              <label htmlFor="profilePic" className="profile-upload-btn">
+                📷
+                <input
+                  type="file"
+                  id="profilePic"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, "profilePic")}
+                />
+              </label>
+            </div>
+          </div>
+
+          <form className="edit-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="e.g. John Doe"
+                className="form-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Username</label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="@username"
+                className="form-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Bio</label>
+              <textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                placeholder="Tell the world about yourself..."
+                rows="4"
+                className="form-textarea"
+              />
+            </div>
+
+            <div className="form-actions">
+              <button type="submit" className="btn-primary" disabled={saving}>
+                {saving ? "Saving Changes..." : "Save Changes"}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-
-      {/* ===== Form Section ===== */}
-      <form className="editprofile-form" onSubmit={handleSubmit}>
-        <h2>Edit Profile</h2>
-
-        <label>Name</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Your full name"
-        />
-
-        <label>Username</label>
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          placeholder="@username"
-        />
-
-        <label>Bio</label>
-        <textarea
-          name="bio"
-          value={formData.bio}
-          onChange={handleChange}
-          placeholder="Write a short bio..."
-          rows="4"
-        />
-
-        <button type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Save Changes"}
-        </button>
-      </form>
     </div>
   );
 }

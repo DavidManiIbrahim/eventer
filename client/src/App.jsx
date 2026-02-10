@@ -55,13 +55,7 @@ function Layout() {
     <>
       {!hideNavAndSidebar && <Sidebar />}
 
-      <main
-        style={{
-          marginLeft: !hideNavAndSidebar ? "var(--sidebar-width)" : "0",
-          transition: "margin-left 0.3s ease",
-          minHeight: "100vh",
-        }}
-      >
+      <main className={`main-content ${!hideNavAndSidebar ? 'with-sidebar' : ''}`}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/events" element={<Home />} />

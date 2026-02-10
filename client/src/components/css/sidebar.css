@@ -312,3 +312,20 @@
   background: rgba(236, 72, 153, 0.18);
   border-color: rgba(236, 72, 153, 0.35);
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+  }
+
+  .sidebar.expand {
+    width: 100vw;
+    /* Full width on mobile */
+    height: 100vh;
+    padding-top: 1rem;
+    overflow-y: auto;
+  }
+}
