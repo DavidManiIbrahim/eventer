@@ -1,44 +1,58 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../api/axios";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContexts";
+import {
+  CreditCard,
+  ArrowLeft,
+  Calendar,
+  MapPin,
+  Ticket,
+  Clock,
+  ShieldCheck,
+  User
+} from "lucide-react";
 import "./CSS/checkout.css";
+
+const PORT_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
 
 export default function Checkout() {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const { darkMode } = useContext(ThemeContext);
   const [loading, setLoading] = useState(false);
 
   if (!state || !state.event || !state.quantity || !state.user) {
-    console.error("Invalid checkout state:", state);
     return (
-      <p className="checkout-error">
-        ❌ Error: Invalid checkout details.
-      </p>
+      <div className={`dashboard-page ${darkMode ? "dark-mode" : ""}`}>
+        <div className="checkout-error-container">
+          <div className="error-card">
+            <h2>Invalid Checkout Details</h2>
+            <p>We couldn't retrieve the event details. Please try selecting your tickets again.</p>
+            <button className="btn-primary" onClick={() => navigate("/events")}>
+              Return to Events
+            </button>
+          </div>
+        </div>
+      </div>
     );
   }
 
   const { event, quantity, user } = state;
   const [selectedPricing, setSelectedPricing] = useState(event.pricing?.[0] || {});
-  const selectedPrice = selectedPricing.price || 0;
+  // If specific pricing was passed in state (e.g. from ticket selection), use that, otherwise default
+  // Ideally, the previous page should pass the *specific* pricing selected if multiple exist.
+  // For now, we'll assume standard flow or passed logic.
+
+  const selectedPrice = state.price || selectedPricing.price || event.ticketPrice || 0;
+  const pricingType = state.pricingType || selectedPricing.type || "Standard";
+
   const totalAmount = selectedPrice * quantity;
 
   const handleConfirmPayment = async () => {
     setLoading(true);
     try {
-      console.log("👤 User object:", user);
-      console.log("🔑 User ID to send:", user._id || user.id || user.email);
-      
       const userIdToSend = user._id || user.id || user.email;
-      
-      console.log("📤 Sending payment request:", {
-        email: user.email,
-        amount: totalAmount,
-        eventId: event._id,
-        userId: userIdToSend,
-        quantity,
-        price: selectedPrice,
-        pricingType: selectedPricing.type
-      });
 
       const res = await API.post("/payment/initiate", {
         email: user.email,
@@ -46,9 +60,9 @@ export default function Checkout() {
         metadata: {
           eventId: event._id,
           userId: userIdToSend,
-          quantity: quantity.toString(), // Convert to string
-          price: selectedPrice.toString(), // Convert to string
-          pricingType: selectedPricing.type,
+          quantity: quantity.toString(),
+          price: selectedPrice.toString(),
+          pricingType: pricingType,
         },
       });
 
@@ -66,90 +80,122 @@ export default function Checkout() {
   };
 
   return (
-    <div className="checkout-page">
-      <div className="checkout-card">
-        {/* Header */}
-        <div className="checkout-header">
-          <h1>Checkout</h1>
-          <p>Confirm your ticket purchase</p>
+    <div className={`dashboard-page ${darkMode ? "dark-mode" : ""}`}>
+      <div className="dashboard-container checkout-container">
+
+        <div className="checkout-nav">
+          <button className="back-link" onClick={() => navigate(-1)}>
+            <ArrowLeft size={20} /> Back
+          </button>
+          <h1 className="checkout-page-title">Checkout</h1>
         </div>
 
-        {/* Event */}
-        <div className="checkout-section">
-          <h2 className="checkout-title">{event.title}</h2>
-          <p className="checkout-muted">{event.description}</p>
+        <div className="checkout-grid">
+          {/* Left Column: Event Details */}
+          <div className="checkout-details-col">
+            <div className="checkout-card event-summary-card">
+              <div className="event-cover-wrapper">
+                {event.image ? (
+                  <img
+                    src={`${PORT_URL}/uploads/event_image/${event.image}`}
+                    alt={event.title}
+                    className="checkout-event-img"
+                  />
+                ) : (
+                  <div className="checkout-event-placeholder" />
+                )}
+                <div className="event-summary-overlay">
+                  <h2>{event.title}</h2>
+                  <p className="organizer">by {event.createdBy?.username || "Organizer"}</p>
+                </div>
+              </div>
 
-          <div className="checkout-meta">
-            <span>📅 {new Date(event.startDate).toLocaleDateString()}</span>
-            <span>⏰ {event.startTime}</span>
-            <span>📍 {event.location}</span>
-          </div>
-        </div>
-
-        {/* Buyer */}
-        <div className="checkout-section">
-          <h3>Buyer Info</h3>
-          <p>👤 {user.username}</p>
-          <p>📧 {user.email}</p>
-        </div>
-
-        {/* Pricing Selection */}
-        {event.pricing && event.pricing.length > 1 && (
-          <div className="checkout-section">
-            <h3>Select Ticket Type</h3>
-            <div className="pricing-options">
-              {event.pricing.map((pricing, index) => (
-                <button
-                  key={index}
-                  className={`pricing-option ${selectedPricing.type === pricing.type ? 'selected' : ''}`}
-                  onClick={() => setSelectedPricing(pricing)}
-                >
+              <div className="event-info-grid">
+                <div className="info-item">
+                  <Calendar size={18} className="info-icon" />
                   <div>
-                    <strong>{pricing.type}</strong>
-                    <p>₦{pricing.price.toLocaleString()}</p>
+                    <span className="label">Date</span>
+                    <span className="value">
+                      {new Date(event.startDate).toLocaleDateString("en-US", {
+                        weekday: "short", month: "short", day: "numeric"
+                      })}
+                    </span>
                   </div>
-                </button>
-              ))}
+                </div>
+                <div className="info-item">
+                  <Clock size={18} className="info-icon" />
+                  <div>
+                    <span className="label">Time</span>
+                    <span className="value">{event.startTime}</span>
+                  </div>
+                </div>
+                <div className="info-item full-width">
+                  <MapPin size={18} className="info-icon" />
+                  <div>
+                    <span className="label">Location</span>
+                    <span className="value">{event.location}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="checkout-card buyer-info-card">
+              <h3><User size={18} /> Buyer Information</h3>
+              <div className="buyer-details">
+                <div className="detail-row">
+                  <span>Name</span>
+                  <strong>{user.name || user.username}</strong>
+                </div>
+                <div className="detail-row">
+                  <span>Email</span>
+                  <strong>{user.email}</strong>
+                </div>
+              </div>
             </div>
           </div>
-        )}
 
-        {/* Summary */}
-        <div className="checkout-summary">
-          <div className="checkout-row">
-            <span>Ticket Type</span>
-            <strong>{selectedPricing.type || "Standard"}</strong>
-          </div>
-          <div className="checkout-row">
-            <span>Price per ticket</span>
-            <strong>₦{selectedPrice.toLocaleString()}</strong>
-          </div>
-          <div className="checkout-row">
-            <span>Quantity</span>
-            <strong>{quantity}</strong>
-          </div>
-          <div className="checkout-row total">
-            <span>Total</span>
-            <strong>₦{totalAmount.toLocaleString()}</strong>
-          </div>
-        </div>
+          {/* Right Column: Order Summary & Payment */}
+          <div className="checkout-payment-col">
+            <div className="checkout-card order-summary-card">
+              <h3>Order Summary</h3>
 
-        {/* Actions */}
-        <div className="checkout-actions">
-          <button
-            onClick={handleConfirmPayment}
-            disabled={loading}
-            className="checkout-pay-btn"
-          >
-            {loading ? "Processing..." : "Confirm & Pay"}
-          </button>
+              <div className="order-items">
+                <div className="order-item">
+                  <div className="item-info">
+                    <span className="item-name">{pricingType} Ticket</span>
+                    <span className="item-qty">x {quantity}</span>
+                  </div>
+                  <span className="item-price">₦{selectedPrice.toLocaleString()}</span>
+                </div>
+              </div>
 
-          <button
-            onClick={() => navigate(-1)}
-            className="checkout-back-btn"
-          >
-            Go Back
-          </button>
+              <div className="order-divider" />
+
+              <div className="order-total">
+                <span>Total</span>
+                <span className="total-amount">₦{totalAmount.toLocaleString()}</span>
+              </div>
+
+              <div className="payment-security-note">
+                <ShieldCheck size={16} />
+                <span>Secure payment via Paystack</span>
+              </div>
+
+              <button
+                className="btn-primary pay-btn"
+                onClick={handleConfirmPayment}
+                disabled={loading}
+              >
+                {loading ? (
+                  <span className="loading-state">Processing...</span>
+                ) : (
+                  <>
+                    PAY ₦{totalAmount.toLocaleString()} <CreditCard size={18} />
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
