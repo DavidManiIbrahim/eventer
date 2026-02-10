@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContexts";
+import ThemeToggle from "../components/ThemeToggle";
 import { Menu, X, TicketCheck, ToggleLeft, ToggleRight } from "lucide-react";
 import useInstallPrompt from "../hooks/useInstallPrompt";
 import "./css/LandingNavbar.css";
@@ -27,7 +28,7 @@ export default function LandingNavbar() {
                 </Link>
 
                 <div className="mobile-controls">
-                    <button
+                    {/* <button
                         onClick={toggleTheme}
                         className="theme-toggle-btn mobile-only"
                         aria-label="Toggle theme"
@@ -44,7 +45,7 @@ export default function LandingNavbar() {
                         aria-label="Toggle menu"
                     >
                         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
+                    </button> */}
                 </div>
 
                 <nav className={`nav-menu ${isMenuOpen ? "active" : ""}`}>
@@ -84,8 +85,9 @@ export default function LandingNavbar() {
                             </Link>
                         </div>
                     )}
+                                <ThemeToggle />
                     
-                    <button
+                    {/* <button
                         onClick={toggleTheme}
                         className="theme-toggle-btn desktop-only"
                         aria-label="Toggle theme"
@@ -95,7 +97,7 @@ export default function LandingNavbar() {
                         ) : (
                             <ToggleRight size={18} className="toggle-icon" />
                         )}
-                    </button>
+                    </button> */}
                 </nav>
             </div>
         </header>

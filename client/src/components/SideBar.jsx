@@ -4,6 +4,7 @@ import { ThemeContext } from "../contexts/ThemeContexts";
 import { logout, getCurrentUser } from "../utils/auth";
 import CreateEvent from "../pages/CreateEvent";
 import ThemeToggle from "./ThemeToggle";
+import LogoutModal from "./LogoutModal";
 import NotificationBell from "./NotificationBell";
 import "./css/sidebar.css";
 import icon from "../assets/icon.svg"
@@ -27,10 +28,7 @@ import {
 
 export default function Sidebar() {
   const [user, setUser] = useState(null);
-  const [expand, setexpand] = useState(false);
-  const { darkMode, toggleTheme } = useContext(ThemeContext);
-  const location = useLocation();
-  const [showCreateEvent, setShowCreateEvent] = useState(false); // ✅ Modal state
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     const currentUser = getCurrentUser();
@@ -80,9 +78,12 @@ export default function Sidebar() {
   ];
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to logout?")) {
-      logout();
-    }
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
+    logout();
+    setShowLogoutModal(false);
   };
 
   return (
@@ -104,6 +105,11 @@ export default function Sidebar() {
             className="sidebar-collapse"
             aria-label={expand ? "Collapse sidebar" : "Expand sidebar"}
             type="button"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             {expand ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
           </button>
@@ -169,6 +175,13 @@ export default function Sidebar() {
       <CreateEvent
         isOpen={showCreateEvent}
         onClose={() => setShowCreateEvent(false)}
+      />
+
+      {/* ✅ Logout Modal */}
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={confirmLogout}
       />
     </>
   );

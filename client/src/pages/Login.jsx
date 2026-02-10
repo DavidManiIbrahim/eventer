@@ -3,7 +3,7 @@ import API from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { isAuthenticated, login } from "../utils/auth";
 import { ThemeContext } from "../contexts/ThemeContexts";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 import PasswordInput from "../components/PasswordInput";
 import icon from "../assets/icon.svg"
 import "./CSS/forms.css";
@@ -63,6 +63,9 @@ export default function Login() {
 
   return (
     <div className={`form-page ${darkMode ? "dark-mode" : ""}`}>
+      <Link to="/" className="back-home-btn">
+        <ArrowLeft size={18} /> Back
+      </Link>
       <div className="form-grid-background"></div>
       <div className="form-container">
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>

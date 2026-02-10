@@ -21,9 +21,9 @@ export default function AboutUs() {
 
         <div className="feature-card animate-in" style={{ padding: "2rem" }}>
           <p style={{ fontSize: "1.2rem", lineHeight: "1.6", marginBottom: "2rem", color: "var(--text-color)" }}>
-            Welcome to <strong>TickiSpot</strong> — your all-in-one event management platform.
+            Welcome to <strong>TickiSpot</strong>  your all-in-one event management platform.
             We empower organizers and attendees alike to create, promote, and manage events effortlessly,
-            ensuring every gathering — big or small — is a success.
+            ensuring every gathering big or small is a success.
           </p>
 
           <section style={{ marginBottom: "2rem" }}>
@@ -38,7 +38,7 @@ export default function AboutUs() {
             <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem" }}>Our Story</h2>
             <p style={{ lineHeight: "1.6", color: "var(--text-muted)" }}>
               Founded with a passion for connecting people, TickiSpot provides organizers the tools to manage,
-              promote, and sell tickets with ease — from concerts and conferences to online meetups.
+              promote, and sell tickets with ease  from concerts and conferences to online meetups.
             </p>
           </section>
         </div>
